@@ -35,7 +35,7 @@ class Pin(object):
         elif not isinstance(son, Pin):
             raise TypeError("You can only connect pins to other pins")
         self.son = son
-        self.son = circuit_slave
+        self.circuit_slave = circuit_slave
         son.father = self
         son.circuit_master = self.circuit_self
     def add_father(self, circuit_master: BaseCircuitElement, father: Pin):
@@ -68,7 +68,7 @@ class BaseCircuitElement():
     """
     count = 0
 
-    def __init__(self, name: str, input_pins: tuple, output_pins: tuple) -> None:
+    def __init__(self, name: str, input_pins: tuple[str], output_pins: tuple[str]) -> None:
         self.name = name
         self.input_pins = tuple(Pin(name, self) for name in input_pins)
         self.output_pins = tuple(Pin(name, self) for name in output_pins)
@@ -168,7 +168,8 @@ class Ground(BaseCircuitElement):
         """
         super().__init__(f'ground{self.count}', ('0V', ), ())
         self.counter()
-
+#class Intersection(BaseCircuitElement):
+    #def
 class Source5V(BaseCircuitElement):
 
     #count = 0
