@@ -198,7 +198,8 @@ class Transistor(BaseCircuitElement):
         """
         super.__init__(self, ('base', ), ('emitor', 'collector'))
 
-
+class GateAND(BaseCircuitElement):
+    
     pass
 def main():
     grd = Ground()

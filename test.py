@@ -1,3 +1,2 @@
-t = ([0],)
-t[0].append(1)
-print(t)
+lst = [1,2,3,4]
+print(lst[:2], lst[2:])
