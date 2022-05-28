@@ -18,6 +18,9 @@ class Pin:
         """All pins are unique"""
         return id(self) == id(other)
 
+    def __hash__(self):
+        return hash(self.id)
+
     def get_state(self):
         return self._state
 
@@ -49,10 +52,14 @@ class InputPin(Pin):
             repr(self.get_parent())))
 
     def __repr__(self):
-        return "OutputPin(id={}, parentId={}, gate={}, state={})".format(str(self.id),
+        if self.get_parent():
+            return "InputPin(id={}, parent={}, gate={}, state={})".format(str(self.id),
                                                                          str(self.get_parent().id),
                                                                          str(self.get_circuit()),
                                                                          str(self.get_state()))
+        return "InputPin(id={}, noparent, gate={}, state={})".format(str(self.id),
+                                                                      str(self.get_circuit()),
+                                                                      str(self.get_state()))
 
     def update_state(self):
         if self._parent is not None and self._parent.get_state() is True:
@@ -151,6 +158,9 @@ class BaseCircuitElement:
     def get_outputs(self):
         return list(self._output_pins)
 
+    def get_board(self):
+        return self._board
+
     def get_dependent_circuits(self):
         output_pins = self.get_outputs()
         dependent_circuits = set()
@@ -181,7 +191,9 @@ class BaseCircuitElement:
         if not self.is_fully_connected():
             for pin in self.get_outputs():
                 pin.update_state(False)
-            raise NotConnectedCircuitError()
+            print("Not fully connected: " + str(self))
+            return
+            # raise NotConnectedCircuitError()
         for pin in self.get_inputs():
             pin.update_state()
         self.operation()
@@ -198,7 +210,6 @@ class Board:
 
     def __init__(self):
         self.circuits_list = []
-        self.independent_circuits = []
 
     def connect_pins(self, parent_pin, child_pin, update=True):
         """Connects a parent pin with a child pin"""
@@ -236,12 +247,8 @@ class Board:
             raise e
         new_circuit = circuit_type(self)
         self.circuits_list.append(new_circuit)
-        if new_circuit.get_inputs() == []:
-            self.independent_circuits.append(new_circuit)
-        return new_circuit
 
-    def get_independent_circuits(self):
-        return list(self.independent_circuits)
+        return new_circuit
 
     def get_circuits_list(self):
         return list(self.circuits_list)

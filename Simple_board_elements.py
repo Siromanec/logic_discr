@@ -1,4 +1,4 @@
-from Fundamentals import BaseCircuitElement, Board
+from Fundamentals import BaseCircuitElement, Board, OutputPin, InputPin
 
 
 class ANDGate(BaseCircuitElement):
@@ -7,13 +7,24 @@ class ANDGate(BaseCircuitElement):
 
     def operation(self):
         for i_pin in self.get_inputs():
-            if i_pin.get_state is False:
+            if i_pin.get_state() is False:
                 for o_pin in self.get_outputs():
                     o_pin.update_state(False)
                 return
         for o_pin in self.get_outputs():
             o_pin.update_state(True)
 
+
+class XORGate(BaseCircuitElement):
+    def __init__(self, board, i_number=2, o_number=1) -> None:
+        super().__init__(board, i_number, o_number)
+
+    def operation(self):
+        # xor gate with more than two inputs is ambiguous, so it is hardcoded here
+        inputs = self.get_inputs()
+        if inputs[0].get_state() != inputs[1].get_state():
+            for o_pin in self.get_outputs():
+                o_pin.update_state(True)
 
 """class NAND_Gate(BaseCircuitElement):
     def __init__(self, board, i_number=2, o_number=1) -> None:
@@ -36,12 +47,7 @@ class NOR_Gate(BaseCircuitElement):
         if self.input_pins[0].signal is not None and self.input_pins[1].signal is not None:
             self.output_pins[0].change_signal(not (self.input_pins[0].father.signal or self.input_pins[1].father.signal))
 
-class XOR_Gate(BaseCircuitElement):
-    def __init__(self) -> None:
-        super().__init__(2, 1)
-    def operation(self):
-        if self.input_pins[0].signal is not None and self.input_pins[1].signal is not None:
-            self.output_pins[0].change_signal(self.input_pins[0].father.signal ^ self.input_pins[1].father.signal)
+
 
 class XNOR_Gate(BaseCircuitElement):
     def __init__(self) -> None:
@@ -88,27 +94,3 @@ class Lamp(BaseCircuitElement):
             print('not shine')
 
 
-def main():
-    board = Board()
-
-    one1 = board.create_element(ONEGenerator)
-    one2 = board.create_element(ONEGenerator)
-    zero = board.create_element(ZEROGenerator)
-    and_gate = board.create_element(ANDGate)
-    lamp = board.create_element(Lamp)
-
-    try:
-        board.connect_pins(one1.get_outputs()[0], and_gate.get_inputs()[0])
-    except Exception as e:
-        pass
-    try:
-        board.connect_pins(one2.get_outputs()[0], and_gate.get_inputs()[1])
-    except Exception as e:
-        pass
-
-    board.connect_pins(and_gate.get_outputs()[0], lamp.get_inputs()[0])
-
-    # board.update_board()
-
-if __name__ == '__main__':
-    main()
