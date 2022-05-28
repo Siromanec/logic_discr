@@ -29,7 +29,7 @@ class App(customtkinter.CTk):
         #Setup for buttons in a frames
         local_compound = "top"
         local_height = 40
-        local_width = 100
+        local_width = 104
         local_fg_color = ("gray75", "gray30")
         
         #Buffer button
