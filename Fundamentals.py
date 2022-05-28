@@ -18,15 +18,15 @@ class Pin:
         """All pins are unique"""
         return id(self) == id(other)
 
-    def get_state(self):
+    def get_state(self) -> bool:
         return self._state
 
-    def set_state(self, new_state):
-        if new_state not in (True, False):
+    def set_state(self, new_state: bool):
+        if not isinstance(new_state, bool):
             raise ValueError("Incorrect value for a pin state!")
         self._state = new_state
 
-    def get_circuit(self):
+    def get_circuit(self) -> BaseCircuitElement:
         return self._circuit
 
 
@@ -60,7 +60,7 @@ class InputPin(Pin):
         else:
             self.set_state(False)
 
-    def set_parent(self, new_parent):
+    def set_parent(self, new_parent: OutputPin):
         if self._parent is not None:
             raise ParentAlreadyExistsError("Disconnect this pin from his current parent first!")
         if not isinstance(new_parent, OutputPin):
@@ -98,19 +98,19 @@ class OutputPin(Pin):
                                                                            repr(self.get_circuit()),
                                                                            str(self.get_state()))
 
-    def update_state(self, new_state):
+    def update_state(self, new_state: bool):
         self.set_state(new_state)
 
-    def add_child(self, child):
-        if not isinstance(child, Pin):
-            raise ValueError("Incorrect pin child type!")
+    def add_child(self, child: InputPin):
+        if not isinstance(child, InputPin):
+            raise ValueError("A child can only be an InputPin")
         self._children.append(child)
 
-    def remove_child(self, child):
-        if not isinstance(child, Pin):
-            raise ValueError("Incorrect pin child type!")
+    def remove_child(self, child: InputPin):
+        if not isinstance(child, InputPin):
+            raise ValueError("A child can only be an InputPin")
         if child not in self.get_children():
-            raise IndexError("A child doesn't exist!")
+            raise IndexError("The child doesn't exist!")
         self._children.remove(child)
 
     def get_children(self):
@@ -140,16 +140,16 @@ class BaseCircuitElement:
                          "outputs Id's:", str([pin.id for pin in self.get_outputs()])))
 
     def __repr__(self) -> str:
-        return str(self.__class__.__name__)+"()"
+        return self.__class__.__name__
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(id(self))
 
-    def get_inputs(self):
-        return list(self._input_pins)
+    def get_inputs(self) -> tuple[InputPin]:
+        return self._input_pins
 
-    def get_outputs(self):
-        return list(self._output_pins)
+    def get_outputs(self) -> tuple[OutputPin]:
+        return self._output_pins
 
     def get_dependent_circuits(self):
         output_pins = self.get_outputs()
@@ -159,7 +159,7 @@ class BaseCircuitElement:
                 dependent_circuits.add(child.get_circuit())
         return dependent_circuits
 
-    def get_parent_circuits(self):
+    def get_parent_circuits(self) -> set[BaseCircuitElement]:
         input_pins = self.get_inputs()
         parent_circuits = set()
         for pin in input_pins:
@@ -207,14 +207,14 @@ class Board:
         if update:
             self.update_board()
 
-    def disconnect_pins(self, parent_pin, child_pin, update=True):
+    def disconnect_pins(self, parent_pin: OutputPin, child_pin: InputPin, update=True):
         """Disconnects a parent pin and a child pin"""
         parent_pin.remove_child(child_pin)
         child_pin.remove_parent(parent_pin)
         if update:
             self.update_board()
 
-    def remove_element(self, circuit):
+    def remove_element(self, circuit: BaseCircuitElement):
         """Removes given circuit from a board and - deletes it"""
         for child in circuit.get_inputs():
             parent = child.get_parent()
@@ -240,11 +240,11 @@ class Board:
             self.independent_circuits.append(new_circuit)
         return new_circuit
 
-    def get_independent_circuits(self):
-        return list(self.independent_circuits)
+    def get_independent_circuits(self) -> list[BaseCircuitElement]:
+        return (self.independent_circuits)
 
-    def get_circuits_list(self):
-        return list(self.circuits_list)
+    def get_circuits_list(self) -> list[BaseCircuitElement]:
+        return (self.circuits_list)
 
     def update_board(self):
         """Updates board status"""
@@ -265,4 +265,4 @@ class Board:
                     independent_circuits.append(dependent_circuit)
             circuits.remove(circuit)
         for circuit in circuits:
-            circuit.cycle_proccessing()
+            circuit.cycle_processing()
