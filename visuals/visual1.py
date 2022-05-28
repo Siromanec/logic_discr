@@ -16,7 +16,7 @@ class App(customtkinter.CTk):
 
         self.geometry(f"{App.WIDTH}x{App.HEIGHT}")
         self.title("Logical Elements Constructor")
-        self.iconbitmap("icon1.ico")
+        # self.iconbitmap("icon1.ico")
         
         #Setup for frame with logical gates
         self.frame_logical_gates = customtkinter.CTkFrame(master=self)
@@ -28,8 +28,8 @@ class App(customtkinter.CTk):
 
         #Setup for buttons in a frames
         local_compound = "top"
-        local_height = 40
-        local_width = 104
+        local_height = 80
+        local_width = 150
         local_fg_color = ("gray75", "gray30")
         
         #Buffer button
@@ -124,10 +124,61 @@ class App(customtkinter.CTk):
             width = local_width, 
             fg_color=local_fg_color)
         
-        img = ImageTk.PhotoImage(Image.open("XNOR.png"))
+        img = ImageTk.PhotoImage(Image.open("xnor.png"))
         self.xnor_button.set_image(img)
         self.xnor_button.grid(row = 4, column = 1, padx=5, pady=5)
 
+        #Setup for frame with input controls
+        self.input_controls = customtkinter.CTkFrame(master=self)
+        self.input_controls.grid(row=1, column=0, sticky="nswe",  padx=20, pady=20)
+        
+        #Label for the framw
+        self.label_input_controls = customtkinter.CTkLabel(master=self.input_controls, text="Input Controls", text_font = ("Roboto Medium", 13))
+        self.label_input_controls.grid(row = 0, column = 0)
+
+        #High Constant button
+        self.high_constant_button = customtkinter.CTkButton(
+            master=self.input_controls, text="High Constant", 
+            compound= local_compound,
+            height= local_height, 
+            width = local_width, 
+            fg_color=local_fg_color)
+        
+        img = ImageTk.PhotoImage(Image.open("high_constant.png"))
+        self.high_constant_button.set_image(img)
+        self.high_constant_button.grid(row = 1, column = 0, padx=5, pady=5)
+
+        #Low Constant button
+        self.low_constant_button = customtkinter.CTkButton(
+            master=self.input_controls, text="Low Constant", 
+            compound= local_compound,
+            height= local_height, 
+            width = local_width, 
+            fg_color=local_fg_color)
+        
+        img = ImageTk.PhotoImage(Image.open("low_constant.png"))
+        self.low_constant_button.set_image(img)
+        self.low_constant_button.grid(row = 1, column = 1, padx=5, pady=5)
+
+        #Setup for frame with output controls
+        self.output_controls = customtkinter.CTkFrame(master=self)
+        self.output_controls.grid(row=2, column=0, sticky="nswe",  padx=20, pady=20)
+        
+        #Label for the framw
+        self.label_output_controls = customtkinter.CTkLabel(master=self.output_controls, text="Output Controls", text_font = ("Roboto Medium", 13))
+        self.label_output_controls.grid(row = 0, column = 0)
+
+        #Light Bulb button
+        self.light_bulb_button = customtkinter.CTkButton(
+            master=self.output_controls, text="Light Bulb", 
+            compound= local_compound,
+            height= local_height, 
+            width = local_width, 
+            fg_color=local_fg_color)
+        
+        img = ImageTk.PhotoImage(Image.open("light_bulb.png"))
+        self.light_bulb_button.set_image(img)
+        self.light_bulb_button.grid(row = 1, column = 0, padx=5, pady=5)
 
     def button_function():
         """Just shob bulo"""
