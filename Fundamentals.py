@@ -212,7 +212,7 @@ class Board:
     def __init__(self):
         self.circuits_list = []
 
-    def connect_pins(self, parent_pin, child_pin, update=True):
+    def connect_pins(self, parent_pin: OutputPin, child_pin: InputPin, update=True):
         """Connects a parent pin with a child pin"""
         parent_pin.add_child(child_pin)
         child_pin.set_parent(parent_pin)
