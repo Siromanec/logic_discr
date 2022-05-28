@@ -266,6 +266,136 @@ class Substractor(AdvancedCircuitElement):
             update=False,
         )
         self.get_board().update_board()
+       
+class Encoder_4_to_2(AdvancedCircuitElement):
+    """
+    Priority Encoder 4-to-2 bits 
+    Input pins:
+        0: I1
+        1: I2
+        2: I3
+        3: I4
+    Output pins:
+        0: O1
+        1: O2
+        2: Valid
+    ┌───────────┬───────┐
+    |  inputs   |outputs|
+    ├──┬──┬──┬──┼──┬──┬─┤
+    |I4|I3|I2|I1|O2|O1|V|
+    ├──┼──┼──┼──┼──┼──┼─┤
+    |0 |0 |0 |0 |x |x |0|
+    ├──┼──┼──┼──┼──┼──┼─┤
+    |0 |0 |0 |1 |0 |0 |1|
+    ├──┼──┼──┼──┼──┼──┼─┤
+    |0 |0 |1 |x |0 |1 |1|
+    ├──┼──┼──┼──┼──┼──┼─┤
+    |0 |1 |x |x |1 |0 |1|
+    ├──┼──┼──┼──┼──┼──┼─┤
+    |1 |x |x |x |1 |1 |1|
+    └──┴──┴──┴──┴──┴──┴─┘
+    I4, I3, I2, I1 - input pins
+    O2, O1 - output pins
+    V - if encoding is valid
+    x - any signal
+    """
+
+    def __init__(self, board: Board, i_number=4, o_number=3):
+
+        super().__init__(board, i_number, o_number)
+        inputs = self.get_inputs()
+        outputs = self.get_outputs()
+        self.input_dict = {
+            "I1": inputs[0],
+            "I2": inputs[1],
+            "I3": inputs[2],
+            "I4": inputs[3],
+        }
+        self.output_dict = {"O2": outputs[0], "O1": outputs[1], "Valid": outputs[2]}
+        self.or_for_valid_1 = self.create_element(OR_Gate)
+        self.or_for_valid_2 = self.create_element(OR_Gate)
+        self.or_for_valid_3 = self.create_element(OR_Gate)
+        self.or_for_encoder_1 = self.create_element(OR_Gate)
+        self.or_for_encoder_2 = self.create_element(OR_Gate)
+        self.not_gate = self.create_element(NOT_Gate)
+        self.and_gate = self.create_element(AND_Gate)
+        board.connect_pins(
+            self.external_inner_convertor("I1"),
+            self.or_for_valid_1.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I2"),
+            self.or_for_valid_1.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I3"),
+            self.or_for_valid_2.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.or_for_valid_1.get_outputs()[0],
+            self.or_for_valid_2.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I4"),
+            self.or_for_valid_3.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.or_for_valid_2.get_outputs()[0],
+            self.or_for_valid_3.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.or_for_valid_3.get_outputs()[0],
+            self.inner_external_convertor("Valid"),
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I2"),
+            self.and_gate.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I3"),
+            self.not_gate.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.not_gate.get_outputs()[0], self.and_gate.get_inputs()[1], update=False
+        )
+        board.connect_pins(
+            self.and_gate.get_outputs()[0],
+            self.or_for_encoder_1.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I4"),
+            self.or_for_encoder_1.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.or_for_encoder_1.get_outputs()[0],
+            self.inner_external_convertor("O1"),
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I4"),
+            self.or_for_encoder_2.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I3"),
+            self.or_for_encoder_2.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.or_for_encoder_2.get_outputs()[0], self.inner_external_convertor("O2")
+        )
+        self.get_board().update_board()
 
 
 def main():
