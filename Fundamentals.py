@@ -239,6 +239,7 @@ class Board:
         circuit.destroy()
         self.update_board()
 
+
     def create_element(self, circuit_type):
         """Creates a circuit of a given type on the board"""
         try:
