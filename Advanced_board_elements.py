@@ -1,9 +1,10 @@
+from __future__ import annotations
 from Fundamentals import Board, BaseCircuitElement, InputPin, OutputPin
-from Simple_board_elements import ANDGate, XORGate, ONEGenerator, ZEROGenerator, Lamp
+from Simple_board_elements import AND_Gate, XOR_Gate, ONE_Generator, ZERO_Generator, Lamp
 
 
 class AdvancedCircuitElement(BaseCircuitElement):
-    def __init__(self, board, i_number=1, o_number=1):
+    def __init__(self, board: Board, i_number=1, o_number=1):
         super().__init__(board, i_number, o_number)
         self._elements = []
         self.inner_inputs_dict = {}
@@ -27,7 +28,7 @@ class AdvancedCircuitElement(BaseCircuitElement):
         self._elements.append(new_circuit)
         return new_circuit
 
-    def get_elements(self):
+    def get_elements(self) -> list[BaseCircuitElement]:
         return list(self._elements)
 
     def operation(self):
@@ -82,15 +83,15 @@ class HalfAdder(AdvancedCircuitElement):
         0: sum
         1: carry"""
 
-    def __init__(self, board, i_number=2, o_number=2):
+    def __init__(self, board: Board, i_number=2, o_number=2):
         super().__init__(board, i_number, o_number)
         inputs = self.get_inputs()
         outputs = self.get_outputs()
         self.input_dict = {"A": inputs[0], "B": inputs[1]}
         self.output_dict = {"Sum": outputs[0], "Carry": outputs[1]}
 
-        self.xor1 = self.create_element(XORGate)
-        self.and1 = self.create_element(ANDGate)
+        self.xor1 = self.create_element(XOR_Gate)
+        self.and1 = self.create_element(AND_Gate)
 
         board.connect_pins(self.external_inner_convertor("A"), self.xor1.get_inputs()[0], update=False)
         board.connect_pins(self.external_inner_convertor("B"), self.xor1.get_inputs()[1], update=False)
@@ -105,10 +106,10 @@ class HalfAdder(AdvancedCircuitElement):
 def main():
     board = Board()
 
-    one1 = board.create_element(ONEGenerator)
-    one2 = board.create_element(ONEGenerator)
-    zero = board.create_element(ZEROGenerator)
-    and_gate = board.create_element(ANDGate)
+    one1 = board.create_element(ONE_Generator)
+    one2 = board.create_element(ONE_Generator)
+    zero = board.create_element(ZERO_Generator)
+    and_gate = board.create_element(AND_Gate)
     lamp = board.create_element(Lamp)
     half_adder1 = board.create_element(HalfAdder)
 
