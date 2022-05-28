@@ -148,16 +148,16 @@ class BaseCircuitElement:
                          "outputs Id's:", str([pin.id for pin in self.get_outputs()])))
 
     def __repr__(self) -> str:
-        return self.__class__.__name__
+        return self.__class__.__name__ + "()"
 
     def __hash__(self) -> int:
         return hash(id(self))
 
     def get_inputs(self) -> tuple[InputPin]:
-        return self._input_pins
+        return list(self._input_pins)
 
     def get_outputs(self) -> tuple[OutputPin]:
-        return self._output_pins
+        return list(self._output_pins)
 
     def get_board(self):
         return self._board
@@ -168,7 +168,7 @@ class BaseCircuitElement:
         for pin in output_pins:
             for child in pin.get_children():
                 dependent_circuits.add(child.get_circuit())
-        return dependent_circuits
+        return list(dependent_circuits)
 
     def get_parent_circuits(self) -> set[BaseCircuitElement]:
         input_pins = self.get_inputs()
@@ -176,7 +176,7 @@ class BaseCircuitElement:
         for pin in input_pins:
             if pin.get_parent():
                 parent_circuits.add(pin.get_parent().get_circuit())
-        return parent_circuits
+        return list(parent_circuits)
 
     def is_fully_connected(self):
         for pin in self.get_inputs():
@@ -252,7 +252,7 @@ class Board:
         return new_circuit
 
     def get_circuits_list(self) -> list[BaseCircuitElement]:
-        return (self.circuits_list)
+        return list(self.circuits_list)
 
     def update_board(self):
         """Updates board status"""

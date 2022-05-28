@@ -1,7 +1,7 @@
 from Fundamentals import BaseCircuitElement, Board, OutputPin, InputPin
 
 
-class ANDGate(BaseCircuitElement):
+class AND_Gate(BaseCircuitElement):
     def __init__(self, board, i_number=2, o_number=1) -> None:
         super().__init__(board, i_number, o_number)
 
@@ -16,9 +16,6 @@ class ANDGate(BaseCircuitElement):
             val_prev = val and val_prev
         for o_pin in self.get_outputs():
             o_pin.update_state(val_prev)
-
-
-
 
 
 class NAND_Gate(BaseCircuitElement):
@@ -38,6 +35,7 @@ class NAND_Gate(BaseCircuitElement):
         for o_pin in self.get_outputs():
             o_pin.update_state(not val_prev)
 
+
 class OR_Gate(BaseCircuitElement):
     def __init__(self, board) -> None:
         super().__init__(board, 2, 1)
@@ -51,6 +49,7 @@ class OR_Gate(BaseCircuitElement):
         for o_pin in self.get_outputs():
             o_pin.update_state(val_prev)
 
+
 class NOR_Gate(BaseCircuitElement):
     def __init__(self, board) -> None:
         super().__init__(board, 2, 1)
@@ -63,7 +62,6 @@ class NOR_Gate(BaseCircuitElement):
             val_prev = val or val_prev
         for o_pin in self.get_outputs():
             o_pin.update_state(not val_prev)
-
 
 
 class XOR_Gate(BaseCircuitElement):
@@ -108,8 +106,6 @@ class NOT_Gate(BaseCircuitElement):
 
         for o_pin in self.get_outputs():
             o_pin.update_state(not val_prev)
-
-
 
 
 class ZEROGenerator(BaseCircuitElement):

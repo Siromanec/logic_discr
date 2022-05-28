@@ -1,5 +1,5 @@
 from Fundamentals import Board, BaseCircuitElement, InputPin, OutputPin
-from Simple_board_elements import ANDGate, XORGate, ONEGenerator, ZEROGenerator, Lamp
+from Simple_board_elements import AND_Gate, XOR_Gate, ONEGenerator, ZEROGenerator, Lamp
 
 
 class AdvancedCircuitElement(BaseCircuitElement):
@@ -89,8 +89,8 @@ class HalfAdder(AdvancedCircuitElement):
         self.input_dict = {"A": inputs[0], "B": inputs[1]}
         self.output_dict = {"Sum": outputs[0], "Carry": outputs[1]}
 
-        self.xor1 = self.create_element(XORGate)
-        self.and1 = self.create_element(ANDGate)
+        self.xor1 = self.create_element(XOR_Gate)
+        self.and1 = self.create_element(AND_Gate)
 
         board.connect_pins(self.external_inner_convertor("A"), self.xor1.get_inputs()[0], update=False)
         board.connect_pins(self.external_inner_convertor("B"), self.xor1.get_inputs()[1], update=False)
@@ -108,20 +108,22 @@ def main():
     one1 = board.create_element(ONEGenerator)
     one2 = board.create_element(ONEGenerator)
     zero = board.create_element(ZEROGenerator)
-    and_gate = board.create_element(ANDGate)
+    and_gate = board.create_element(AND_Gate)
     lamp = board.create_element(Lamp)
     half_adder1 = board.create_element(HalfAdder)
 
     board.connect_pins(one1.get_outputs()[0], and_gate.get_inputs()[0])
     board.connect_pins(one2.get_outputs()[0], and_gate.get_inputs()[1])
-    board.connect_pins(zero.get_outputs()[0], half_adder1.input_dict["A"])
+    board.connect_pins(one2.get_outputs()[0], half_adder1.input_dict["A"])
     board.connect_pins(one1.get_outputs()[0], half_adder1.input_dict["B"])
 
     board.connect_pins(and_gate.get_outputs()[0], lamp.get_inputs()[0])
 
-    print(half_adder1)
+
     print("Final state: ")
     board.update_board()
+    print(half_adder1.get_outputs())
+
 
 
 if __name__ == '__main__':
