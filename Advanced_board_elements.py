@@ -1,7 +1,7 @@
 from __future__ import annotations
 from Fundamentals import Board, BaseCircuitElement, InputPin, OutputPin
 
-from Simple_board_elements import AND_Gate, XOR_Gate, ONE_Generator, ZERO_Generator, Lamp
+from Simple_board_elements import AND_Gate, XOR_Gate, OR_Gate, ONE_Generator, ZERO_Generator, Lamp
 
 
 
@@ -104,29 +104,70 @@ class HalfAdder(AdvancedCircuitElement):
 
         self.get_board().update_board()
 
+class Adder(AdvancedCircuitElement):
+    """
+    Input pins:
+        0: A
+        1: B
+        2: Carry in
+    Output pins:
+        0: sum
+        1: carry out
+    """
+    def __init__(self, board: Board, i_number=3, o_number=2):
+        super().__init__(board, i_number, o_number)
+        inputs = self.get_inputs()
+        outputs = self.get_outputs()
+        self.input_dict = {"A": inputs[0], "B": inputs[1], "Carry in": inputs[2]}
+        self.output_dict = {"Sum": outputs[0], "Carry out": outputs[1]}
+
+        self.half_adder_1 = self.create_element(HalfAdder)
+        self.half_adder_2 = self.create_element(HalfAdder)
+        self.or_1 = self.create_element(OR_Gate)
+
+        board.connect_pins(self.external_inner_convertor("A"), self.half_adder_1.get_inputs()[0], update=False)
+        board.connect_pins(self.external_inner_convertor("B"), self.half_adder_1.get_inputs()[1], update=False)
+        board.connect_pins(self.half_adder_1.get_outputs()[0], self.or_1.get_inputs()[0], update=False)
+        board.connect_pins(self.half_adder_1.get_outputs()[1], self.half_adder_2.get_inputs()[0], update=False)
+        board.connect_pins(self.external_inner_convertor("Carry in"), self.half_adder_2.get_inputs()[1], update=False)
+        board.connect_pins(self.half_adder_2.get_outputs()[0], self.or_1.get_inputs()[1], update=False)
+        board.connect_pins(self.half_adder_2.get_outputs()[1], self.inner_external_convertor("Sum"), update=False)
+        board.connect_pins(self.or_1.get_outputs()[0], self.inner_external_convertor("Carry out"), update=False)
+
+        self.get_board().update_board()
 
 def main():
     board = Board()
 
-    one1 = board.create_element(ONE_Generator)
+    one = board.create_element(ONE_Generator)
     one2 = board.create_element(ONE_Generator)
     zero = board.create_element(ZERO_Generator)
+    
 
-    and_gate = board.create_element(AND_Gate)
-    lamp = board.create_element(Lamp)
+    # and_gate = board.create_element(AND_Gate)
+    # lamp = board.create_element(Lamp)
     half_adder1 = board.create_element(HalfAdder)
+    half_adder2 = board.create_element(HalfAdder)
+    adder_1 = board.create_element(Adder)
+    lamp1 = board.create_element(Lamp)
+    lamp2 = board.create_element(Lamp)
 
-    board.connect_pins(one1.get_outputs()[0], and_gate.get_inputs()[0])
-    board.connect_pins(one2.get_outputs()[0], and_gate.get_inputs()[1])
-    board.connect_pins(one2.get_outputs()[0], half_adder1.input_dict["A"])
-    board.connect_pins(one1.get_outputs()[0], half_adder1.input_dict["B"])
+    board.connect_pins(one.get_outputs()[0], adder_1.get_inputs()[0])
+    board.connect_pins(zero.get_outputs()[0], adder_1.get_inputs()[1])
+    board.connect_pins(one2.get_outputs()[0], adder_1.get_inputs()[2])
+    board.connect_pins(adder_1.get_outputs()[0], lamp2.get_inputs()[1])
+    board.connect_pins(adder_1.get_outputs()[1], lamp1.get_inputs()[0])
+    # board.connect_pins(one1.get_outputs()[0], and_gate.get_inputs()[0])
+    # board.connect_pins(one2.get_outputs()[0], and_gate.get_inputs()[1])
+    # board.connect_pins(one2.get_outputs()[0], half_adder1.input_dict["A"])
+    # board.connect_pins(one1.get_outputs()[0], half_adder1.input_dict["B"])
 
-    board.connect_pins(and_gate.get_outputs()[0], lamp.get_inputs()[0])
+    # board.connect_pins(and_gate.get_outputs()[0], lamp.get_inputs()[0])
 
 
     print("Final state: ")
     board.update_board()
-    print(half_adder1.get_outputs())
+    print(adder1.get_outputs())
 
 
 
