@@ -1,8 +1,15 @@
 from __future__ import annotations
 from Fundamentals import Board, BaseCircuitElement, InputPin, OutputPin
 
-from Simple_board_elements import AND_Gate, XOR_Gate, ONE_Generator, ZERO_Generator, Lamp
-
+from Simple_board_elements import (
+    AND_Gate,
+    OR_Gate,
+    XOR_Gate,
+    ONE_Generator,
+    ZERO_Generator,
+    Lamp,
+    NOT_Gate,
+)
 
 
 class AdvancedCircuitElement(BaseCircuitElement):
@@ -40,7 +47,8 @@ class AdvancedCircuitElement(BaseCircuitElement):
             circuits_dependence = {}
             for circuit in circuits:
                 circuits_set = circuit.get_parent_circuits()
-                circuits_set.remove(self)
+                if self in circuits_set:
+                    circuits_set.remove(self)
                 circuits_dependence[circuit] = len(circuits_set)
                 if circuits_dependence[circuit] == 0:
                     independent_circuits.append(circuit)
@@ -95,13 +103,135 @@ class HalfAdder(AdvancedCircuitElement):
         self.xor1 = self.create_element(XOR_Gate)
         self.and1 = self.create_element(AND_Gate)
 
-        board.connect_pins(self.external_inner_convertor("A"), self.xor1.get_inputs()[0], update=False)
-        board.connect_pins(self.external_inner_convertor("B"), self.xor1.get_inputs()[1], update=False)
-        board.connect_pins(self.external_inner_convertor("A"), self.and1.get_inputs()[0], update=False)
-        board.connect_pins(self.external_inner_convertor("B"), self.and1.get_inputs()[1], update=False)
-        board.connect_pins(self.xor1.get_outputs()[0], self.inner_external_convertor("Sum"), update=False)
-        board.connect_pins(self.and1.get_outputs()[0], self.inner_external_convertor("Carry"), update=False)
+        board.connect_pins(
+            self.external_inner_convertor("A"), self.xor1.get_inputs()[0], update=False
+        )
+        board.connect_pins(
+            self.external_inner_convertor("B"), self.xor1.get_inputs()[1], update=False
+        )
+        board.connect_pins(
+            self.external_inner_convertor("A"), self.and1.get_inputs()[0], update=False
+        )
+        board.connect_pins(
+            self.external_inner_convertor("B"), self.and1.get_inputs()[1], update=False
+        )
+        board.connect_pins(
+            self.xor1.get_outputs()[0],
+            self.inner_external_convertor("Sum"),
+            update=False,
+        )
+        board.connect_pins(
+            self.and1.get_outputs()[0],
+            self.inner_external_convertor("Carry"),
+            update=False,
+        )
 
+        self.get_board().update_board()
+
+
+class HalfSubstractor(AdvancedCircuitElement):
+    """
+    Input pins:
+        0: A
+        1: B
+    Output pins:
+        0: difference
+        1: borrow"""
+
+    def __init__(self, board: Board, i_number=2, o_number=2):
+        super().__init__(board, i_number, o_number)
+        inputs = self.get_inputs()
+        outputs = self.get_outputs()
+        self.input_dict = {"A": inputs[0], "B": inputs[1]}
+        self.output_dict = {"Diff": outputs[0], "Borrow": outputs[1]}
+        self.xor1 = self.create_element(XOR_Gate)
+        self.and1 = self.create_element(AND_Gate)
+        self.not1 = self.create_element(NOT_Gate)
+        board.connect_pins(
+            self.external_inner_convertor("A"), self.xor1.get_inputs()[0], update=False
+        )
+        board.connect_pins(
+            self.external_inner_convertor("B"), self.xor1.get_inputs()[1], update=False
+        )
+        board.connect_pins(
+            self.external_inner_convertor("A"), self.not1.get_inputs()[0], update=False
+        )
+        board.connect_pins(
+            self.external_inner_convertor("B"), self.and1.get_inputs()[1], update=False
+        )
+        board.connect_pins(
+            self.not1.get_outputs()[0], self.and1.get_inputs()[0], update=False
+        )
+        board.connect_pins(
+            self.xor1.get_outputs()[0],
+            self.inner_external_convertor("Diff"),
+            update=False,
+        )
+        board.connect_pins(
+            self.and1.get_outputs()[0],
+            self.inner_external_convertor("Borrow"),
+            update=False,
+        )
+
+        self.get_board().update_board()
+
+
+class Substractor(AdvancedCircuitElement):
+    """
+    Input pins:
+        0: A
+        1: B
+        2: borrow in
+    Output pins:
+        0: difference
+        1: borrow out
+    """
+
+    def __init__(self, board: Board, i_number=3, o_number=2):
+        super().__init__(board, i_number, o_number)
+        inputs = self.get_inputs()
+        outputs = self.get_outputs()
+        self.input_dict = {"A": inputs[0], "B": inputs[1], "Borrow In": inputs[2]}
+        self.output_dict = {"Diff": outputs[0], "Borrow Out": outputs[1]}
+        self.half_sub1 = self.create_element(HalfSubstractor)
+        self.half_sub2 = self.create_element(HalfSubstractor)
+        self.or1 = self.create_element(OR_Gate)
+        board.connect_pins(
+            self.external_inner_convertor("A"),
+            self.half_sub1.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("B"),
+            self.half_sub1.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.half_sub1.get_outputs()[0],
+            self.half_sub2.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("Borrow In"),
+            self.half_sub2.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.half_sub2.get_outputs()[1], self.or1.get_inputs()[0], update=False
+        )
+        board.connect_pins(
+            self.half_sub1.get_outputs()[1], self.or1.get_inputs()[1], update=False
+        )
+        board.connect_pins(
+            self.half_sub2.get_outputs()[0],
+            self.inner_external_convertor("Diff"),
+            update=False,
+        )
+        board.connect_pins(
+            self.or1.get_outputs()[0],
+            self.inner_external_convertor("Borrow Out"),
+            update=False,
+        )
         self.get_board().update_board()
 
 
@@ -112,23 +242,23 @@ def main():
     one2 = board.create_element(ONE_Generator)
     zero = board.create_element(ZERO_Generator)
 
-    and_gate = board.create_element(AND_Gate)
     lamp = board.create_element(Lamp)
-    half_adder1 = board.create_element(HalfAdder)
+    lamp_2 = board.create_element(Lamp)
+    substractor1 = board.create_element(Substractor)
 
-    board.connect_pins(one1.get_outputs()[0], and_gate.get_inputs()[0])
-    board.connect_pins(one2.get_outputs()[0], and_gate.get_inputs()[1])
-    board.connect_pins(one2.get_outputs()[0], half_adder1.input_dict["A"])
-    board.connect_pins(one1.get_outputs()[0], half_adder1.input_dict["B"])
+    # board.connect_pins(one1.get_outputs()[0], and_gate.get_inputs()[0])
+    # board.connect_pins(one2.get_outputs()[0], and_gate.get_inputs()[1])
+    board.connect_pins(one2.get_outputs()[0], substractor1.get_inputs()[0])
+    board.connect_pins(one1.get_outputs()[0], substractor1.get_inputs()[2])
+    board.connect_pins(zero.get_outputs()[0], substractor1.get_inputs()[1])
 
-    board.connect_pins(and_gate.get_outputs()[0], lamp.get_inputs()[0])
-
+    board.connect_pins(substractor1.get_outputs()[0], lamp.get_inputs()[0])
+    board.connect_pins(substractor1.get_outputs()[1], lamp_2.get_inputs()[0])
 
     print("Final state: ")
     board.update_board()
-    print(half_adder1.get_outputs())
+    print(substractor1.get_outputs())
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
