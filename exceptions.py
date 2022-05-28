@@ -11,3 +11,9 @@ class ImpossibleToJoin(Exception):
     """Can't join out/out or in/in"""
 class ImpossibleToDisconnect(Exception):
     """Can't disconnect out/out or in/in"""
+
+class ParentAlreadyExistsError(Exception):
+    pass
+
+class NotConnectedCircuitError(Exception):
+    pass
