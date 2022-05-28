@@ -1,6 +1,8 @@
 from __future__ import annotations
 from Fundamentals import Board, BaseCircuitElement, InputPin, OutputPin
+
 from Simple_board_elements import AND_Gate, XOR_Gate, ONE_Generator, ZERO_Generator, Lamp
+
 
 
 class AdvancedCircuitElement(BaseCircuitElement):
@@ -109,20 +111,23 @@ def main():
     one1 = board.create_element(ONE_Generator)
     one2 = board.create_element(ONE_Generator)
     zero = board.create_element(ZERO_Generator)
+
     and_gate = board.create_element(AND_Gate)
     lamp = board.create_element(Lamp)
     half_adder1 = board.create_element(HalfAdder)
 
     board.connect_pins(one1.get_outputs()[0], and_gate.get_inputs()[0])
     board.connect_pins(one2.get_outputs()[0], and_gate.get_inputs()[1])
-    board.connect_pins(zero.get_outputs()[0], half_adder1.input_dict["A"])
+    board.connect_pins(one2.get_outputs()[0], half_adder1.input_dict["A"])
     board.connect_pins(one1.get_outputs()[0], half_adder1.input_dict["B"])
 
     board.connect_pins(and_gate.get_outputs()[0], lamp.get_inputs()[0])
 
-    print(half_adder1)
+
     print("Final state: ")
     board.update_board()
+    print(half_adder1.get_outputs())
+
 
 
 if __name__ == '__main__':

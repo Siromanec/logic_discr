@@ -39,9 +39,6 @@ class AND_Gate(BaseCircuitElement):
             o_pin.update_state(val_prev)
 
 
-
-
-
 class NAND_Gate(BaseCircuitElement):
     """
     The NAND logic gate
@@ -72,6 +69,7 @@ class NAND_Gate(BaseCircuitElement):
         for o_pin in self.get_outputs():
             o_pin.update_state(not val_prev)
 
+
 class OR_Gate(BaseCircuitElement):
     """
     The OR logic gate
@@ -100,6 +98,7 @@ class OR_Gate(BaseCircuitElement):
             val_prev = val or val_prev
         for o_pin in self.get_outputs():
             o_pin.update_state(val_prev)
+
 
 class NOR_Gate(BaseCircuitElement):
     """
@@ -130,7 +129,6 @@ class NOR_Gate(BaseCircuitElement):
             val_prev = val or val_prev
         for o_pin in self.get_outputs():
             o_pin.update_state(not val_prev)
-
 
 
 class XOR_Gate(BaseCircuitElement):
@@ -223,13 +221,13 @@ class NOT_Gate(BaseCircuitElement):
 
 
 
-
 class ZERO_Generator(BaseCircuitElement):
     """
     The ZERO signal generator
     """
     def __init__(self, board, o_number=1) -> None:
         super().__init__(board, 0, o_number)
+
 
     def operation(self):
         """
