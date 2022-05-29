@@ -28,14 +28,23 @@ class AdvancedCircuitElement(BaseCircuitElement):
             o_pin = OutputPin(self)
             self.inner_inputs_dict[i_pin] = o_pin
 
-    def create_element(self, circuit_type):
+    def create_element(self, circuit_type, inputs=None, outputs=None):
         """Creates a circuit of a given type in this circuit"""
         try:
             if not issubclass(circuit_type, BaseCircuitElement):
                 raise ValueError("Incorrect circuit type!")
         except TypeError as e:
             raise e
-        new_circuit = circuit_type(self.get_board())
+
+        if inputs is not None and outputs is not None:
+            new_circuit = circuit_type(self.get_board(), inputs, outputs)
+        elif inputs is not None:
+            new_circuit = circuit_type(self.get_board(), inputs)
+        elif outputs is not None:
+            new_circuit = circuit_type(self.get_board(), outputs)
+        else:
+            new_circuit = circuit_type(self.get_board())
+
         self._elements.append(new_circuit)
         return new_circuit
 
@@ -85,7 +94,7 @@ class AdvancedCircuitElement(BaseCircuitElement):
     def inner_external_convertor(self, output_pin_name):
         return self.inner_outputs_dict[self.output_dict[output_pin_name]]
     
-    def add_element(self, circuit):
+    '''def add_element(self, circuit):
         try:
             if not issubclass(type(circuit), BaseCircuitElement):
                 raise ValueError("Incorrect circuit type!")
@@ -93,9 +102,8 @@ class AdvancedCircuitElement(BaseCircuitElement):
             raise e
 
         self._elements.append(circuit)
-        return circuit
+        return circuit'''
     
-
 
 class HalfAdder(AdvancedCircuitElement):
     """
@@ -141,6 +149,7 @@ class HalfAdder(AdvancedCircuitElement):
 
         self.get_board().update_board()
 
+
 class Adder(AdvancedCircuitElement):
     """
     Input pins:
@@ -173,8 +182,7 @@ class Adder(AdvancedCircuitElement):
 
         self.get_board().update_board()
 
-        
-        
+
 class HalfSubstractor(AdvancedCircuitElement):
     """
     Input pins:
@@ -279,7 +287,8 @@ class Substractor(AdvancedCircuitElement):
             update=False,
         )
         self.get_board().update_board()
-       
+
+
 class Encoder_4_to_2(AdvancedCircuitElement):
     """
     Priority Encoder 4-to-2 bits 
@@ -438,10 +447,10 @@ class Encoder_8_to_3(AdvancedCircuitElement):
             "O1": outputs[2],
             "Valid": outputs[3],
         }
-        self.nand_gate_1 = self.add_element(NAND_Gate(self, 4, 1))
-        self.nand_gate_2 = self.add_element(NAND_Gate(self, 4, 1))
-        self.nand_gate_3 = self.add_element(NAND_Gate(self, 4, 1))
-        self.nand_gate_4 = self.add_element(NAND_Gate(self, 4, 1))
+        self.nand_gate_1 = self.create_element(NAND_Gate, 4, 1)
+        self.nand_gate_2 = self.create_element(NAND_Gate, 4, 1)
+        self.nand_gate_3 = self.create_element(NAND_Gate, 4, 1)
+        self.nand_gate_4 = self.create_element(NAND_Gate, 4, 1)
         self.additional_nand_1 = self.create_element(NAND_Gate)
         self.additional_nand_2 = self.create_element(NAND_Gate)
         self.additional_nand_3 = self.create_element(NAND_Gate)
@@ -450,8 +459,8 @@ class Encoder_8_to_3(AdvancedCircuitElement):
         self.not_gate_3 = self.create_element(NOT_Gate)
         self.not_gate_4 = self.create_element(NOT_Gate)
         self.not_gate_5 = self.create_element(NOT_Gate)
-        self.or_gate_1 = self.add_element(OR_Gate(self, 3, 1))
-        self.or_gate_2 = self.add_element(OR_Gate(self, 3, 1))
+        self.or_gate_1 = self.create_element(OR_Gate, 3, 1)
+        self.or_gate_2 = self.create_element(OR_Gate, 3, 1)
         self.nor_gate = self.create_element(NOR_Gate)
         board.connect_pins(
             self.external_inner_convertor("I1"),

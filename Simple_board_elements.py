@@ -212,7 +212,7 @@ class NOT_Gate(BaseCircuitElement):
     """
 
     def __init__(self, board) -> None:
-        super().__init__(board, 2, 1)
+        super().__init__(board, 1, 1)
 
     def operation(self):
         """
