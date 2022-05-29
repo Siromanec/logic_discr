@@ -11,6 +11,7 @@ class AND_Gate(BaseCircuitElement):
     """
     The AND logic gate
     """
+
     def __init__(self, board, i_number=2, o_number=1) -> None:
         super().__init__(board, i_number, o_number)
 
@@ -43,8 +44,10 @@ class NAND_Gate(BaseCircuitElement):
     """
     The NAND logic gate
     """
+
     def __init__(self, board, i_number=2, o_number=1) -> None:
         super().__init__(board, i_number, o_number)
+
     def operation(self):
         """
         Performs NAND operation on all inputs
@@ -74,8 +77,10 @@ class OR_Gate(BaseCircuitElement):
     """
     The OR logic gate
     """
-    def __init__(self, board) -> None:
-        super().__init__(board, 2, 1)
+
+    def __init__(self, board, i_number=2, o_number=1) -> None:
+        super().__init__(board, i_number, o_number)
+
     def operation(self):
         bools = tuple(i_pin.get_state() for i_pin in self.get_inputs())
         """
@@ -104,8 +109,10 @@ class NOR_Gate(BaseCircuitElement):
     """
     The NOR logic gate
     """
-    def __init__(self, board) -> None:
-        super().__init__(board, 2, 1)
+
+    def __init__(self, board, i_number=2, o_number=1) -> None:
+        super().__init__(board, i_number, o_number)
+
     def operation(self):
         """
         Performs NOR operation on all inputs
@@ -135,8 +142,10 @@ class XOR_Gate(BaseCircuitElement):
     """
     The XOR logic gate
     """
+
     def __init__(self, board) -> None:
         super().__init__(board, 2, 1)
+
     def operation(self):
         """
         Performs XOR operation on all inputs
@@ -168,8 +177,10 @@ class XNOR_Gate(BaseCircuitElement):
     """
     The XNOR logic gate
     """
+
     def __init__(self, board) -> None:
         super().__init__(board, 2, 1)
+
     def operation(self):
         """
         Performs XNOR operation on all inputs
@@ -199,8 +210,10 @@ class NOT_Gate(BaseCircuitElement):
     """
     The NOT logic gate
     """
+
     def __init__(self, board) -> None:
-        super().__init__(board, 2, 1) 
+        super().__init__(board, 2, 1)
+
     def operation(self):
         """
         Performs NOT operation on input
@@ -220,14 +233,13 @@ class NOT_Gate(BaseCircuitElement):
             o_pin.update_state(not val_prev)
 
 
-
 class ZERO_Generator(BaseCircuitElement):
     """
     The ZERO signal generator
     """
+
     def __init__(self, board, o_number=1) -> None:
         super().__init__(board, 0, o_number)
-
 
     def operation(self):
         """
@@ -241,6 +253,7 @@ class ONE_Generator(BaseCircuitElement):
     """
     The ONE signal generator
     """
+
     def __init__(self, board, o_number=1) -> None:
         super().__init__(board, 0, o_number)
 
@@ -254,6 +267,7 @@ class ONE_Generator(BaseCircuitElement):
 
 class Lamp(BaseCircuitElement):
     """Toy implementation of a lamp"""
+
     def __init__(self, board) -> None:
         super().__init__(board, 1, 0)
 
@@ -268,4 +282,4 @@ class Lamp(BaseCircuitElement):
         if val_prev:
             print("shine")
         else:
-            print('not shine')
+            print("not shine")
