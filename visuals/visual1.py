@@ -40,7 +40,7 @@ class App(customtkinter.CTk):
             width = local_width, 
             fg_color=local_fg_color)
         
-        img = ImageTk.PhotoImage(Image.open("buffer.png"))
+        img = ImageTk.PhotoImage(Image.open("buffer.png").resize((80, 40)))
         self.buffer_button.set_image(img)
         self.buffer_button.grid(row = 1, column = 0, padx=5, pady=5)
 
@@ -52,7 +52,7 @@ class App(customtkinter.CTk):
             width = local_width, 
             fg_color=local_fg_color)
         
-        img = ImageTk.PhotoImage(Image.open("not.png"))
+        img = ImageTk.PhotoImage(Image.open("not.png").resize((80, 40)))
         self.not_button.set_image(img)
         self.not_button.grid(row = 1, column = 1, padx=5, pady=5)
 
@@ -64,7 +64,7 @@ class App(customtkinter.CTk):
             width = local_width, 
             fg_color=local_fg_color)
         
-        img = ImageTk.PhotoImage(Image.open("and.png"))
+        img = ImageTk.PhotoImage(Image.open("and.png").resize((80, 40)))
         self.and_button.set_image(img)
         self.and_button.grid(row = 2, column = 0, padx=5, pady=5)
 
@@ -76,7 +76,7 @@ class App(customtkinter.CTk):
             width = local_width, 
             fg_color=local_fg_color)
         
-        img = ImageTk.PhotoImage(Image.open("nand.png"))
+        img = ImageTk.PhotoImage(Image.open("nand.png").resize((80, 40)))
         self.nand_button.set_image(img)
         self.nand_button.grid(row = 2, column = 1, padx=5, pady=5)
 
@@ -88,7 +88,7 @@ class App(customtkinter.CTk):
             width = local_width, 
             fg_color=local_fg_color)
         
-        img = ImageTk.PhotoImage(Image.open("or.png"))
+        img = ImageTk.PhotoImage(Image.open("or.png").resize((80, 40)))
         self.or_button.set_image(img)
         self.or_button.grid(row = 3, column = 0, padx=5, pady=5)
 
@@ -100,7 +100,7 @@ class App(customtkinter.CTk):
             width = local_width, 
             fg_color=local_fg_color)
         
-        img = ImageTk.PhotoImage(Image.open("nor.png"))
+        img = ImageTk.PhotoImage(Image.open("nor.png").resize((80, 40)))
         self.nor_button.set_image(img)
         self.nor_button.grid(row = 3, column = 1, padx=5, pady=5)
 
@@ -112,7 +112,7 @@ class App(customtkinter.CTk):
             width = local_width, 
             fg_color=local_fg_color)
         
-        img = ImageTk.PhotoImage(Image.open("xor.png"))
+        img = ImageTk.PhotoImage(Image.open("xor.png").resize((80, 40)))
         self.xor_button.set_image(img)
         self.xor_button.grid(row = 4, column = 0, padx=5, pady=5)
 
@@ -124,7 +124,7 @@ class App(customtkinter.CTk):
             width = local_width, 
             fg_color=local_fg_color)
         
-        img = ImageTk.PhotoImage(Image.open("xnor.png"))
+        img = ImageTk.PhotoImage(Image.open("xnor.png").resize((80, 40)))
         self.xnor_button.set_image(img)
         self.xnor_button.grid(row = 4, column = 1, padx=5, pady=5)
 
@@ -144,7 +144,7 @@ class App(customtkinter.CTk):
             width = local_width, 
             fg_color=local_fg_color)
         
-        img = ImageTk.PhotoImage(Image.open("high_constant.png"))
+        img = ImageTk.PhotoImage(Image.open("high_constant.png").resize((80, 40)))
         self.high_constant_button.set_image(img)
         self.high_constant_button.grid(row = 1, column = 0, padx=5, pady=5)
 
@@ -156,7 +156,7 @@ class App(customtkinter.CTk):
             width = local_width, 
             fg_color=local_fg_color)
         
-        img = ImageTk.PhotoImage(Image.open("low_constant.png"))
+        img = ImageTk.PhotoImage(Image.open("low_constant.png").resize((80, 40)))
         self.low_constant_button.set_image(img)
         self.low_constant_button.grid(row = 1, column = 1, padx=5, pady=5)
 
@@ -176,7 +176,7 @@ class App(customtkinter.CTk):
             width = local_width, 
             fg_color=local_fg_color)
         
-        img = ImageTk.PhotoImage(Image.open("light_bulb.png"))
+        img = ImageTk.PhotoImage(Image.open("light_bulb.png").resize((40, 80)))
         self.light_bulb_button.set_image(img)
         self.light_bulb_button.grid(row = 1, column = 0, padx=5, pady=5)
 
