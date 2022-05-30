@@ -132,7 +132,7 @@ class BaseCircuitElement:
     """
     count = 0
 
-    def __init__(self, board, input_pins_amount: int, output_pins_amount: int=1) -> None:
+    def __init__(self, board, input_pins_amount: int, output_pins_amount: int) -> None:
         self._input_pins = tuple(InputPin(self) for _ in range(input_pins_amount))
         self._output_pins = tuple(OutputPin(self) for _ in range(output_pins_amount))
         self._board = board
@@ -239,15 +239,23 @@ class Board:
         circuit.destroy()
         self.update_board()
 
-
-    def create_element(self, circuit_type):
+    def create_element(self, circuit_type, inputs=None, outputs=None):
         """Creates a circuit of a given type on the board"""
         try:
             if not issubclass(circuit_type, BaseCircuitElement):
                 raise ValueError("Incorrect circuit type!")
         except TypeError as e:
             raise e
-        new_circuit = circuit_type(self)
+
+        if inputs is not None and outputs is not None:
+            new_circuit = circuit_type(self, inputs, outputs)
+        elif inputs is not None:
+            new_circuit = circuit_type(self, inputs)
+        elif outputs is not None:
+            new_circuit = circuit_type(self, outputs)
+        else:
+            new_circuit = circuit_type(self)
+
         self.circuits_list.append(new_circuit)
 
         return new_circuit
@@ -275,3 +283,26 @@ class Board:
             circuits.remove(circuit)
         for circuit in circuits:
             circuit.cycle_processing()
+
+    '''def update(self, structure=""):
+        """Updates structure state, using topology sorting"""
+        if not structure:
+            structure = self
+        circuits = self.get_circuits_list()
+        independent_circuits = []
+        circuits_dependence = {}
+        for circuit in circuits:
+            circuits_dependence[circuit] = len(circuit.get_parent_circuits())
+            if circuits_dependence[circuit] == 0:
+                independent_circuits.append(circuit)
+
+        while independent_circuits:
+            circuit = independent_circuits.pop(0)
+            circuit.update()
+            for dependent_circuit in circuit.get_dependent_circuits():
+                circuits_dependence[dependent_circuit] -= 1
+                if circuits_dependence[dependent_circuit] == 0:
+                    independent_circuits.append(dependent_circuit)
+            circuits.remove(circuit)
+        for circuit in circuits:
+            circuit.cycle_processing()'''
