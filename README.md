@@ -1,5 +1,18 @@
 # logic_discr
-very cool discreete project
+very cool discreete project<br />
+## requirements:
+  tkinter, customtkinter<br />
+## usage:
+run main.py
 ```
-very cool python code
+python main.py
 ```
+# short overview of classes:
+## Fundamentals.Pin, Fundamentals.InputPin, Fundamentals.OutputPin:
+The pin is used to connect BaseCircuitElements (BCE)<br />
+Works like a node
+Stores the BCE that owns them
+## Fundamentals.BaseCircuitElements:
+BCE is used for creating logic gates
+## Fundamentals.Board:
+
