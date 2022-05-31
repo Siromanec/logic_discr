@@ -660,41 +660,345 @@ class Encoder_8_to_3(AdvancedCircuitElement):
         self.get_board().update_board()
 
 
+class ShiftLeft(AdvancedCircuitElement):
+    """
+    Moving a bit pattern to the left
+        1      0      1     0
+        ↓      ↓      ↓     ↓
+     ┌────────────────────────┐
+     |       Shift left       |
+     └────────────────────────┘
+        ↓      ↓      ↓     ↓
+        0      1      0     0
+    Input pins:
+        0: I1
+        1: I2
+        2: I3
+        3: I4
+    Output pins:
+        0: O1
+        1: O2
+        2: O3
+        3: O4
+    """
+
+    def __init__(self, board: Board, i_number=4, o_number=4):
+        super().__init__(board, i_number, o_number)
+        inputs = self.get_inputs()
+        outputs = self.get_outputs()
+        self.input_dict = {
+            "I1": inputs[0],
+            "I2": inputs[1],
+            "I3": inputs[2],
+            "I4": inputs[3],
+        }
+        self.output_dict = {
+            "O1": outputs[0],
+            "O2": outputs[1],
+            "O3": outputs[2],
+            "O4": outputs[3],
+        }
+        self.controller = self.create_element(ZERO_Generator)
+        self.not_gate = self.create_element(NOT_Gate)
+        self.and_gate_1 = self.create_element(AND_Gate)
+        self.and_gate_2 = self.create_element(AND_Gate)
+        self.and_gate_3 = self.create_element(AND_Gate)
+        self.and_gate_4 = self.create_element(AND_Gate)
+        self.and_gate_5 = self.create_element(AND_Gate)
+        self.and_gate_6 = self.create_element(AND_Gate)
+        self.or_gate_1 = self.create_element(OR_Gate)
+        self.or_gate_2 = self.create_element(OR_Gate)
+        board.connect_pins(
+            self.controller.get_outputs()[0],
+            self.not_gate.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I1"),
+            self.and_gate_1.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I2"),
+            self.and_gate_2.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I2"),
+            self.and_gate_3.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I3"),
+            self.and_gate_4.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I3"),
+            self.and_gate_5.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I4"),
+            self.and_gate_6.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.controller.get_outputs()[0],
+            self.and_gate_1.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.controller.get_outputs()[0],
+            self.and_gate_3.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.controller.get_outputs()[0],
+            self.and_gate_5.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.not_gate.get_outputs()[0],
+            self.and_gate_2.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.not_gate.get_outputs()[0],
+            self.and_gate_4.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.not_gate.get_outputs()[0],
+            self.and_gate_6.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.and_gate_1.get_outputs()[0],
+            self.or_gate_1.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.and_gate_4.get_outputs()[0],
+            self.or_gate_1.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.and_gate_3.get_outputs()[0],
+            self.or_gate_2.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.and_gate_6.get_outputs()[0],
+            self.or_gate_2.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.and_gate_2.get_outputs()[0],
+            self.inner_external_convertor("O1"),
+            update=False,
+        )
+        board.connect_pins(
+            self.or_gate_1.get_outputs()[0],
+            self.inner_external_convertor("O2"),
+            update=False,
+        )
+        board.connect_pins(
+            self.or_gate_2.get_outputs()[0],
+            self.inner_external_convertor("O3"),
+            update=False,
+        )
+        board.connect_pins(
+            self.and_gate_5.get_outputs()[0],
+            self.inner_external_convertor("O4"),
+            update=False,
+        )
+        self.get_board().update_board()
+
+
+class ShiftRight(AdvancedCircuitElement):
+    """
+    Moving a bit pattern to the right
+        1      0      1     0
+        ↓      ↓      ↓     ↓
+     ┌────────────────────────┐
+     |      Shift right       |
+     └────────────────────────┘
+        ↓      ↓      ↓     ↓
+        0      1      0     1
+        Input pins:
+        0: I1
+        1: I2
+        2: I3
+        3: I4
+    Output pins:
+        0: O1
+        1: O2
+        2: O3
+        3: O4
+    """
+
+    def __init__(self, board: Board, i_number=4, o_number=4):
+        super().__init__(board, i_number, o_number)
+        inputs = self.get_inputs()
+        outputs = self.get_outputs()
+        self.input_dict = {
+            "I1": inputs[0],
+            "I2": inputs[1],
+            "I3": inputs[2],
+            "I4": inputs[3],
+        }
+        self.output_dict = {
+            "O1": outputs[0],
+            "O2": outputs[1],
+            "O3": outputs[2],
+            "O4": outputs[3],
+        }
+        self.controller = self.create_element(ONE_Generator)
+        self.not_gate = self.create_element(NOT_Gate)
+        self.and_gate_1 = self.create_element(AND_Gate)
+        self.and_gate_2 = self.create_element(AND_Gate)
+        self.and_gate_3 = self.create_element(AND_Gate)
+        self.and_gate_4 = self.create_element(AND_Gate)
+        self.and_gate_5 = self.create_element(AND_Gate)
+        self.and_gate_6 = self.create_element(AND_Gate)
+        self.or_gate_1 = self.create_element(OR_Gate)
+        self.or_gate_2 = self.create_element(OR_Gate)
+        board.connect_pins(
+            self.controller.get_outputs()[0],
+            self.not_gate.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I1"),
+            self.and_gate_1.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I2"),
+            self.and_gate_2.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I2"),
+            self.and_gate_3.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I3"),
+            self.and_gate_4.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I3"),
+            self.and_gate_5.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.external_inner_convertor("I4"),
+            self.and_gate_6.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.controller.get_outputs()[0],
+            self.and_gate_1.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.controller.get_outputs()[0],
+            self.and_gate_3.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.controller.get_outputs()[0],
+            self.and_gate_5.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.not_gate.get_outputs()[0],
+            self.and_gate_2.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.not_gate.get_outputs()[0],
+            self.and_gate_4.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.not_gate.get_outputs()[0],
+            self.and_gate_6.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.and_gate_1.get_outputs()[0],
+            self.or_gate_1.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.and_gate_4.get_outputs()[0],
+            self.or_gate_1.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.and_gate_3.get_outputs()[0],
+            self.or_gate_2.get_inputs()[0],
+            update=False,
+        )
+        board.connect_pins(
+            self.and_gate_6.get_outputs()[0],
+            self.or_gate_2.get_inputs()[1],
+            update=False,
+        )
+        board.connect_pins(
+            self.and_gate_2.get_outputs()[0],
+            self.inner_external_convertor("O1"),
+            update=False,
+        )
+        board.connect_pins(
+            self.or_gate_1.get_outputs()[0],
+            self.inner_external_convertor("O2"),
+            update=False,
+        )
+        board.connect_pins(
+            self.or_gate_2.get_outputs()[0],
+            self.inner_external_convertor("O3"),
+            update=False,
+        )
+        board.connect_pins(
+            self.and_gate_5.get_outputs()[0],
+            self.inner_external_convertor("O4"),
+            update=False,
+        )
+        self.get_board().update_board()
+
+
 def main():
     board = Board()
 
     one1 = board.create_element(ONE_Generator)
-    one2 = board.create_element(ONE_Generator)
+    one2 = board.create_element(ZERO_Generator)
     one3 = board.create_element(ONE_Generator)
-    one4 = board.create_element(ONE_Generator)
-    one5 = board.create_element(ONE_Generator)
-    one6 = board.create_element(ONE_Generator)
-    one7 = board.create_element(ONE_Generator)
-    one8 = board.create_element(ONE_Generator)
+    one4 = board.create_element(ZERO_Generator)
 
     lamp = board.create_element(Lamp)
     lamp_2 = board.create_element(Lamp)
     lamp_3 = board.create_element(Lamp)
     lamp_4 = board.create_element(Lamp)
 
-    encoder = board.create_element(Encoder_8_to_3)
-    board.connect_pins(one1.get_outputs()[0], encoder.get_inputs()[0])
-    board.connect_pins(one2.get_outputs()[0], encoder.get_inputs()[1])
-    board.connect_pins(one3.get_outputs()[0], encoder.get_inputs()[2])
-    board.connect_pins(one4.get_outputs()[0], encoder.get_inputs()[3])
-    board.connect_pins(one5.get_outputs()[0], encoder.get_inputs()[4])
-    board.connect_pins(one6.get_outputs()[0], encoder.get_inputs()[5])
-    board.connect_pins(one7.get_outputs()[0], encoder.get_inputs()[6])
-    board.connect_pins(one8.get_outputs()[0], encoder.get_inputs()[7])
+    shifter = board.create_element(ShiftLeft)
+    board.connect_pins(one1.get_outputs()[0], shifter.get_inputs()[0])
+    board.connect_pins(one2.get_outputs()[0], shifter.get_inputs()[1])
+    board.connect_pins(one3.get_outputs()[0], shifter.get_inputs()[2])
+    board.connect_pins(one4.get_outputs()[0], shifter.get_inputs()[3])
 
-    board.connect_pins(encoder.get_outputs()[0], lamp.get_inputs()[0])
-    board.connect_pins(encoder.get_outputs()[1], lamp_2.get_inputs()[0])
-    board.connect_pins(encoder.get_outputs()[2], lamp_3.get_inputs()[0])
-    board.connect_pins(encoder.get_outputs()[3], lamp_4.get_inputs()[0])
+    board.connect_pins(shifter.get_outputs()[0], lamp.get_inputs()[0])
+    board.connect_pins(shifter.get_outputs()[1], lamp_2.get_inputs()[0])
+    board.connect_pins(shifter.get_outputs()[2], lamp_3.get_inputs()[0])
+    board.connect_pins(shifter.get_outputs()[3], lamp_4.get_inputs()[0])
 
     print("Final state: ")
     board.update_board()
-    print(encoder.get_outputs())
+    print(shifter.get_outputs())
 
 
 if __name__ == "__main__":
