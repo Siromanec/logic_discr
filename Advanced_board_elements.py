@@ -194,6 +194,9 @@ class Adder(AdvancedCircuitElement):
 
 
 class Decoder(AdvancedCircuitElement):
+    """
+    A class for Decoder.
+    """
 
     def __init__(self, board: Board, i_number=3, o_number=8):
         super().__init__(board, i_number, o_number)
