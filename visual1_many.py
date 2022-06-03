@@ -2,7 +2,37 @@ from tkinter import *
 import customtkinter
 from PIL import Image, ImageTk
 from Simple_board_elements import Lamp
-from Fundamentals import Board
+from Fundamentals import Board, OutputPin
+
+
+class Line:
+    last_coords = []
+
+    def __init__(self, color="black", canvas=None, coords=[]) -> None:
+        self.color = color
+        self.canvas = canvas
+        self.coords = coords
+        self.connected_pins = [None, None]
+
+    @classmethod
+    def clear(cls):
+        """
+        Clear list with last coordinates.
+        """
+        cls.last_coords.clear()
+
+    def valide_click(self, x_coord, y_coord):
+        """
+        Check if user clicked on the free pin.
+        """
+        for pin in board.get_all_pins():
+            if pin.check_dot(x_coord, y_coord) and not pin.is_connected():
+                if isinstance(pin, OutputPin):
+                    self.connected_pins[0] = pin
+                else:
+                    self.connected_pins[1] = pin
+                return True
+        return False
 
 
 def put_bulb(event):
@@ -10,11 +40,10 @@ def put_bulb(event):
     print("clicked at", event.x, event.y)
     # coords.append(event.x)
     # coords.append(event.y)
-    # global one
-    # one = ImageTk.PhotoImage(Image.open(
-    #     "light_bulb.png").resize((50, 100)))
-    one = Lamp(board).img
-    canvas.create_image(event.x, event.y, image=one)
+    new_lamp = Lamp(board)
+    new_lamp.update_reaction_areas(event.x, event.y)
+    Lamp.all_lamp_images.append(new_lamp.img)
+    canvas.create_image(event.x, event.y, image=Lamp.all_lamp_images[-1])
     # coords.clear()
 
 
@@ -23,14 +52,16 @@ def curr_com_put_bulb():
     # coords.clear()
     canvas.bind("<Button-1>", put_bulb)
 
+
 def connect(event):
     print("current function: connect")
-    print ("clicked at", event.x, event.y)
-    coords.append(event.x)
-    coords.append(event.y)
+    print("clicked at", event.x, event.y)
+    Line.last_coords.append(event.x)
+    Line.last_coords.append(event.y)
+
 
 def curr_com_connect():
-    coords.clear()
+    Line.last_coords.clear()
     canvas.bind("<Button-1>", connect)
 
 
@@ -85,8 +116,6 @@ def main():
 
     WIDTH = 1400
     HEIGHT = 800
-    global coords
-    coords = []
 
     app = customtkinter.CTk()
 
@@ -266,7 +295,6 @@ def main():
     img = ImageTk.PhotoImage(Image.open("light_bulb.png").resize((40, 80)))
     light_bulb_button.set_image(img)
     light_bulb_button.grid(row=1, column=0, padx=5, pady=5)
-
 
     # Connect button
     connect_button = customtkinter.CTkButton(

@@ -276,10 +276,12 @@ class ONE_Generator(BaseCircuitElement):
 
 class Lamp(BaseCircuitElement):
     """Toy implementation of a lamp"""
+    all_lamp_images = []
 
     def __init__(self, board) -> None:
         super().__init__(board, 1, 0)
         self.img = ImageTk.PhotoImage(Image.open("light_bulb.png").resize((50, 100)))
+        self.set_reaction_areas_for_pins()
 
     def operation(self):
         """
@@ -293,3 +295,7 @@ class Lamp(BaseCircuitElement):
             print("shine")
         else:
             print("not shine")
+    
+    def set_reaction_areas_for_pins(self):
+        """Set reaction areas for all pins"""
+        self.get_inputs()[0].set_reaction_area(-4, -35, 4, -26)
