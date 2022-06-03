@@ -211,7 +211,7 @@ class App(customtkinter.CTk):
         App.coords.clear()
 
     def curr_com_put_bulb(self):
-        """Defines command"""
+        """Defines command to put bulb"""
         App.coords.clear()
         self.canvas.bind("<Button-1>", self.put_bulb)
 
