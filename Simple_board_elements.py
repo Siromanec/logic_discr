@@ -279,7 +279,7 @@ class Lamp(BaseCircuitElement):
 
     def __init__(self, board) -> None:
         super().__init__(board, 1, 0)
-        self.img = ImageTk.PhotoImage(Image.open("light_bulb.png").resize((100, 50)))
+        self.img = ImageTk.PhotoImage(Image.open("light_bulb.png").resize((50, 100)))
 
     def operation(self):
         """
