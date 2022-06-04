@@ -225,6 +225,7 @@ class NOT_Gate(BaseCircuitElement):
     def __init__(self, board) -> None:
         super().__init__(board, 1, 1)
         self.img = ImageTk.PhotoImage(Image.open("not.png").resize((100, 50)))
+        self.set_reaction_areas_for_pins()
 
     def operation(self):
         """
@@ -243,6 +244,11 @@ class NOT_Gate(BaseCircuitElement):
 
         for o_pin in self.get_outputs():
             o_pin.update_state(not val_prev)
+
+    def set_reaction_areas_for_pins(self):
+        """Set reaction areas for all pins"""
+        self.get_inputs()[0].set_reaction_area(-48, -5, -40, 5)
+        self.get_outputs()[0].set_reaction_area(40, -5, 48, 5)
 
 
 class ZERO_Generator(BaseCircuitElement):
@@ -303,7 +309,7 @@ class Lamp(BaseCircuitElement):
     
     def set_reaction_areas_for_pins(self):
         """Set reaction areas for all pins"""
-        self.get_inputs()[0].set_reaction_area(-4, -35, 4, -26)
+        self.get_inputs()[0].set_reaction_area(-4, 26, 4, 35)
 
 
 class Switch(BaseCircuitElement):
