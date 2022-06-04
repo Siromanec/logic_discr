@@ -13,7 +13,8 @@ class ImpossibleToDisconnect(Exception):
     """Can't disconnect out/out or in/in"""
 
 class ParentAlreadyExistsError(Exception):
-    pass
+    """ParentAlreadyExistsError"""
+
 
 class NotConnectedCircuitError(Exception):
-    pass
+    """NotConnectedCircuitError"""
