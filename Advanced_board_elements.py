@@ -1,5 +1,6 @@
 from __future__ import annotations
 from Fundamentals import Board, BaseCircuitElement, InputPin, OutputPin
+import time
 
 from Simple_board_elements import (
     AND_Gate,
@@ -11,6 +12,8 @@ from Simple_board_elements import (
     NOT_Gate,
     NOR_Gate,
     NAND_Gate,
+    Switch,
+    ClockGenerator
 )
 
 
@@ -93,16 +96,6 @@ class AdvancedCircuitElement(BaseCircuitElement):
 
     def inner_external_convertor(self, output_pin_name):
         return self.inner_outputs_dict[self.output_dict[output_pin_name]]
-    
-    '''def add_element(self, circuit):
-        try:
-            if not issubclass(type(circuit), BaseCircuitElement):
-                raise ValueError("Incorrect circuit type!")
-        except TypeError as e:
-            raise e
-
-        self._elements.append(circuit)
-        return circuit'''
     
 
 class HalfAdder(AdvancedCircuitElement):
@@ -295,6 +288,7 @@ class Decoder(AdvancedCircuitElement):
                            0], self.inner_external_convertor("O7"), update=False)
 
         self.get_board().update_board()
+
 
 class HalfSubstractor(AdvancedCircuitElement):
     """
@@ -1112,6 +1106,15 @@ def main():
     print("Final state: ")
     board.update_board()
     print(shifter.get_outputs())
+
+    """g = board.create_element(ClockGenerator)
+    time.sleep(2)
+    print("-----")
+    time.sleep(2)
+    board.remove_element(g)
+    print("Killed?")
+    time.sleep(3)
+    print("Killed.")"""
 
 
 if __name__ == "__main__":

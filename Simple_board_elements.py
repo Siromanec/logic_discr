@@ -2,10 +2,15 @@
 these are simple board elements
 ['AND_Gate', 'NAND_Gate', 'OR_Gate', 'NOR_Gate',
  'XOR_Gate', 'XNOR_Gate', 'NOT_Gate',
- 'ZERO_Generator', 'ONE_Generator', 'Lamp']
+ 'ZERO_Generator', 'ONE_Generator', 'Lamp', 'Switch',
+ 'ClockGenerator']
+
 """
 from Fundamentals import BaseCircuitElement
 from PIL import Image, ImageTk
+import time
+import threading
+
 
 class AND_Gate(BaseCircuitElement):
     """
@@ -299,3 +304,52 @@ class Lamp(BaseCircuitElement):
     def set_reaction_areas_for_pins(self):
         """Set reaction areas for all pins"""
         self.get_inputs()[0].set_reaction_area(-4, -35, 4, -26)
+
+
+class Switch(BaseCircuitElement):
+    """The Switch - can change generated signal"""
+    def __init__(self, board, o_number=1) -> None:
+        super().__init__(board, 0, o_number)
+        self.state = False
+        img1 = "image 1"
+        img2 = "image 2"
+        self.images = {True: img1, False: img2}
+        self.img = self.images[self.state]
+
+    def operation(self):
+        """Generates either ZERO or ONE, depending on the state"""
+        for o_pin in self.get_outputs():
+            o_pin.update_state(self.state)
+
+    def switch(self):
+        """Activates by the click on the Switch element area"""
+        self.state = False if self.state else True
+        self.img = self.images[self.state]
+        self.get_board().update_board()
+
+
+class ClockGenerator(BaseCircuitElement):
+    """The clock generator - generates clock pulses of a defined frequency"""
+
+    def __init__(self, board, o_number=1, frequency=1) -> None:
+        super().__init__(board, 0, o_number)
+        self.time_interval = 1 / frequency
+        self.state = True
+        self.exists = True
+        # self.img =
+        gen = threading.Thread(target=self.generation, args=())
+        gen.start()
+
+    def generation(self):
+        """Generates either ZERO or ONE each time period, depending on the state"""
+        while self.exists:
+            time.sleep(self.time_interval)
+            print(self.state)
+            for o_pin in self.get_outputs():
+                o_pin.update_state(self.state)
+            self.get_board().update_board()
+            self.state = False if self.state else True
+
+    def destroy(self):
+        """Activates by the click on the Switch element area"""
+        self.exists = False
