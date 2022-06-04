@@ -183,15 +183,15 @@ class Adder(AdvancedCircuitElement):
         board.connect_pins(self.external_inner_convertor(
             "B"), self.half_adder_1.get_inputs()[1], update=False)
         board.connect_pins(self.half_adder_1.get_outputs()[
-                           0], self.or_1.get_inputs()[0], update=False)
+                           1], self.or_1.get_inputs()[0], update=False)
         board.connect_pins(self.half_adder_1.get_outputs()[
-                           1], self.half_adder_2.get_inputs()[0], update=False)
+                           0], self.half_adder_2.get_inputs()[0], update=False)
         board.connect_pins(self.external_inner_convertor(
             "Carry in"), self.half_adder_2.get_inputs()[1], update=False)
         board.connect_pins(self.half_adder_2.get_outputs()[
-                           0], self.or_1.get_inputs()[1], update=False)
+                           1], self.or_1.get_inputs()[1], update=False)
         board.connect_pins(self.half_adder_2.get_outputs()[
-                           1], self.inner_external_convertor("Sum"), update=False)
+                           0], self.inner_external_convertor("Sum"), update=False)
         board.connect_pins(self.or_1.get_outputs()[
                            0], self.inner_external_convertor("Carry out"), update=False)
 
