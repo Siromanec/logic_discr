@@ -369,7 +369,6 @@ class Lamp(BaseCircuitElement):
         img_path_on = "app_code/visuals/textures/light_bulb_shine.png"
         self.images = {False: img_path_off, True: img_path_on}
         self.img_path = self.images[self._input_pins[0].get_state()] 
-        self.tag = "lamp"+str(self.id)
 
         self.set_reaction_areas_for_pins()
         self.set_img_height(100)

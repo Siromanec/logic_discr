@@ -58,8 +58,8 @@ class Line:
         pin2 = self.get_connected_pins()[1].get_reaction_area()
         center2 = ((pin2[0]+pin2[2])/2, (pin2[1]+pin2[3])/2)
         print("draw a line")
-        self.canvas.create_line(
-            center1[0], center1[1], center2[0], center2[1], width=self.width, fill=self.color, tag=self.tag)
+        self.tag = self.canvas.create_line(
+            center1[0], center1[1], center2[0], center2[1], width=self.width, fill=self.color)
         for pin in self.get_connected_pins():
             pin.set_connected_line_tag(self.tag)
 
@@ -98,7 +98,7 @@ def delete(event):
     """Delete element from canvas"""
     for element in board.get_circuits_list():
         # remove if lamp!!!!!!!!!!!!!!
-        if isinstance(element, Lamp) and element.check_dot_in_img(event.x, event.y):
+        if element.check_dot_in_img(event.x, event.y):
             canvas.delete(element.img_object)
             for input_pin in element.get_inputs():
                 # delete line from canvas
@@ -126,6 +126,7 @@ def put(element_type, event):
     print("clicked at", event.x, event.y)
     new_not = board.create_element(element_type)
     new_not.update_reaction_areas(event.x, event.y)
+    new_not.set_img_coords(event.x, event.y)
     # print(new_not._input_pins[0].get_reaction_area())
     # print(new_not._output_pins[0].get_reaction_area())
     img = ImageTk.PhotoImage(Image.open(new_not.img_path).resize((100, 50)))
@@ -156,6 +157,7 @@ def put_not(event):
     print("clicked at", event.x, event.y)
     new_not = board.create_element(NOT_Gate)
     new_not.update_reaction_areas(event.x, event.y)
+    new_not.set_img_coords(event.x, event.y)
     # print(new_not._input_pins[0].get_reaction_area())
     # print(new_not._output_pins[0].get_reaction_area())
     img = ImageTk.PhotoImage(Image.open(new_not.img_path).resize((100, 50)))
@@ -168,6 +170,7 @@ def put_and(event):
     print("clicked at", event.x, event.y)
     new_and = board.create_element(AND_Gate)
     new_and.update_reaction_areas(event.x, event.y)
+    new_and.set_img_coords(event.x, event.y)
     print(new_and._input_pins[0].get_reaction_area())
     img = ImageTk.PhotoImage(Image.open(new_and.img_path).resize((100, 50)))
     board.add_to_img_list(img)
@@ -179,6 +182,7 @@ def put_nand(event):
     print("clicked at", event.x, event.y)
     new_nand = board.create_element(NAND_Gate)
     new_nand.update_reaction_areas(event.x, event.y)
+    new_nand.set_img_coords(event.x, event.y)
     img = ImageTk.PhotoImage(Image.open(new_nand.img_path).resize((100, 50)))
     board.add_to_img_list(img)
     new_nand.img_object = canvas.create_image(event.x, event.y, image=img)
@@ -189,6 +193,7 @@ def put_or(event):
     print("clicked at", event.x, event.y)
     new_or = board.create_element(OR_Gate)
     new_or.update_reaction_areas(event.x, event.y)
+    new_or.set_img_coords(event.x, event.y)
     img = ImageTk.PhotoImage(Image.open(new_or.img_path).resize((100, 50)))
     board.add_to_img_list(img)
     new_or.img_object = canvas.create_image(event.x, event.y, image=img)
@@ -199,6 +204,7 @@ def put_nor(event):
     print("clicked at", event.x, event.y)
     new_nor = board.create_element(NOR_Gate)
     new_nor.update_reaction_areas(event.x, event.y)
+    new_nor.set_img_coords(event.x, event.y)
     img = ImageTk.PhotoImage(Image.open(new_nor.img_path).resize((100, 50)))
     board.add_to_img_list(img)
     new_nor.img_object = canvas.create_image(event.x, event.y, image=img)
@@ -209,6 +215,7 @@ def put_xor(event):
     print("clicked at", event.x, event.y)
     new_xor = board.create_element(XOR_Gate)
     new_xor.update_reaction_areas(event.x, event.y)
+    new_xor.set_img_coords(event.x, event.y)
     img = ImageTk.PhotoImage(Image.open(new_xor.img_path).resize((100, 50)))
     board.add_to_img_list(img)
     new_xor.img_object = canvas.create_image(event.x, event.y, image=img)
@@ -219,6 +226,7 @@ def put_xnor(event):
     print("clicked at", event.x, event.y)
     new_xnor = board.create_element(XNOR_Gate)
     new_xnor.update_reaction_areas(event.x, event.y)
+    new_xnor.set_img_coords(event.x, event.y)
     img = ImageTk.PhotoImage(Image.open(new_xnor.img_path).resize((100, 50)))
     board.add_to_img_list(img)
     new_xnor.img_object = canvas.create_image(event.x, event.y, image=img)
@@ -229,6 +237,7 @@ def put_high_const(event):
     print("clicked at", event.x, event.y)
     new_high_const = board.create_element(ONE_Generator)
     new_high_const.update_reaction_areas(event.x, event.y)
+    new_high_const.set_img_coords(event.x, event.y)
     img = ImageTk.PhotoImage(Image.open(
         new_high_const.img_path).resize((100, 50)))
     board.add_to_img_list(img)
@@ -240,6 +249,7 @@ def put_low_const(event):
     print("clicked at", event.x, event.y)
     new_low_const = board.create_element(ZERO_Generator)
     new_low_const.update_reaction_areas(event.x, event.y)
+    new_low_const.set_img_coords(event.x, event.y)
     img = ImageTk.PhotoImage(Image.open(
         new_low_const.img_path).resize((100, 50)))
     board.add_to_img_list(img)

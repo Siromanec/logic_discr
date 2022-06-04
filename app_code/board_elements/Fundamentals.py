@@ -401,7 +401,7 @@ class Board:
     def disconnect_pins(self, parent_pin: OutputPin, child_pin: InputPin, update=True):
         """Disconnects a parent pin and a child pin"""
         parent_pin.remove_child(child_pin)
-        child_pin.remove_parent(parent_pin)
+        child_pin.remove_parent()
         if update:
             self.update_board()
 
