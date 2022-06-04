@@ -7,7 +7,6 @@ these are simple board elements
 
 """
 from Fundamentals import BaseCircuitElement
-from PIL import Image, ImageTk
 import time
 import threading
 
@@ -19,7 +18,7 @@ class AND_Gate(BaseCircuitElement):
 
     def __init__(self, board, i_number=2, o_number=1) -> None:
         super().__init__(board, i_number, o_number)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/and.png").resize((100, 50)))
+        self.img_path = "visuals/and.png"
 
     def operation(self):
         """
@@ -53,7 +52,7 @@ class NAND_Gate(BaseCircuitElement):
 
     def __init__(self, board, i_number=2, o_number=1) -> None:
         super().__init__(board, i_number, o_number)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/nand.png").resize((100, 50)))
+        self.img_path = "visuals/nand.png"
 
     def operation(self):
         """
@@ -87,7 +86,7 @@ class OR_Gate(BaseCircuitElement):
 
     def __init__(self, board, i_number=2, o_number=1) -> None:
         super().__init__(board, i_number, o_number)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/or.png").resize((100, 50)))
+        self.img_path = "visuals/or.png"
 
     def operation(self):
         bools = tuple(i_pin.get_state() for i_pin in self.get_inputs())
@@ -120,7 +119,7 @@ class NOR_Gate(BaseCircuitElement):
 
     def __init__(self, board, i_number=2, o_number=1) -> None:
         super().__init__(board, i_number, o_number)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/nor.png").resize((100, 50)))
+        self.img_path = "visuals/nor.png"
 
     def operation(self):
         """
@@ -154,7 +153,7 @@ class XOR_Gate(BaseCircuitElement):
 
     def __init__(self, board) -> None:
         super().__init__(board, 2, 1)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/xor.png").resize((100, 50)))
+        self.img_path = "visuals/xor.png"
 
     def operation(self):
         """
@@ -190,7 +189,7 @@ class XNOR_Gate(BaseCircuitElement):
 
     def __init__(self, board) -> None:
         super().__init__(board, 2, 1)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/xnor.png").resize((100, 50)))
+        self.img_path = "visuals/xnor.png"
 
     def operation(self):
         """
@@ -224,7 +223,7 @@ class NOT_Gate(BaseCircuitElement):
 
     def __init__(self, board) -> None:
         super().__init__(board, 1, 1)
-        # self.img = ImageTk.PhotoImage(Image.open("not.png").resize((100, 50)))
+        self.img_path = "visuals/not.png"
         self.set_reaction_areas_for_pins()
 
     def operation(self):
@@ -258,7 +257,7 @@ class ZERO_Generator(BaseCircuitElement):
 
     def __init__(self, board, o_number=1) -> None:
         super().__init__(board, 0, o_number)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/low_constant.png").resize((100, 50)))
+        self.img_path = "visuals/low_constant.png"
 
     def operation(self):
         """
@@ -275,7 +274,7 @@ class ONE_Generator(BaseCircuitElement):
 
     def __init__(self, board, o_number=1) -> None:
         super().__init__(board, 0, o_number)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/high_constant.png").resize((100, 50)))
+        self.img_path = "visuals/high_constant.png"
 
     def operation(self):
         """
@@ -287,11 +286,10 @@ class ONE_Generator(BaseCircuitElement):
 
 class Lamp(BaseCircuitElement):
     """Toy implementation of a lamp"""
-    all_lamp_images = []
 
     def __init__(self, board) -> None:
         super().__init__(board, 1, 0)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/light_bulb.png").resize((50, 100)))
+        self.img_path = "visuals/light_bulb.png"
         self.set_reaction_areas_for_pins()
 
     def operation(self):
@@ -306,7 +304,7 @@ class Lamp(BaseCircuitElement):
             print("shine")
         else:
             print("not shine")
-    
+
     def set_reaction_areas_for_pins(self):
         """Set reaction areas for all pins"""
         self.get_inputs()[0].set_reaction_area(-4, 26, 4, 35)
@@ -314,6 +312,7 @@ class Lamp(BaseCircuitElement):
 
 class Switch(BaseCircuitElement):
     """The Switch - can change generated signal"""
+
     def __init__(self, board, o_number=1) -> None:
         super().__init__(board, 0, o_number)
         self.state = False

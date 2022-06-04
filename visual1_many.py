@@ -56,18 +56,18 @@ def connect(event):
     if not Line.valide_click(event.x, event.y):
         print("invalid click")
         Line.clear_last_pins()
+
     elif len(Line.last_pins_to_connect) == 2:
         last_pins = Line.last_pins_to_connect
         if isinstance(last_pins[0], OutputPin) and isinstance(last_pins[1], InputPin):
             board.connect_pins(last_pins[0], last_pins[1])
             line = Line(canvas=canvas, connected_pins=last_pins)
             line.draw_line()
-            Line.clear_last_pins()
         elif isinstance(last_pins[0], InputPin) and isinstance(last_pins[1], OutputPin):
-            board.connect_pins(last_pins[1], last_pins[1])
+            board.connect_pins(last_pins[1], last_pins[0])
             line = Line(canvas=canvas, connected_pins=last_pins)
             line.draw_line()
-            Line.clear_last_pins()
+        Line.clear_last_pins()
 
 
 def curr_com_connect():
@@ -80,9 +80,10 @@ def put_bulb(event):
     print("clicked at", event.x, event.y)
     new_lamp = board.create_element(Lamp)
     new_lamp.update_reaction_areas(event.x, event.y)
-    print(new_lamp._input_pins[0].get_reaction_area())
-    Lamp.all_lamp_images.append(new_lamp.img)
-    canvas.create_image(event.x, event.y, image=Lamp.all_lamp_images[-1])
+    # print(new_lamp._input_pins[0].get_reaction_area())
+    img = ImageTk.PhotoImage(Image.open(new_lamp.img_path).resize((50, 100)))
+    board.add_to_img_list(img)
+    canvas.create_image(event.x, event.y, image=img)
 
 
 def curr_com_put_bulb():
@@ -99,10 +100,11 @@ def put_not(event):
     print("clicked at", event.x, event.y)
     new_not = board.create_element(NOT_Gate)
     new_not.update_reaction_areas(event.x, event.y)
-    print(new_not._input_pins[0].get_reaction_area())
-    print(new_not._output_pins[0].get_reaction_area())
-    Lamp.all_lamp_images.append(new_not.img)
-    canvas.create_image(event.x, event.y, image=Lamp.all_lamp_images[-1])
+    # print(new_not._input_pins[0].get_reaction_area())
+    # print(new_not._output_pins[0].get_reaction_area())
+    img = ImageTk.PhotoImage(Image.open(new_not.img_path).resize((100, 50)))
+    board.add_to_img_list(img)
+    canvas.create_image(event.x, event.y, image=img)
 
 
 def curr_com_put_not():
@@ -330,7 +332,8 @@ def main():
         command=curr_com_put_bulb
     )
 
-    img = ImageTk.PhotoImage(Image.open("visuals/light_bulb.png").resize((40, 80)))
+    img = ImageTk.PhotoImage(Image.open(
+        "visuals/light_bulb.png").resize((40, 80)))
     light_bulb_button.set_image(img)
     light_bulb_button.grid(row=1, column=0, padx=5, pady=5)
 
@@ -345,7 +348,7 @@ def main():
     connect_button.grid(row=1, column=1, padx=5, pady=5)
 
     # Setting up the canvas
-    global canvas # please don't use globals
+    global canvas  # please don't use globals
     canvas = Canvas(master=app, height=700,
                     width=1000, bg="light grey")
     canvas.grid(row=0, column=2, rowspan=3)

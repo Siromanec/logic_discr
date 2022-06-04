@@ -279,7 +279,10 @@ class Board:
     def __init__(self):
         #self.clear()
         self._circuits_list: list[BaseCircuitElement] = []
-
+        self._images_list = []
+    
+    def add_to_img_list(self, img):
+        self._images_list.append(img)
 
     def clear(self):
         # for el in self._circuits_list:
