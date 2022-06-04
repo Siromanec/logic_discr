@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from exceptions import *
+from exceptions.exceptions import *
 class Pin():
     def __init__(self, circuit: BaseCircuitElement,
                  father: Pin or None=None, children: list[Pin]=[],

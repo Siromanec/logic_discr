@@ -4,10 +4,16 @@
  Encoder_8_to_3, ShiftLeft, ShiftRight]
 """
 from __future__ import annotations
-from Fundamentals import Board, BaseCircuitElement, InputPin, OutputPin
+import os
+import sys
+
+root_folder = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(root_folder)
+
+from board_elements.Fundamentals import Board, BaseCircuitElement, InputPin, OutputPin
 import time
 
-from Simple_board_elements import (
+from board_elements.SimpleBoardElements import (
     AND_Gate,
     OR_Gate,
     XOR_Gate,

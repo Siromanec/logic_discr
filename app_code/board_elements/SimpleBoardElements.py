@@ -6,7 +6,13 @@ these are simple board elements
  'ClockGenerator']
 
 """
-from Fundamentals import BaseCircuitElement
+import os
+import sys
+
+root_folder = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(root_folder)
+
+from board_elements.Fundamentals import BaseCircuitElement
 from PIL import Image, ImageTk
 import time
 import threading
@@ -19,7 +25,7 @@ class AND_Gate(BaseCircuitElement):
 
     def __init__(self, board, i_number=2, o_number=1) -> None:
         super().__init__(board, i_number, o_number)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/and.png").resize((100, 50)))
+        # self.img = ImageTk.PhotoImage(Image.open("app_code/visuals/textures/and.png").resize((100, 50)))
 
     def operation(self):
         """
@@ -53,7 +59,7 @@ class NAND_Gate(BaseCircuitElement):
 
     def __init__(self, board, i_number=2, o_number=1) -> None:
         super().__init__(board, i_number, o_number)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/nand.png").resize((100, 50)))
+        # self.img = ImageTk.PhotoImage(Image.open("app_code/visuals/textures/nand.png").resize((100, 50)))
 
     def operation(self):
         """
@@ -87,7 +93,7 @@ class OR_Gate(BaseCircuitElement):
 
     def __init__(self, board, i_number=2, o_number=1) -> None:
         super().__init__(board, i_number, o_number)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/or.png").resize((100, 50)))
+        # self.img = ImageTk.PhotoImage(Image.open("app_code/visuals/textures/or.png").resize((100, 50)))
 
     def operation(self):
         bools = tuple(i_pin.get_state() for i_pin in self.get_inputs())
@@ -120,7 +126,7 @@ class NOR_Gate(BaseCircuitElement):
 
     def __init__(self, board, i_number=2, o_number=1) -> None:
         super().__init__(board, i_number, o_number)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/nor.png").resize((100, 50)))
+        # self.img = ImageTk.PhotoImage(Image.open("app_code/visuals/textures/nor.png").resize((100, 50)))
 
     def operation(self):
         """
@@ -154,7 +160,7 @@ class XOR_Gate(BaseCircuitElement):
 
     def __init__(self, board) -> None:
         super().__init__(board, 2, 1)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/xor.png").resize((100, 50)))
+        # self.img = ImageTk.PhotoImage(Image.open("app_code/visuals/textures/xor.png").resize((100, 50)))
 
     def operation(self):
         """
@@ -190,7 +196,7 @@ class XNOR_Gate(BaseCircuitElement):
 
     def __init__(self, board) -> None:
         super().__init__(board, 2, 1)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/xnor.png").resize((100, 50)))
+        # self.img = ImageTk.PhotoImage(Image.open("app_code/visuals/textures/xnor.png").resize((100, 50)))
 
     def operation(self):
         """
@@ -224,7 +230,7 @@ class NOT_Gate(BaseCircuitElement):
 
     def __init__(self, board) -> None:
         super().__init__(board, 1, 1)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/not.png").resize((100, 50)))
+        # self.img = ImageTk.PhotoImage(Image.open("app_code/visuals/textures/not.png").resize((100, 50)))
 
     def operation(self):
         """
@@ -252,7 +258,7 @@ class ZERO_Generator(BaseCircuitElement):
 
     def __init__(self, board, o_number=1) -> None:
         super().__init__(board, 0, o_number)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/low_constant.png").resize((100, 50)))
+        # self.img = ImageTk.PhotoImage(Image.open("app_code/visuals/textures/low_constant.png").resize((100, 50)))
 
     def operation(self):
         """
@@ -269,7 +275,7 @@ class ONE_Generator(BaseCircuitElement):
 
     def __init__(self, board, o_number=1) -> None:
         super().__init__(board, 0, o_number)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/high_constant.png").resize((100, 50)))
+        # self.img = ImageTk.PhotoImage(Image.open("app_code/visuals/textures/high_constant.png").resize((100, 50)))
 
     def operation(self):
         """
@@ -285,7 +291,7 @@ class Lamp(BaseCircuitElement):
 
     def __init__(self, board) -> None:
         super().__init__(board, 1, 0)
-        # self.img = ImageTk.PhotoImage(Image.open("visuals/light_bulb.png").resize((50, 100)))
+        # self.img = ImageTk.PhotoImage(Image.open("app_code/visuals/textures/light_bulb.png").resize((50, 100)))
         self.set_reaction_areas_for_pins()
 
     def operation(self):
