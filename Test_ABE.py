@@ -1,29 +1,50 @@
 import unittest
 from  Fundamentals import Board
-from Advanced_board_elements import ShiftLeft
+from Advanced_board_elements import ShiftLeft, ShiftRight
 from Simple_board_elements import ONE_Generator, ZERO_Generator
 
-
-class Test_ABE(unittest.TestCase):
+from Test_SBE import Test_SBE
+class Test_ABE(Test_SBE):
     """
 
     """
     def setUp(self):
         """Set up for test functions"""
         self.board = Board()
-        self.one = self.board.create_element(ONE_Generator)
-        self.zero = self.board.create_element(ZERO_Generator)
-        self.shifter = self.board.create_element(ShiftLeft)
 
-    def test_1(self):
+    def set_board_1010(self):
+
+        self.set_board_10()
+        self.board.connect_pins(self.src_A.get_outputs()[0], self.element.get_inputs()[2])
+        self.board.connect_pins(self.src_B.get_outputs()[0], self.element.get_inputs()[3])
+
+    # def set_shifters(self):
+    
+    #     self.board.clear()
+    #     self.set_board_10()
+    #     self.shifter = self.board.create_element(self.el)
+    #     self.board.connect_pins(self.src_A.get_outputs()[0], self.shifter.get_inputs()[0])
+    #     self.board.connect_pins(self.src_B.get_outputs()[0], self.shifter.get_inputs()[1])
+    #     self.board.connect_pins(self.src_A.get_outputs()[0], self.shifter.get_inputs()[2])
+    #     self.board.connect_pins(self.src_B.get_outputs()[0], self.shifter.get_inputs()[3])
+
+    def test_ShiftLeft(self):
+
+        self.el = ShiftLeft
+        self.board.clear()
+        self.element = self.board.create_element(self.el)
+        self.set_board_1010()
+        assert [self.element.get_outputs()[i].get_state() for i in range(len(self.element.get_outputs()))] == [False, True, False, False]
+
+    def test_ShiftRight(self):
         """
 
         """
-        self.board.connect_pins(self.one.get_outputs()[0], self.shifter.get_inputs()[0])
-        self.board.connect_pins(self.zero.get_outputs()[0], self.shifter.get_inputs()[1])
-        self.board.connect_pins(self.one.get_outputs()[0], self.shifter.get_inputs()[2])
-        self.board.connect_pins(self.zero.get_outputs()[0], self.shifter.get_inputs()[3])
-        self.assertEqual(self.shifter.get_outputs() == ["Correct answer here"])
+        self.el = ShiftRight
+        self.board.clear()
+        self.element = self.board.create_element(self.el)
+        self.set_board_1010()
+        assert [self.element.get_outputs()[i].get_state() for i in range(len(self.element.get_outputs()))] == [False, True, False, True]
 
     def test_2(self):
         """

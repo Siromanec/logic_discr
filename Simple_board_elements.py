@@ -19,7 +19,7 @@ class AND_Gate(BaseCircuitElement):
 
     def __init__(self, board, i_number=2, o_number=1) -> None:
         super().__init__(board, i_number, o_number)
-        self.img = ImageTk.PhotoImage(Image.open("and.png").resize((100, 50)))
+        # self.img = ImageTk.PhotoImage(Image.open("visuals/and.png").resize((100, 50)))
 
     def operation(self):
         """
@@ -53,7 +53,7 @@ class NAND_Gate(BaseCircuitElement):
 
     def __init__(self, board, i_number=2, o_number=1) -> None:
         super().__init__(board, i_number, o_number)
-        self.img = ImageTk.PhotoImage(Image.open("nand.png").resize((100, 50)))
+        # self.img = ImageTk.PhotoImage(Image.open("visuals/nand.png").resize((100, 50)))
 
     def operation(self):
         """
@@ -87,7 +87,7 @@ class OR_Gate(BaseCircuitElement):
 
     def __init__(self, board, i_number=2, o_number=1) -> None:
         super().__init__(board, i_number, o_number)
-        self.img = ImageTk.PhotoImage(Image.open("or.png").resize((100, 50)))
+        # self.img = ImageTk.PhotoImage(Image.open("visuals/or.png").resize((100, 50)))
 
     def operation(self):
         bools = tuple(i_pin.get_state() for i_pin in self.get_inputs())
@@ -120,7 +120,7 @@ class NOR_Gate(BaseCircuitElement):
 
     def __init__(self, board, i_number=2, o_number=1) -> None:
         super().__init__(board, i_number, o_number)
-        self.img = ImageTk.PhotoImage(Image.open("nor.png").resize((100, 50)))
+        # self.img = ImageTk.PhotoImage(Image.open("visuals/nor.png").resize((100, 50)))
 
     def operation(self):
         """
@@ -154,7 +154,7 @@ class XOR_Gate(BaseCircuitElement):
 
     def __init__(self, board) -> None:
         super().__init__(board, 2, 1)
-        self.img = ImageTk.PhotoImage(Image.open("xor.png").resize((100, 50)))
+        # self.img = ImageTk.PhotoImage(Image.open("visuals/xor.png").resize((100, 50)))
 
     def operation(self):
         """
@@ -190,7 +190,7 @@ class XNOR_Gate(BaseCircuitElement):
 
     def __init__(self, board) -> None:
         super().__init__(board, 2, 1)
-        self.img = ImageTk.PhotoImage(Image.open("xnor.png").resize((100, 50)))
+        # self.img = ImageTk.PhotoImage(Image.open("visuals/xnor.png").resize((100, 50)))
 
     def operation(self):
         """
@@ -224,7 +224,7 @@ class NOT_Gate(BaseCircuitElement):
 
     def __init__(self, board) -> None:
         super().__init__(board, 1, 1)
-        self.img = ImageTk.PhotoImage(Image.open("not.png").resize((100, 50)))
+        # self.img = ImageTk.PhotoImage(Image.open("visuals/not.png").resize((100, 50)))
 
     def operation(self):
         """
@@ -252,7 +252,7 @@ class ZERO_Generator(BaseCircuitElement):
 
     def __init__(self, board, o_number=1) -> None:
         super().__init__(board, 0, o_number)
-        self.img = ImageTk.PhotoImage(Image.open("low_constant.png").resize((100, 50)))
+        # self.img = ImageTk.PhotoImage(Image.open("visuals/low_constant.png").resize((100, 50)))
 
     def operation(self):
         """
@@ -269,7 +269,7 @@ class ONE_Generator(BaseCircuitElement):
 
     def __init__(self, board, o_number=1) -> None:
         super().__init__(board, 0, o_number)
-        self.img = ImageTk.PhotoImage(Image.open("high_constant.png").resize((100, 50)))
+        # self.img = ImageTk.PhotoImage(Image.open("visuals/high_constant.png").resize((100, 50)))
 
     def operation(self):
         """
@@ -285,7 +285,7 @@ class Lamp(BaseCircuitElement):
 
     def __init__(self, board) -> None:
         super().__init__(board, 1, 0)
-        self.img = ImageTk.PhotoImage(Image.open("light_bulb.png").resize((50, 100)))
+        # self.img = ImageTk.PhotoImage(Image.open("visuals/light_bulb.png").resize((50, 100)))
         self.set_reaction_areas_for_pins()
 
     def operation(self):
@@ -314,7 +314,7 @@ class Switch(BaseCircuitElement):
         img1 = "image 1"
         img2 = "image 2"
         self.images = {True: img1, False: img2}
-        self.img = self.images[self.state]
+        # self.img = self.images[self.state]
 
     def operation(self):
         """Generates either ZERO or ONE, depending on the state"""
@@ -324,7 +324,7 @@ class Switch(BaseCircuitElement):
     def switch(self):
         """Activates by the click on the Switch element area"""
         self.state = False if self.state else True
-        self.img = self.images[self.state]
+        # self.img = self.images[self.state]
         self.get_board().update_board()
 
 
@@ -336,7 +336,7 @@ class ClockGenerator(BaseCircuitElement):
         self.time_interval = 1 / frequency
         self.state = True
         self.exists = True
-        # self.img =
+        # # self.img =
         gen = threading.Thread(target=self.generation, args=())
         gen.start()
 
