@@ -108,6 +108,7 @@ def put_and(event):
     print("clicked at", event.x, event.y)
     new_and = board.create_element(AND_Gate)
     new_and.update_reaction_areas(event.x, event.y)
+    print(new_and._input_pins[0].get_reaction_area())
     img = ImageTk.PhotoImage(Image.open(new_and.img_path).resize((100, 50)))
     board.add_to_img_list(img)
     canvas.create_image(event.x, event.y, image=img)
