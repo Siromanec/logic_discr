@@ -432,7 +432,7 @@ def main():
     output_controls.grid(
         row=2, column=0, sticky="nswe",  padx=20, pady=20)
 
-    # Label for the framw
+    # Label for the frame
     label_output_controls = ctk.CTkLabel(
         master=output_controls, text="Output Controls", text_font=("Roboto Medium", 13))
     label_output_controls.grid(row=0, column=0)
@@ -455,11 +455,10 @@ def main():
 
     # Connect button
     connect_button = ctk.CTkButton(
-        master=output_controls, text="Connect",
+        master=output_controls, text="Connect", text_font = ("Roboto Medium", 14),
         compound=cmpd,
         height=hght,
         width=wdth,
-        fg_color=fg_color,
         command=curr_com_connect)
     connect_button.grid(row=1, column=1, padx=5, pady=5)
 
