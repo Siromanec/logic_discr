@@ -246,13 +246,15 @@ class BaseCircuitElement:
         """Update reaction areas of pins depending on the position of the image"""
         for input_pin in self.get_inputs():
             old_area = input_pin.get_reaction_area()
-            input_pin.set_reaction_area(
-                old_area[0]+x_coord, old_area[1]+y_coord, old_area[2]+x_coord, old_area[3]+y_coord)
+            if old_area:
+                input_pin.set_reaction_area(
+                    old_area[0]+x_coord, old_area[1]+y_coord, old_area[2]+x_coord, old_area[3]+y_coord)
 
         for output_pin in self.get_outputs():
             old_area = output_pin.get_reaction_area()
-            output_pin.set_reaction_area(
-                old_area[0]+x_coord, old_area[1]+y_coord, old_area[2]+x_coord, old_area[3]+y_coord)
+            if old_area:
+                output_pin.set_reaction_area(
+                    old_area[0]+x_coord, old_area[1]+y_coord, old_area[2]+x_coord, old_area[3]+y_coord)
 
     def update(self):
         if not self.is_fully_connected():
