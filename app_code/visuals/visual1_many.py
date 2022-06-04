@@ -6,8 +6,8 @@ import sys
 
 root_folder = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(root_folder)
-from board_elements.SimpleBoardElements import Lamp
-from board_elements.Fundamentals import Board, OutputPin
+from board_elements.SimpleBoardElements import *
+from board_elements.Fundamentals import *
 
 
 class Line:
