@@ -1,6 +1,6 @@
 from __future__ import annotations
-from tkinter import *
-import customtkinter
+from tkinter import Canvas
+import customtkinter as ctk
 from PIL import Image, ImageTk
 import os
 import sys
@@ -240,50 +240,50 @@ def curr_com_put_low_const():
     canvas.bind("<Button-1>", put_low_const)
 
 
-def start():
+def start(app: ctk.CTk):
     """Starts the whole thing"""
-    mainloop()
+    app.mainloop()
 
 
 def main():
     # Just a setup for a theme
     # Modes: system (default), light, dark
-    customtkinter.set_appearance_mode("dark")
+    ctk.set_appearance_mode("dark")
     # Themes: blue (default), dark-blue, green
-    customtkinter.set_default_color_theme("blue")
+    ctk.set_default_color_theme("blue")
 
     WIDTH = 1400
     HEIGHT = 800
 
-    app = customtkinter.CTk()
+    app = ctk.CTk()
 
     app.geometry(f"{WIDTH}x{HEIGHT}")
     app.title("Logical Elements Constructor")
     # iconbitmap("icon1.ico")
 
     # Setup for frame with logical gates
-    frame_logical_gates = customtkinter.CTkFrame(master=app)
+    frame_logical_gates = ctk.CTkFrame(master=app)
     frame_logical_gates.grid(
         row=0, column=0, sticky="nswe",  padx=20, pady=20)
 
     # Label for the framw
-    label_logical_frame = customtkinter.CTkLabel(
+    label_logical_frame = ctk.CTkLabel(
         master=frame_logical_gates, text="Logic Gates", text_font=("Roboto Medium", 13))
     label_logical_frame.grid(row=0, column=0)
 
     # Setup for buttons in a frames
-    local_compound = "top"
-    local_height = 80
-    local_width = 150
-    local_fg_color = ("gray75", "gray30")
+    cmpd = "top"
+    hght = 80
+    wdth = 150
+    fg_color = ("gray75", "gray30")
 
     # Buffer button
-    buffer_button = customtkinter.CTkButton(
+    buffer_button = ctk.CTkButton(
         master=frame_logical_gates, text="Buffer",
-        compound=local_compound,
-        height=local_height,
-        width=local_width,
-        fg_color=local_fg_color)
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color)
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/buffer.png").resize((80, 40)))
@@ -291,12 +291,12 @@ def main():
     buffer_button.grid(row=1, column=0, padx=5, pady=5)
 
     # NOT button
-    not_button = customtkinter.CTkButton(
+    not_button = ctk.CTkButton(
         master=frame_logical_gates, text="NOT Gate",
-        compound=local_compound,
-        height=local_height,
-        width=local_width,
-        fg_color=local_fg_color,
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
         command=curr_com_put_not)
 
     img = ImageTk.PhotoImage(Image.open(
@@ -305,12 +305,12 @@ def main():
     not_button.grid(row=1, column=1, padx=5, pady=5)
 
     # AND button
-    and_button = customtkinter.CTkButton(
+    and_button = ctk.CTkButton(
         master=frame_logical_gates, text="AND Gate",
-        compound=local_compound,
-        height=local_height,
-        width=local_width,
-        fg_color=local_fg_color,
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
         command=curr_com_put_and)
 
     img = ImageTk.PhotoImage(Image.open(
@@ -319,12 +319,12 @@ def main():
     and_button.grid(row=2, column=0, padx=5, pady=5)
 
     # NAND button
-    nand_button = customtkinter.CTkButton(
+    nand_button = ctk.CTkButton(
         master=frame_logical_gates, text="NAND Gate",
-        compound=local_compound,
-        height=local_height,
-        width=local_width,
-        fg_color=local_fg_color,
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
         command=curr_com_put_nand)
 
     img = ImageTk.PhotoImage(Image.open(
@@ -333,12 +333,12 @@ def main():
     nand_button.grid(row=2, column=1, padx=5, pady=5)
 
     # OR button
-    or_button = customtkinter.CTkButton(
+    or_button = ctk.CTkButton(
         master=frame_logical_gates, text="OR Gate",
-        compound=local_compound,
-        height=local_height,
-        width=local_width,
-        fg_color=local_fg_color,
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
         command=curr_com_put_or)
 
     img = ImageTk.PhotoImage(Image.open(
@@ -347,12 +347,12 @@ def main():
     or_button.grid(row=3, column=0, padx=5, pady=5)
 
     # NOR button
-    nor_button = customtkinter.CTkButton(
+    nor_button = ctk.CTkButton(
         master=frame_logical_gates, text="NOR Gate",
-        compound=local_compound,
-        height=local_height,
-        width=local_width,
-        fg_color=local_fg_color,
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
         command=curr_com_put_nor)
 
     img = ImageTk.PhotoImage(Image.open(
@@ -361,12 +361,12 @@ def main():
     nor_button.grid(row=3, column=1, padx=5, pady=5)
 
     # XOR button
-    xor_button = customtkinter.CTkButton(
+    xor_button = ctk.CTkButton(
         master=frame_logical_gates, text="XOR Gate",
-        compound=local_compound,
-        height=local_height,
-        width=local_width,
-        fg_color=local_fg_color,
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
         command=curr_com_put_xor)
 
     img = ImageTk.PhotoImage(Image.open(
@@ -375,12 +375,12 @@ def main():
     xor_button.grid(row=4, column=0, padx=5, pady=5)
 
     # XNOR button
-    xnor_button = customtkinter.CTkButton(
+    xnor_button = ctk.CTkButton(
         master=frame_logical_gates, text="XNOR Gate",
-        compound=local_compound,
-        height=local_height,
-        width=local_width,
-        fg_color=local_fg_color,
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
         command=curr_com_put_xnor)
 
     img = ImageTk.PhotoImage(Image.open(
@@ -389,22 +389,22 @@ def main():
     xnor_button.grid(row=4, column=1, padx=5, pady=5)
 
     # Setup for frame with input controls
-    input_controls = customtkinter.CTkFrame(master=app)
+    input_controls = ctk.CTkFrame(master=app)
     input_controls.grid(
         row=1, column=0, sticky="nswe",  padx=20, pady=20)
 
     # Label for the framw
-    label_input_controls = customtkinter.CTkLabel(
+    label_input_controls = ctk.CTkLabel(
         master=input_controls, text="Input Controls", text_font=("Roboto Medium", 13))
     label_input_controls.grid(row=0, column=0)
 
     # High Constant button
-    high_constant_button = customtkinter.CTkButton(
+    high_constant_button = ctk.CTkButton(
         master=input_controls, text="High Constant",
-        compound=local_compound,
-        height=local_height,
-        width=local_width,
-        fg_color=local_fg_color,
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
         command=curr_com_put_high_const)
 
     img = ImageTk.PhotoImage(Image.open(
@@ -413,12 +413,12 @@ def main():
     high_constant_button.grid(row=1, column=0, padx=5, pady=5)
 
     # Low Constant button
-    low_constant_button = customtkinter.CTkButton(
+    low_constant_button = ctk.CTkButton(
         master=input_controls, text="Low Constant",
-        compound=local_compound,
-        height=local_height,
-        width=local_width,
-        fg_color=local_fg_color,
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
         command=curr_com_put_low_const)
 
     img = ImageTk.PhotoImage(Image.open(
@@ -427,23 +427,23 @@ def main():
     low_constant_button.grid(row=1, column=1, padx=5, pady=5)
 
     # Setup for frame with output controls
-    output_controls = customtkinter.CTkFrame(master=app)
+    output_controls = ctk.CTkFrame(master=app)
     output_controls.grid(
         row=2, column=0, sticky="nswe",  padx=20, pady=20)
 
     # Label for the framw
-    label_output_controls = customtkinter.CTkLabel(
+    label_output_controls = ctk.CTkLabel(
         master=output_controls, text="Output Controls", text_font=("Roboto Medium", 13))
     label_output_controls.grid(row=0, column=0)
 
     # Light Bulb button
-    light_bulb_button = customtkinter.CTkButton(
+    light_bulb_button = ctk.CTkButton(
         master=output_controls,
         text="Light Bulb",
-        compound=local_compound,
-        height=local_height,
-        width=local_width,
-        fg_color=local_fg_color,
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
         command=curr_com_put_bulb
     )
 
@@ -453,12 +453,12 @@ def main():
     light_bulb_button.grid(row=1, column=0, padx=5, pady=5)
 
     # Connect button
-    connect_button = customtkinter.CTkButton(
+    connect_button = ctk.CTkButton(
         master=output_controls, text="Connect",
-        compound=local_compound,
-        height=local_height,
-        width=local_width,
-        fg_color=local_fg_color,
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
         command=curr_com_connect)
     connect_button.grid(row=1, column=1, padx=5, pady=5)
 
@@ -473,7 +473,7 @@ def main():
     board = Board()
 
     # start a main loop
-    start()
+    start(app)
 
 
 if __name__ == "__main__":
