@@ -287,6 +287,8 @@ class ZERO_Generator(BaseCircuitElement):
         super().__init__(board, 0, o_number)
 
         self.img_path = "app_code/visuals/textures/low_constant.png"
+        self.set_reaction_areas_for_pins()
+
 
     def operation(self):
         """
@@ -294,6 +296,10 @@ class ZERO_Generator(BaseCircuitElement):
         """
         for o_pin in self.get_outputs():
             o_pin.update_state(False)
+
+    def set_reaction_areas_for_pins(self):
+        """Set reaction areas for all pins"""
+        self.get_outputs()[0].set_reaction_area(20, -5, 27, 4)
 
 
 class ONE_Generator(BaseCircuitElement):
@@ -305,6 +311,8 @@ class ONE_Generator(BaseCircuitElement):
         super().__init__(board, 0, o_number)
 
         self.img_path = "app_code/visuals/textures/high_constant.png"
+        self.set_reaction_areas_for_pins()
+
 
     def operation(self):
         """
@@ -312,6 +320,10 @@ class ONE_Generator(BaseCircuitElement):
         """
         for o_pin in self.get_outputs():
             o_pin.update_state(True)
+
+    def set_reaction_areas_for_pins(self):
+        """Set reaction areas for all pins"""
+        self.get_outputs()[0].set_reaction_area(20, -5, 27, 4)
 
 
 class Lamp(BaseCircuitElement):
