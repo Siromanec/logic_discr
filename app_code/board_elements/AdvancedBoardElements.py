@@ -382,6 +382,69 @@ class Decoder(AdvancedCircuitElement):
         )
 
         self.get_board().update_board()
+class Multiplexor(AdvancedCircuitElement):
+ """ 
+ A class for multiplexor.
+ """
+    def __init__(self, board: Board, i_number=6, o_number=1):
+        super().__init__(board, i_number, o_number)
+        inputs = self.get_inputs()
+        outputs = self.get_outputs()
+        self.input_dict = {"s1": inputs[0], "s0": inputs[1],
+                           "i0": inputs[2], "i1": inputs[3], "i2": inputs[4], "i3": inputs[5]}
+        self.output_dict = {"y": outputs[0]}
+
+        self.not1 = self.create_element(NOT_Gate)
+        self.not2 = self.create_element(NOT_Gate)
+        self.and3 = self.create_element(AND_Gate, 3)
+        self.and2 = self.create_element(AND_Gate, 3)
+        self.and1 = self.create_element(AND_Gate, 3)
+        self.and0 = self.create_element(AND_Gate, 3)
+        self.or1 = self.create_element(OR_Gate, 4)
+
+        board.connect_pins(self.external_inner_convertor(
+            "s1"), self.and3.get_inputs()[0], update=False)
+        board.connect_pins(self.external_inner_convertor(
+            "s1"), self.not1.get_inputs()[0], update=False)
+        board.connect_pins(self.not1.get_outputs()[
+                           0], self.and1.get_inputs()[0], update=False)
+        board.connect_pins(self.not1.get_outputs()[
+                           0], self.and0.get_inputs()[0], update=False)
+        board.connect_pins(self.external_inner_convertor(
+            "s1"), self.and2.get_inputs()[0], update=False)
+        board.connect_pins(self.external_inner_convertor(
+            "s0"), self.and3.get_inputs()[1], update=False)
+        board.connect_pins(self.external_inner_convertor(
+            "s0"), self.and1.get_inputs()[1], update=False)
+        board.connect_pins(self.external_inner_convertor(
+            "s0"), self.not2.get_inputs()[0], update=False)
+        board.connect_pins(self.not2.get_outputs()[
+                           0], self.and2.get_inputs()[1], update=False)
+        board.connect_pins(self.not2.get_outputs()[
+                           0], self.and0.get_inputs()[1], update=False)
+        board.connect_pins(self.external_inner_convertor(
+            "i3"), self.and3.get_inputs()[2], update=False)
+        board.connect_pins(self.external_inner_convertor(
+            "i2"), self.and2.get_inputs()[2], update=False)
+        board.connect_pins(self.external_inner_convertor(
+            "i1"), self.and1.get_inputs()[2], update=False)
+        board.connect_pins(self.external_inner_convertor(
+            "i0"), self.and0.get_inputs()[2], update=False)
+
+        board.connect_pins(self.and3.get_outputs()[
+                           0], self.or1.get_inputs()[0], update=False)
+        board.connect_pins(self.and2.get_outputs()[
+                           0], self.or1.get_inputs()[1], update=False)
+        board.connect_pins(self.and1.get_outputs()[
+                           0], self.or1.get_inputs()[2], update=False)
+        board.connect_pins(self.and0.get_outputs()[
+                           0], self.or1.get_inputs()[3], update=False)
+
+        board.connect_pins(self.or1.get_outputs()[
+                           0], self.inner_external_convertor("y"), update=False)
+
+        self.get_board().update_board()
+
 
 
 class HalfSubstractor(AdvancedCircuitElement):
