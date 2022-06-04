@@ -13,6 +13,7 @@ sys.path.append(root_folder)
 from exceptions.exceptions import *
 
 
+
 class Pin:
     """
     class Pin
@@ -59,6 +60,7 @@ class Pin:
 
     def set_reaction_area(self, x1, y1, x2, y2):
         """Set reaction area for the pin"""
+        # check
         self._reaction_area = (x1, y1, x2, y2)
 
     def get_reaction_area(self):
@@ -66,6 +68,7 @@ class Pin:
         return self._reaction_area
 
     def set_connected_line_tag(self, line_tag):
+        # check
         self._connected_line_tag = line_tag
 
     def get_connected_line_tag(self):
@@ -123,7 +126,7 @@ class InputPin(Pin):
         """
         copies the state of parent pin
         """
-        self.set_state(self._parent.is_connected() and self.get_parent().get_state())
+        self.set_state(bool(self._parent) and self._parent.is_connected() and self.get_parent().get_state())
 
     def set_parent(self, new_parent: OutputPin):
         """
@@ -361,6 +364,8 @@ class BaseCircuitElement:
     def update(self):
         """updates the BCE"""
         if not self.is_fully_connected():
+            for pin in self.get_inputs():
+                pin.update_state()
             for pin in self.get_outputs():
                 pin.update_state(False)
             print("Not fully connected: " + str(self))
@@ -368,6 +373,9 @@ class BaseCircuitElement:
         for pin in self.get_inputs():
             pin.update_state()
         self.operation()
+        img = ImageTk.PhotoImage(Image.open(self.img_path).resize((self.get_img_width(), self.get_img_height())))
+        canvas.itemconfig(element.img_object, image=img)
+        board.add_to_img_list(img)
 
     def cycle_processing(self):
         """Maybe it should become red on the board or smth like that"""
@@ -417,6 +425,8 @@ class Board:
         self._circuits_list.remove(circuit)
         circuit.destroy()
         self.update_board()
+        for el in self._circuits_list:
+            print(el)
 
     def create_element(self, circuit_type, inputs=None, outputs=None) -> BaseCircuitElement:
         """Creates a circuit of a given type on the board"""
