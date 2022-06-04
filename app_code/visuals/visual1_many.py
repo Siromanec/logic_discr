@@ -1,6 +1,4 @@
 from __future__ import annotations
-
-import time
 from tkinter import Canvas
 import customtkinter as ctk
 from PIL import Image, ImageTk
@@ -39,7 +37,7 @@ class Line:
         """
         cls.last_pins_to_connect.clear()
 
-    @ classmethod
+    @classmethod
     def valide_click(cls, x_coord, y_coord):
         """
         Check if user clicked on the free pin.
@@ -121,205 +119,31 @@ def delete(event):
             board.remove_element(element)
 
 
+def curr_com_put(element_type):
+    """Defines command that puts element images and creates objects"""
+    canvas.bind("<Button-1>", lambda event: put(element_type, event))
+
 def put(element_type, event):
-    """Puts image of gate NOT on the canvas"""
+    """Puts image of element on the canvas and crates an appropriate object"""
     print("clicked at", event.x, event.y)
-    new_not = board.create_element(element_type)
-    new_not.update_reaction_areas(event.x, event.y)
-    new_not.set_img_coords(event.x, event.y)
-    # print(new_not._input_pins[0].get_reaction_area())
-    # print(new_not._output_pins[0].get_reaction_area())
-    img = ImageTk.PhotoImage(Image.open(new_not.img_path).resize((100, 50)))
+    new_element = board.create_element(element_type)
+    new_element.update_reaction_areas(event.x, event.y)
+    new_element.set_img_coords(event.x, event.y)
+    img = ImageTk.PhotoImage(Image.open(new_element.img_path).resize((new_element.get_img_width(), new_element.get_img_height())))
     board.add_to_img_list(img)
-    new_not.img_object = canvas.create_image(event.x, event.y, image=img)
 
-
-def put_bulb(event):
-    """Puts image bulb on the canvas"""
-    print("clicked at", event.x, event.y)
-    new_lamp = board.create_element(Lamp)
-    new_lamp.update_reaction_areas(event.x, event.y)
-    new_lamp.set_img_coords(event.x, event.y)
-    # print(new_lamp._input_pins[0].get_reaction_area())
-    img = ImageTk.PhotoImage(Image.open(
-        new_lamp.img_path).resize((50, 100)))
-    board.add_to_img_list(img)
-    new_lamp.img_object = canvas.create_image(event.x, event.y, image=img)
-    # m = canvas.create_image(event.x, event.y, image=img)
-
-
-def put_buffer():
-    pass
-
-
-def put_not(event):
-    """Puts image of gate NOT on the canvas"""
-    print("clicked at", event.x, event.y)
-    new_not = board.create_element(NOT_Gate)
-    new_not.update_reaction_areas(event.x, event.y)
-    new_not.set_img_coords(event.x, event.y)
-    # print(new_not._input_pins[0].get_reaction_area())
-    # print(new_not._output_pins[0].get_reaction_area())
-    img = ImageTk.PhotoImage(Image.open(new_not.img_path).resize((100, 50)))
-    board.add_to_img_list(img)
-    new_not.img_object = canvas.create_image(event.x, event.y, image=img)
-
-
-def put_and(event):
-    """Puts image of gate AND on the canvas"""
-    print("clicked at", event.x, event.y)
-    new_and = board.create_element(AND_Gate)
-    new_and.update_reaction_areas(event.x, event.y)
-    new_and.set_img_coords(event.x, event.y)
-    print(new_and._input_pins[0].get_reaction_area())
-    img = ImageTk.PhotoImage(Image.open(new_and.img_path).resize((100, 50)))
-    board.add_to_img_list(img)
-    new_and.img_object = canvas.create_image(event.x, event.y, image=img)
-
-
-def put_nand(event):
-    """Puts image of gate NAND on the canvas"""
-    print("clicked at", event.x, event.y)
-    new_nand = board.create_element(NAND_Gate)
-    new_nand.update_reaction_areas(event.x, event.y)
-    new_nand.set_img_coords(event.x, event.y)
-    img = ImageTk.PhotoImage(Image.open(new_nand.img_path).resize((100, 50)))
-    board.add_to_img_list(img)
-    new_nand.img_object = canvas.create_image(event.x, event.y, image=img)
-
-
-def put_or(event):
-    """Puts image of gate OR on the canvas"""
-    print("clicked at", event.x, event.y)
-    new_or = board.create_element(OR_Gate)
-    new_or.update_reaction_areas(event.x, event.y)
-    new_or.set_img_coords(event.x, event.y)
-    img = ImageTk.PhotoImage(Image.open(new_or.img_path).resize((100, 50)))
-    board.add_to_img_list(img)
-    new_or.img_object = canvas.create_image(event.x, event.y, image=img)
-
-
-def put_nor(event):
-    """Puts image of gate NOR on the canvas"""
-    print("clicked at", event.x, event.y)
-    new_nor = board.create_element(NOR_Gate)
-    new_nor.update_reaction_areas(event.x, event.y)
-    new_nor.set_img_coords(event.x, event.y)
-    img = ImageTk.PhotoImage(Image.open(new_nor.img_path).resize((100, 50)))
-    board.add_to_img_list(img)
-    new_nor.img_object = canvas.create_image(event.x, event.y, image=img)
-
-
-def put_xor(event):
-    """Puts image of gate XOR on the canvas"""
-    print("clicked at", event.x, event.y)
-    new_xor = board.create_element(XOR_Gate)
-    new_xor.update_reaction_areas(event.x, event.y)
-    new_xor.set_img_coords(event.x, event.y)
-    img = ImageTk.PhotoImage(Image.open(new_xor.img_path).resize((100, 50)))
-    board.add_to_img_list(img)
-    new_xor.img_object = canvas.create_image(event.x, event.y, image=img)
-
-
-def put_xnor(event):
-    """Puts image of gate XNOR on the canvas"""
-    print("clicked at", event.x, event.y)
-    new_xnor = board.create_element(XNOR_Gate)
-    new_xnor.update_reaction_areas(event.x, event.y)
-    new_xnor.set_img_coords(event.x, event.y)
-    img = ImageTk.PhotoImage(Image.open(new_xnor.img_path).resize((100, 50)))
-    board.add_to_img_list(img)
-    new_xnor.img_object = canvas.create_image(event.x, event.y, image=img)
-
-
-def put_high_const(event):
-    """Puts image of ONE generator on the canvas"""
-    print("clicked at", event.x, event.y)
-    new_high_const = board.create_element(ONE_Generator)
-    new_high_const.update_reaction_areas(event.x, event.y)
-    new_high_const.set_img_coords(event.x, event.y)
-    img = ImageTk.PhotoImage(Image.open(
-        new_high_const.img_path).resize((100, 50)))
-    board.add_to_img_list(img)
-    new_high_const.img_object = canvas.create_image(event.x, event.y, image=img)
-
-
-def put_low_const(event):
-    """Puts image of ZERO generator on the canvas"""
-    print("clicked at", event.x, event.y)
-    new_low_const = board.create_element(ZERO_Generator)
-    new_low_const.update_reaction_areas(event.x, event.y)
-    new_low_const.set_img_coords(event.x, event.y)
-    img = ImageTk.PhotoImage(Image.open(
-        new_low_const.img_path).resize((100, 50)))
-    board.add_to_img_list(img)
-    new_low_const.img_object = canvas.create_image(event.x, event.y, image=img)
-
-
-# def dec(element):
-#     def curr_com(element):
-#         canvas.bind("<Button-1>", element)
-#     return curr_com
+    new_element.img_object = canvas.create_image(event.x, event.y, image=img)
 
 
 def curr_com_connect():
+    """Binds left click to the connect function"""
     Line.clear_last_pins()
     canvas.bind("<Button-1>", connect)
 
 
 def curr_com_delete():
-    """Defines command"""
+    """Binds left click to the delete function"""
     canvas.bind("<Button-1>", delete)
-
-
-def curr_com_put_bulb():
-    """Defines command"""
-    canvas.bind("<Button-1>", put_bulb)
-
-
-def curr_com_put_not():
-    """Defines command"""
-    canvas.bind("<Button-1>", put_not)
-
-
-def curr_com_put_and():
-    """Defines command"""
-    canvas.bind("<Button-1>", put_and)
-
-
-def curr_com_put_nand():
-    """Defines command"""
-    canvas.bind("<Button-1>", put_nand)
-
-
-def curr_com_put_or():
-    """Defines command"""
-    canvas.bind("<Button-1>", put_or)
-
-
-def curr_com_put_nor():
-    """Defines command"""
-    canvas.bind("<Button-1>", put_nor)
-
-
-def curr_com_put_xor():
-    """Defines command"""
-    canvas.bind("<Button-1>", put_xor)
-
-
-def curr_com_put_xnor():
-    """Defines command"""
-    canvas.bind("<Button-1>", put_xnor)
-
-
-def curr_com_put_high_const():
-    """Defines command"""
-    canvas.bind("<Button-1>", put_high_const)
-
-
-def curr_com_put_low_const():
-    """Defines command"""
-    canvas.bind("<Button-1>", put_low_const)
 
 
 def start(app: ctk.CTk):
@@ -335,7 +159,7 @@ def main():
     ctk.set_default_color_theme("blue")
 
     WIDTH = 1400
-    HEIGHT = 800
+    HEIGHT = 850
 
     app = ctk.CTk()
 
@@ -359,19 +183,6 @@ def main():
     wdth = 150
     fg_color = ("gray75", "gray30")
 
-    # Buffer button
-    buffer_button = ctk.CTkButton(
-        master=frame_logical_gates, text="Buffer",
-        compound=cmpd,
-        height=hght,
-        width=wdth,
-        fg_color=fg_color)
-
-    img = ImageTk.PhotoImage(Image.open(
-        "app_code/visuals/textures/buffer.png").resize((80, 40)))
-    buffer_button.set_image(img)
-    buffer_button.grid(row=1, column=0, padx=5, pady=5)
-
     # NOT button
     not_button = ctk.CTkButton(
         master=frame_logical_gates, text="NOT Gate",
@@ -380,12 +191,12 @@ def main():
         width=wdth,
         fg_color=fg_color,
         # command=dec(NOT_Gate))
-        command=curr_com_put_not)
+        command=lambda: curr_com_put(NOT_Gate))
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/not.png").resize((80, 40)))
     not_button.set_image(img)
-    not_button.grid(row=1, column=1, padx=5, pady=5)
+    not_button.grid(row=1, column=0, padx=5, pady=5)
 
     # AND button
     and_button = ctk.CTkButton(
@@ -394,12 +205,12 @@ def main():
         height=hght,
         width=wdth,
         fg_color=fg_color,
-        command=curr_com_put_and)
+        command=lambda: curr_com_put(AND_Gate))
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/and.png").resize((80, 40)))
     and_button.set_image(img)
-    and_button.grid(row=2, column=0, padx=5, pady=5)
+    and_button.grid(row=1, column=1, padx=5, pady=5)
 
     # NAND button
     nand_button = ctk.CTkButton(
@@ -408,12 +219,12 @@ def main():
         height=hght,
         width=wdth,
         fg_color=fg_color,
-        command=curr_com_put_nand)
+        command=lambda: curr_com_put(NAND_Gate))
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/nand.png").resize((80, 40)))
     nand_button.set_image(img)
-    nand_button.grid(row=2, column=1, padx=5, pady=5)
+    nand_button.grid(row=2, column=0, padx=5, pady=5)
 
     # OR button
     or_button = ctk.CTkButton(
@@ -422,12 +233,12 @@ def main():
         height=hght,
         width=wdth,
         fg_color=fg_color,
-        command=curr_com_put_or)
+        command=lambda: curr_com_put(OR_Gate))
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/or.png").resize((80, 40)))
     or_button.set_image(img)
-    or_button.grid(row=3, column=0, padx=5, pady=5)
+    or_button.grid(row=2, column=1, padx=5, pady=5)
 
     # NOR button
     nor_button = ctk.CTkButton(
@@ -436,12 +247,12 @@ def main():
         height=hght,
         width=wdth,
         fg_color=fg_color,
-        command=curr_com_put_nor)
+        command=lambda: curr_com_put(NOR_Gate))
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/nor.png").resize((80, 40)))
     nor_button.set_image(img)
-    nor_button.grid(row=3, column=1, padx=5, pady=5)
+    nor_button.grid(row=3, column=0, padx=5, pady=5)
 
     # XOR button
     xor_button = ctk.CTkButton(
@@ -450,12 +261,12 @@ def main():
         height=hght,
         width=wdth,
         fg_color=fg_color,
-        command=curr_com_put_xor)
+        command=lambda: curr_com_put(XOR_Gate))
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/xor.png").resize((80, 40)))
     xor_button.set_image(img)
-    xor_button.grid(row=4, column=0, padx=5, pady=5)
+    xor_button.grid(row=3, column=1, padx=5, pady=5)
 
     # XNOR button
     xnor_button = ctk.CTkButton(
@@ -464,12 +275,12 @@ def main():
         height=hght,
         width=wdth,
         fg_color=fg_color,
-        command=curr_com_put_xnor)
+        command=lambda: curr_com_put(XNOR_Gate))
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/xnor.png").resize((80, 40)))
     xnor_button.set_image(img)
-    xnor_button.grid(row=4, column=1, padx=5, pady=5)
+    xnor_button.grid(row=4, column=0, padx=5, pady=5)
 
     # Setup for frame with input controls
     input_controls = ctk.CTkFrame(master=app)
@@ -488,7 +299,7 @@ def main():
         height=hght,
         width=wdth,
         fg_color=fg_color,
-        command=curr_com_put_high_const)
+        command=lambda: curr_com_put(ONE_Generator))
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/high_constant.png").resize((80, 40)))
@@ -502,7 +313,7 @@ def main():
         height=hght,
         width=wdth,
         fg_color=fg_color,
-        command=curr_com_put_low_const)
+        command=lambda: curr_com_put(ZERO_Generator))
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/low_constant.png").resize((80, 40)))
@@ -527,7 +338,7 @@ def main():
         height=hght,
         width=wdth,
         fg_color=fg_color,
-        command=curr_com_put_bulb
+        command=lambda: curr_com_put(Lamp)
     )
 
     img = ImageTk.PhotoImage(Image.open(
@@ -556,7 +367,7 @@ def main():
     # Setting up the canvas
     global canvas  # please don't use globals
     canvas = Canvas(master=app, height=700,
-                    width=1000, bg="light grey")
+                    width=1000, bg="light grey", )
     canvas.grid(row=0, column=2, rowspan=3)
 
     # Setting up the board
