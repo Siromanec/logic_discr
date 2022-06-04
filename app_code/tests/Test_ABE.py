@@ -1,7 +1,12 @@
 import unittest
-from  Fundamentals import Board
-from Advanced_board_elements import ShiftLeft, ShiftRight
-from Simple_board_elements import ONE_Generator, ZERO_Generator
+import os
+import sys
+
+root_folder = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(root_folder)
+from board_elements.Fundamentals import Board
+from board_elements.AdvancedBoardElements import ShiftLeft, ShiftRight
+from board_elements.SimpleBoardElements import ONE_Generator, ZERO_Generator
 
 from Test_SBE import Test_SBE
 class Test_ABE(Test_SBE):
