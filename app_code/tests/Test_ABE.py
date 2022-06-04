@@ -81,6 +81,21 @@ class Test_ABE(Test_SBE):
             self.src_A.get_outputs()[0], self.element.get_inputs()[2]
         )
 
+    def set_board_010100(self):
+        self.set_board_01()
+        self.board.connect_pins(
+            self.src_A.get_outputs()[0], self.element.get_inputs()[2]
+        )
+        self.board.connect_pins(
+            self.src_B.get_outputs()[0], self.element.get_inputs()[3]
+        )
+        self.board.connect_pins(
+            self.src_A.get_outputs()[0], self.element.get_inputs()[4]
+        )
+        self.board.connect_pins(
+            self.src_A.get_outputs()[0], self.element.get_inputs()[5]
+        )
+
     # def set_shifters(self):
 
     #     self.board.clear()
@@ -217,7 +232,20 @@ class Test_ABE(Test_SBE):
             [True, True, False, True],
         )
 
+    def test_Multiplexor(self):
+        """Testing  multiplexor"""
+        self.el = Multiplexor
+        self.board.clear()
+        self.element = self.board.create_element(self.el)
+        self.set_board_010100()
+        self.assertEqual(
+            [
+                self.element.get_outputs()[i].get_state()
+                for i in range(len(self.element.get_outputs()))
+            ],
+            [True],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
-

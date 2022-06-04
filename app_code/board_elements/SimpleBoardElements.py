@@ -6,18 +6,19 @@ these are simple board elements
  'ClockGenerator']
 
 """
-
+import time
+import threading
 import os
 import sys
+from PIL import Image, ImageTk
+
 
 root_folder = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(root_folder)
 
 from board_elements.Fundamentals import BaseCircuitElement
-from PIL import Image, ImageTk
 
-import time
-import threading
+
 
 
 class AND_Gate(BaseCircuitElement):
@@ -137,7 +138,7 @@ class OR_Gate(BaseCircuitElement):
             val_prev = val or val_prev
         for o_pin in self.get_outputs():
             o_pin.update_state(val_prev)
-        
+
     def set_reaction_areas_for_pins(self):
         """Set reaction areas for all pins"""
         self.get_inputs()[0].set_reaction_area(-41, -14, -32, -5)
@@ -181,7 +182,7 @@ class NOR_Gate(BaseCircuitElement):
             val_prev = val or val_prev
         for o_pin in self.get_outputs():
             o_pin.update_state(not val_prev)
-    
+
     def set_reaction_areas_for_pins(self):
         """Set reaction areas for all pins"""
         self.get_inputs()[0].set_reaction_area(-41, -14, -32, -5)
@@ -224,7 +225,7 @@ class XOR_Gate(BaseCircuitElement):
             val_prev = val ^ val_prev
         for o_pin in self.get_outputs():
             o_pin.update_state(val_prev)
-    
+
     def set_reaction_areas_for_pins(self):
         """Set reaction areas for all pins"""
         self.get_inputs()[0].set_reaction_area(-41, -14, -32, -5)
@@ -415,7 +416,7 @@ class Switch(BaseCircuitElement):
         self.state = not self.state
         # self.img = self.images[self.state]
         self.get_board().update_board()
-    
+
     def set_reaction_areas_for_pins(self):
         """Set reaction areas for all pins"""
         pass

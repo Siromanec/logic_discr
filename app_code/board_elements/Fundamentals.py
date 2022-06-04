@@ -82,7 +82,7 @@ class Pin:
         """Check if dot is in the reaction area"""
         area = self.get_reaction_area()
         return area[0] <= x_coord <= area[2] and area[1] <= y_coord <= area[3]
-    
+
     def is_connected(self):
         """used to check connections"""
 
@@ -150,7 +150,7 @@ class InputPin(Pin):
         returns parent of the pin
         """
         return self._parent
-    
+
     def is_connected(self) -> bool:
         """
         checks if self has connections
@@ -217,7 +217,7 @@ class OutputPin(Pin):
         return s list of input pins
         """
         return list(self._children)
-    
+
     def is_connected(self) -> bool:
         """
         checks if has any children
@@ -233,7 +233,7 @@ class BaseCircuitElement:
     """
     count = 0
 
-    def __init__(self, board: Board, 
+    def __init__(self, board: Board,
                  input_pins_amount: int,
                  output_pins_amount: int) -> None:
         self._input_pins = tuple(InputPin(self)
@@ -284,19 +284,19 @@ class BaseCircuitElement:
 
     def set_img_coords(self, x_coord, y_coord):
         self._img_coords = (x_coord, y_coord)
-    
+
     def get_img_coords(self):
         return self._img_coords
-    
+
     def set_img_width(self, width):
         self._img_width = width
-    
+
     def get_img_width(self):
         return self._img_width
-    
+
     def set_img_height(self, height):
         self._img_height = height
-    
+
     def get_img_height(self):
         return self._img_height
 
@@ -343,23 +343,30 @@ class BaseCircuitElement:
             old_area = input_pin.get_reaction_area()
             if old_area:
                 input_pin.set_reaction_area(
-                    old_area[0]+x_coord, old_area[1]+y_coord, old_area[2]+x_coord, old_area[3]+y_coord)
+                    old_area[0] + x_coord,
+                    old_area[1] + y_coord,
+                    old_area[2] + x_coord,
+                    old_area[3] + y_coord
+                    )
 
         for output_pin in self.get_outputs():
             old_area = output_pin.get_reaction_area()
             if old_area:
                 output_pin.set_reaction_area(
-                    old_area[0]+x_coord, old_area[1]+y_coord, old_area[2]+x_coord, old_area[3]+y_coord)
-    
+                    old_area[0] + x_coord,
+                    old_area[1] + y_coord,
+                    old_area[2] + x_coord,
+                    old_area[3] + y_coord
+                    )
+
     def check_dot_in_img(self, x_coord, y_coord):
         """Check if dot is in the image's area"""
         center = self.get_img_coords()
         center_x, center_y = center[0], center[1]
         x_shift, y_shift = self.get_img_width()/2, self.get_img_height()/2
-        if center_x - x_shift <= x_coord <= center_x + x_shift and\
-            center_y - y_shift <= y_coord <= center_y + y_shift:
-            return True
-        return False
+        return ((center_x - x_shift <= x_coord <= center_x + x_shift) and
+                (center_y - y_shift <= y_coord <= center_y + y_shift))
+
 
     def update(self):
         """updates the BCE"""
