@@ -19,7 +19,7 @@ class Pin:
         self._circuit = circuit
         self._state = False
         self._reaction_area = None
-        self._connected_line = None
+        self._connected_line_tag = None
 
     def __eq__(self, other: Pin) -> bool:
         """All pins are unique"""
@@ -48,14 +48,14 @@ class Pin:
         """Get reaction area of the pin"""
         return self._reaction_area
     
-    def set_connected_line(self, line):
-        self._connected_line = line
+    def set_connected_line_tag(self, line_tag):
+        self._connected_line_tag = line_tag
     
-    def get_connected_line(self, line):
-        return self._connected_line
+    def get_connected_line_tag(self):
+        return self._connected_line_tag
     
-    def remove_connected_line(self):
-        self._connected_line = None
+    def remove_connected_line_tag(self):
+        self._connected_line_tag = None
 
     def check_dot(self, x_coord, y_coord):
         """Check if dot is in the reaction area"""
@@ -188,6 +188,9 @@ class BaseCircuitElement:
         self._board = board
         self.id = BaseCircuitElement.count
         BaseCircuitElement.count += 1
+        self._img_coords = None
+        self._img_width = 100
+        self._img_height = 50
 
     def __eq__(self, other: BaseCircuitElement) -> bool:
         """All circuit elements are unique"""
@@ -211,6 +214,24 @@ class BaseCircuitElement:
 
     def get_board(self):
         return self._board
+
+    def set_img_coords(self, x_coord, y_coord):
+        self._img_coords = (x_coord, y_coord)
+    
+    def get_img_coords(self):
+        return self._img_coords
+    
+    def set_img_width(self, width):
+        self._img_width = width
+    
+    def get_img_width(self):
+        return self._img_width
+    
+    def set_img_height(self, height):
+        self._img_height = height
+    
+    def get_img_height(self):
+        return self._img_height
 
     def get_dependent_circuits(self):
         output_pins = self.get_outputs()
@@ -255,6 +276,16 @@ class BaseCircuitElement:
             if old_area:
                 output_pin.set_reaction_area(
                     old_area[0]+x_coord, old_area[1]+y_coord, old_area[2]+x_coord, old_area[3]+y_coord)
+    
+    def check_dot_in_img(self, x_coord, y_coord):
+        """Check if dot is in the image's area"""
+        center = self.get_img_coords()
+        center_x, center_y = center[0], center[1]
+        x_shift, y_shift = self.get_img_width()/2, self.get_img_height()/2
+        if center_x - x_shift <= x_coord <= center_x + x_shift and\
+            center_y - y_shift <= y_coord <= center_y + y_shift:
+            return True
+        return False
 
     def update(self):
         if not self.is_fully_connected():

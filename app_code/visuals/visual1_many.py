@@ -13,12 +13,16 @@ from board_elements.Fundamentals import *
 
 class Line:
     last_pins_to_connect = []
+    count = 0
 
     def __init__(self, color="black", canvas: Canvas = None, connected_pins=(None, None)) -> None:
         self.color = color
         self.width = 3
         self.canvas = canvas
         self.connected_pins = connected_pins
+        self.id = Line.count
+        Line.count += 1
+        self.tag = 'line'+str(self.id)
 
     def set_connected_pins(self, pins: tuple[Pin]):
         self.connected_pins = pins
@@ -53,8 +57,9 @@ class Line:
         center2 = ((pin2[0]+pin2[2])/2, (pin2[1]+pin2[3])/2)
         print("draw a line")
         self.canvas.create_line(
-            center1[0], center1[1], center2[0], center2[1], width=self.width, fill=self.color)
-
+            center1[0], center1[1], center2[0], center2[1], width=self.width, fill=self.color, tag=self.tag)
+        for pin in self.get_connected_pins():
+            pin.set_connected_line_tag(self.tag)
 
 def connect(event):
     print("clicked at", event.x, event.y)
@@ -70,9 +75,11 @@ def connect(event):
             for element in board.get_circuits_list():
                 if isinstance(element, Lamp):
                     if element.get_inputs()[0].get_state():
-                        img = ImageTk.PhotoImage(Image.open(element.img_path_on).resize((50, 100)))
+                        img = ImageTk.PhotoImage(Image.open(
+                            element.img_path_on).resize((50, 100)))
                         board.add_to_img_list(img)
-                        canvas.create_image(element.get_img_coords()[0], element.get_img_coords()[1], image=img)
+                        canvas.create_image(element.get_img_coords()[
+                                            0], element.get_img_coords()[1], image=img)
             line = Line(canvas=canvas, connected_pins=last_pins)
             line.draw_line()
         elif isinstance(last_pins[0], InputPin) and isinstance(last_pins[1], OutputPin):
@@ -82,6 +89,32 @@ def connect(event):
         Line.clear_last_pins()
 
 
+def delete(event):
+    """Delete element from canvas"""
+    for element in board.get_circuits_list():
+        # remove if lamp!!!!!!!!!!!!!!
+        if isinstance(element, Lamp) and element.check_dot_in_img(event.x, event.y):
+            canvas.delete(element.tag)
+            for input_pin in element.get_inputs():
+                # delete line from canvas
+                line_to_delete = input_pin.get_connected_line_tag()
+                canvas.delete(line_to_delete)
+                # remove line tag from parent pin
+                parent = input_pin.get_parent()
+                if parent:
+                    parent.remove_connected_line_tag()
+            for output_pin in element.get_outputs():
+                # delete line from canvas
+                line_to_delete = output_pin.get_connected_line_tag()
+                canvas.delete(line_to_delete)
+                # remove line tag from children pins
+                children = output_pin.get_children()
+                for child in children:
+                    if child:
+                        child.remove_connected_line_tag()
+
+            board.remove_element(element)
+
 def put_bulb(event):
     """Puts image bulb on the canvas"""
     print("clicked at", event.x, event.y)
@@ -89,9 +122,10 @@ def put_bulb(event):
     new_lamp.update_reaction_areas(event.x, event.y)
     new_lamp.set_img_coords(event.x, event.y)
     # print(new_lamp._input_pins[0].get_reaction_area())
-    img = ImageTk.PhotoImage(Image.open(new_lamp.img_path_off).resize((50, 100)))
+    img = ImageTk.PhotoImage(Image.open(
+        new_lamp.img_path_off).resize((50, 100)))
     board.add_to_img_list(img)
-    canvas.create_image(event.x, event.y, image=img)
+    canvas.create_image(event.x, event.y, image=img, tag=new_lamp.tag)
 
 
 def put_buffer():
@@ -198,6 +232,11 @@ def curr_com_connect():
     canvas.bind("<Button-1>", connect)
 
 
+def curr_com_delete():
+    """Defines command"""
+    canvas.bind("<Button-1>", delete)
+
+
 def curr_com_put_bulb():
     """Defines command"""
     canvas.bind("<Button-1>", put_bulb)
@@ -261,7 +300,7 @@ def main():
     ctk.set_default_color_theme("blue")
 
     WIDTH = 1400
-    HEIGHT = 800
+    HEIGHT = 900
 
     app = ctk.CTk()
 
@@ -462,12 +501,21 @@ def main():
 
     # Connect button
     connect_button = ctk.CTkButton(
-        master=output_controls, text="Connect", text_font = ("Roboto Medium", 14),
+        master=output_controls, text="Connect", text_font=("Roboto Medium", 14),
         compound=cmpd,
         height=hght,
         width=wdth,
         command=curr_com_connect)
     connect_button.grid(row=1, column=1, padx=5, pady=5)
+
+    # Delete button
+    delete_button = ctk.CTkButton(
+        master=output_controls, text="Delete", text_font=("Roboto Medium", 14),
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        command=curr_com_delete)
+    delete_button.grid(row=2, column=0, padx=5, pady=5)
 
     # Setting up the canvas
     global canvas  # please don't use globals
