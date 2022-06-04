@@ -382,10 +382,12 @@ class Decoder(AdvancedCircuitElement):
         )
 
         self.get_board().update_board()
+        
+        
 class Multiplexor(AdvancedCircuitElement):
- """ 
- A class for multiplexor.
- """
+    """ 
+    A class for multiplexor.
+    """
     def __init__(self, board: Board, i_number=6, o_number=1):
         super().__init__(board, i_number, o_number)
         inputs = self.get_inputs()
