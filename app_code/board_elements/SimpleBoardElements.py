@@ -29,6 +29,7 @@ class AND_Gate(BaseCircuitElement):
         super().__init__(board, i_number, o_number)
 
         self.img_path = "app_code/visuals/textures/and.png"
+        self.set_reaction_areas_for_pins()
 
     def operation(self):
         """
@@ -54,6 +55,11 @@ class AND_Gate(BaseCircuitElement):
         for o_pin in self.get_outputs():
             o_pin.update_state(val_prev)
 
+    def set_reaction_areas_for_pins(self):
+        """Set reaction areas for all pins"""
+        self.get_inputs()[0].set_reaction_area(-41, -14, -32, -5)
+        self.get_inputs()[1].set_reaction_area(-41, 5, -32, 14)
+        self.get_outputs()[0].set_reaction_area(40, -5, 48, 4)
 
 class NAND_Gate(BaseCircuitElement):
     """
