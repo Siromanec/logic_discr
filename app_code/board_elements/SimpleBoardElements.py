@@ -70,6 +70,7 @@ class NAND_Gate(BaseCircuitElement):
         super().__init__(board, i_number, o_number)
 
         self.img_path = "app_code/visuals/textures/nand.png"
+        self.set_reaction_areas_for_pins()
 
 
     def operation(self):
@@ -96,6 +97,11 @@ class NAND_Gate(BaseCircuitElement):
         for o_pin in self.get_outputs():
             o_pin.update_state(not val_prev)
 
+    def set_reaction_areas_for_pins(self):
+        """Set reaction areas for all pins"""
+        self.get_inputs()[0].set_reaction_area(-41, -14, -32, -5)
+        self.get_inputs()[1].set_reaction_area(-41, 5, -32, 14)
+        self.get_outputs()[0].set_reaction_area(40, -5, 48, 4)
 
 class OR_Gate(BaseCircuitElement):
     """
@@ -107,7 +113,7 @@ class OR_Gate(BaseCircuitElement):
 
 
         self.img_path = "app_code/visuals/textures/or.png"
-
+        self.set_reaction_areas_for_pins()
 
     def operation(self):
         bools = tuple(i_pin.get_state() for i_pin in self.get_inputs())
@@ -131,6 +137,12 @@ class OR_Gate(BaseCircuitElement):
             val_prev = val or val_prev
         for o_pin in self.get_outputs():
             o_pin.update_state(val_prev)
+        
+    def set_reaction_areas_for_pins(self):
+        """Set reaction areas for all pins"""
+        self.get_inputs()[0].set_reaction_area(-41, -14, -32, -5)
+        self.get_inputs()[1].set_reaction_area(-41, 5, -32, 14)
+        self.get_outputs()[0].set_reaction_area(40, -5, 48, 4)
 
 
 class NOR_Gate(BaseCircuitElement):
@@ -143,6 +155,7 @@ class NOR_Gate(BaseCircuitElement):
 
 
         self.img_path = "app_code/visuals/textures/nor.png"
+        self.set_reaction_areas_for_pins()
 
 
     def operation(self):
@@ -168,6 +181,12 @@ class NOR_Gate(BaseCircuitElement):
             val_prev = val or val_prev
         for o_pin in self.get_outputs():
             o_pin.update_state(not val_prev)
+    
+    def set_reaction_areas_for_pins(self):
+        """Set reaction areas for all pins"""
+        self.get_inputs()[0].set_reaction_area(-41, -14, -32, -5)
+        self.get_inputs()[1].set_reaction_area(-41, 5, -32, 14)
+        self.get_outputs()[0].set_reaction_area(40, -5, 48, 4)
 
 
 class XOR_Gate(BaseCircuitElement):
@@ -179,6 +198,7 @@ class XOR_Gate(BaseCircuitElement):
         super().__init__(board, 2, 1)
 
         self.img_path = "app_code/visuals/textures/xor.png"
+        self.set_reaction_areas_for_pins()
 
     def operation(self):
         """
@@ -204,6 +224,12 @@ class XOR_Gate(BaseCircuitElement):
             val_prev = val ^ val_prev
         for o_pin in self.get_outputs():
             o_pin.update_state(val_prev)
+    
+    def set_reaction_areas_for_pins(self):
+        """Set reaction areas for all pins"""
+        self.get_inputs()[0].set_reaction_area(-41, -14, -32, -5)
+        self.get_inputs()[1].set_reaction_area(-41, 5, -32, 14)
+        self.get_outputs()[0].set_reaction_area(40, -5, 48, 4)
 
 
 class XNOR_Gate(BaseCircuitElement):
@@ -215,6 +241,7 @@ class XNOR_Gate(BaseCircuitElement):
         super().__init__(board, 2, 1)
 
         self.img_path = "app_code/visuals/textures/xnor.png"
+        self.set_reaction_areas_for_pins()
 
     def operation(self):
         """
@@ -239,6 +266,12 @@ class XNOR_Gate(BaseCircuitElement):
             val_prev = val ^ val_prev
         for o_pin in self.get_outputs():
             o_pin.update_state(not val_prev)
+
+    def set_reaction_areas_for_pins(self):
+        """Set reaction areas for all pins"""
+        self.get_inputs()[0].set_reaction_area(-41, -14, -32, -5)
+        self.get_inputs()[1].set_reaction_area(-41, 5, -32, 14)
+        self.get_outputs()[0].set_reaction_area(40, -5, 48, 4)
 
 
 class NOT_Gate(BaseCircuitElement):
@@ -364,6 +397,7 @@ class Switch(BaseCircuitElement):
         img2 = "image 2"
         self.images = {True: img1, False: img2}
         # self.img = self.images[self.state]
+        self.set_reaction_areas_for_pins()
 
     def operation(self):
         """Generates either ZERO or ONE, depending on the state"""
@@ -375,6 +409,10 @@ class Switch(BaseCircuitElement):
         self.state = not self.state
         # self.img = self.images[self.state]
         self.get_board().update_board()
+    
+    def set_reaction_areas_for_pins(self):
+        """Set reaction areas for all pins"""
+        pass
 
 
 class ClockGenerator(BaseCircuitElement):
