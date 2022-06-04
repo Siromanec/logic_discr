@@ -187,6 +187,7 @@ class BaseCircuitElement:
                                   for _ in range(output_pins_amount))
         self._board = board
         self.id = BaseCircuitElement.count
+        self.img_object = None
         BaseCircuitElement.count += 1
         self._img_coords = None
         self._img_width = 100

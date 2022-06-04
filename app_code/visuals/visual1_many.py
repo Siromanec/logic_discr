@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import time
 from tkinter import Canvas
 import customtkinter as ctk
 from PIL import Image, ImageTk
@@ -61,6 +63,7 @@ class Line:
         for pin in self.get_connected_pins():
             pin.set_connected_line_tag(self.tag)
 
+
 def connect(event):
     print("clicked at", event.x, event.y)
 
@@ -73,17 +76,19 @@ def connect(event):
         if isinstance(last_pins[0], OutputPin) and isinstance(last_pins[1], InputPin):
             board.connect_pins(last_pins[0], last_pins[1])
             for element in board.get_circuits_list():
-                if isinstance(element, Lamp):
-                    if element.get_inputs()[0].get_state():
-                        img = ImageTk.PhotoImage(Image.open(
-                            element.img_path_on).resize((50, 100)))
-                        board.add_to_img_list(img)
-                        canvas.create_image(element.get_img_coords()[
-                                            0], element.get_img_coords()[1], image=img)
+                img = ImageTk.PhotoImage(
+                    Image.open(element.img)).resize((50, 100))
+                canvas.itemconfig(element.img_object, image=img)
+                board.add_to_img_list(img)
             line = Line(canvas=canvas, connected_pins=last_pins)
             line.draw_line()
         elif isinstance(last_pins[0], InputPin) and isinstance(last_pins[1], OutputPin):
             board.connect_pins(last_pins[1], last_pins[0])
+            for element in board.get_circuits_list():
+                img = ImageTk.PhotoImage(
+                    Image.open(element.img)).resize((50, 100))
+                canvas.itemconfig(element.img_object, image=img)
+                board.add_to_img_list(img)
             line = Line(canvas=canvas, connected_pins=last_pins)
             line.draw_line()
         Line.clear_last_pins()
@@ -115,6 +120,19 @@ def delete(event):
 
             board.remove_element(element)
 
+
+def put(element_type, event):
+    """Puts image of gate NOT on the canvas"""
+    print("clicked at", event.x, event.y)
+    new_not = board.create_element(element_type)
+    new_not.update_reaction_areas(event.x, event.y)
+    # print(new_not._input_pins[0].get_reaction_area())
+    # print(new_not._output_pins[0].get_reaction_area())
+    img = ImageTk.PhotoImage(Image.open(new_not.img_path).resize((100, 50)))
+    board.add_to_img_list(img)
+    canvas.create_image(event.x, event.y, image=img)
+
+
 def put_bulb(event):
     """Puts image bulb on the canvas"""
     print("clicked at", event.x, event.y)
@@ -126,6 +144,7 @@ def put_bulb(event):
         new_lamp.img_path_off).resize((50, 100)))
     board.add_to_img_list(img)
     canvas.create_image(event.x, event.y, image=img, tag=new_lamp.tag)
+    # m = canvas.create_image(event.x, event.y, image=img)
 
 
 def put_buffer():
@@ -172,7 +191,7 @@ def put_or(event):
     new_or.update_reaction_areas(event.x, event.y)
     img = ImageTk.PhotoImage(Image.open(new_or.img_path).resize((100, 50)))
     board.add_to_img_list(img)
-    canvas.create_image(event.x, event.y, image=img)
+    new_or.img_object = canvas.create_image(event.x, event.y, image=img)
 
 
 def put_nor(event):
@@ -227,6 +246,12 @@ def put_low_const(event):
     canvas.create_image(event.x, event.y, image=img)
 
 
+def dec(element):
+    def curr_com(element):
+        canvas.bind("<Button-1>", element)
+    return curr_com
+
+
 def curr_com_connect():
     Line.clear_last_pins()
     canvas.bind("<Button-1>", connect)
@@ -257,7 +282,7 @@ def curr_com_put_nand():
     canvas.bind("<Button-1>", put_nand)
 
 
-def curr_com_put_or():
+def curr_com_put_or(el_type):
     """Defines command"""
     canvas.bind("<Button-1>", put_or)
 
@@ -344,7 +369,7 @@ def main():
         height=hght,
         width=wdth,
         fg_color=fg_color,
-        command=curr_com_put_not)
+        command=dec())
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/not.png").resize((80, 40)))
