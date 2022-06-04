@@ -1,3 +1,8 @@
+"""
+[AdvancedCircuitElement, HalfAdder, Adder,
+ Decoder, HalfSubstractor, Substractor, Encoder_4_to_2,
+ Encoder_8_to_3, ShiftLeft, ShiftRight]
+"""
 from __future__ import annotations
 from Fundamentals import Board, BaseCircuitElement, InputPin, OutputPin
 import time
@@ -31,7 +36,7 @@ class AdvancedCircuitElement(BaseCircuitElement):
             o_pin = OutputPin(self)
             self.inner_inputs_dict[i_pin] = o_pin
 
-    def create_element(self, circuit_type, inputs=None, outputs=None):
+    def create_element(self, circuit_type, inputs=None, outputs=None) -> AdvancedCircuitElement:
         """Creates a circuit of a given type in this circuit"""
         try:
             if not issubclass(circuit_type, BaseCircuitElement):
@@ -105,7 +110,8 @@ class HalfAdder(AdvancedCircuitElement):
         1: B
     Output pins:
         0: sum
-        1: carry"""
+        1: carry
+    """
 
     def __init__(self, board: Board, i_number=2, o_number=2):
         super().__init__(board, i_number, o_number)
@@ -297,7 +303,8 @@ class HalfSubstractor(AdvancedCircuitElement):
         1: B
     Output pins:
         0: difference
-        1: borrow"""
+        1: borrow
+    """
 
     def __init__(self, board: Board, i_number=2, o_number=2):
         super().__init__(board, i_number, o_number)

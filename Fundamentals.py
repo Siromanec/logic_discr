@@ -159,7 +159,7 @@ class OutputPin(Pin):
             raise IndexError("The child doesn't exist!")
         self._children.remove(child)
 
-    def get_children(self):
+    def get_children(self) -> list[InputPin]:
         return list(self._children)
     
     def is_connected(self):
@@ -175,7 +175,7 @@ class BaseCircuitElement:
     """
     count = 0
 
-    def __init__(self, board, input_pins_amount: int, output_pins_amount: int) -> None:
+    def __init__(self, board: Board, input_pins_amount: int, output_pins_amount: int) -> None:
         self._input_pins = tuple(InputPin(self)
                                  for _ in range(input_pins_amount))
         self._output_pins = tuple(OutputPin(self)
@@ -265,13 +265,26 @@ class BaseCircuitElement:
         pass
 
     def destroy(self):
+        # max we can do is set board to None. Python will outomatically destroy the object, once all refferences dissapear. Serhii.
+        # self._input_pins = tuple()
+                   
+        # self._output_pins = tuple()
+
+        # self._board = None
         pass  # some additional actions to destroy the circuit?
 
 
 class Board:
 
     def __init__(self):
-        self.circuits_list = []
+        #self.clear()
+        self._circuits_list: list[BaseCircuitElement] = []
+
+
+    def clear(self):
+        # for el in self._circuits_list:
+        #     self.remove_element(el)
+        self._circuits_list: list[BaseCircuitElement] = []
 
     def connect_pins(self, parent_pin: OutputPin, child_pin: InputPin, update=True):
         """Connects a parent pin with a child pin"""
@@ -296,11 +309,11 @@ class Board:
             children = parent.get_children()
             for child in children:
                 self.disconnect_pins(parent, child, update=False)
-        self.circuits_list.remove(circuit)
+        self._circuits_list.remove(circuit)
         circuit.destroy()
         self.update_board()
 
-    def create_element(self, circuit_type, inputs=None, outputs=None):
+    def create_element(self, circuit_type, inputs=None, outputs=None) -> BaseCircuitElement:
         """Creates a circuit of a given type on the board"""
         try:
             if not issubclass(circuit_type, BaseCircuitElement):
@@ -317,13 +330,13 @@ class Board:
         else:
             new_circuit = circuit_type(self)
 
-        self.circuits_list.append(new_circuit)
+        self._circuits_list.append(new_circuit)
         self.update_board()
 
         return new_circuit
 
     def get_circuits_list(self) -> list[BaseCircuitElement]:
-        return list(self.circuits_list)
+        return list(self._circuits_list)
 
     def get_all_pins(self) -> list[Pin]:
         pins_list = []

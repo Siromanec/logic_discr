@@ -10,8 +10,8 @@ class TestFund(TestCase):
 
         self.circuitA = BaseCircuitElement(self.board, 2, 1)
         self.circuitB = BaseCircuitElement(self.board, 2, 1)
-        self.board.circuits_list.append(self.circuitA)
-        self.board.circuits_list.append(self.circuitB)
+        self.board._circuits_list.append(self.circuitA)
+        self.board._circuits_list.append(self.circuitB)
 
         self.assertNotEqual(self.circuitA, self.circuitB)
 
@@ -24,6 +24,9 @@ class TestFund(TestCase):
 
         self.assertFalse(self.circuitA.is_fully_connected())
         #self.board.remove_element(self.circuitA)
+        self.assertEqual(self.board._circuits_list, [self.circuitA, self.circuitB])
+        self.board.clear()
+        self.assertEqual(self.board._circuits_list, [])
 
     def test_pins(self):
         self.board = Board()
@@ -42,8 +45,10 @@ class TestFund(TestCase):
         self.assertTrue("A child can only be an InputPin" in str(context.exception))
 
         self.pinA.set_parent(self.pinB)
+        self.assertEqual(self.pinA.get_parent(), self.pinB)
         
         self.pinB.add_child(self.pinA)
+        self.assertEqual(self.pinB.get_children()[0], self.pinA)
 
         self.assertEqual(self.pinA._parent, self.pinB)
         self.assertEqual(self.pinB._children[0], self.pinA)
@@ -72,8 +77,7 @@ class TestFund(TestCase):
         self.assertEqual(self.pinB.get_children(), [])
         self.assertNotEqual(self.pinA, self.pinB)
         self.assertEqual(hash(self.pinA), 12)
-        del self.pinB
-        del self.pinA
+
 
 
 
