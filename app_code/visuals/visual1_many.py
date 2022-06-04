@@ -1,3 +1,4 @@
+from __future__ import annotations
 from tkinter import Canvas
 import customtkinter as ctk
 from PIL import Image, ImageTk
