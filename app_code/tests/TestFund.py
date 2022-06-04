@@ -9,8 +9,9 @@ from board_elements.Fundamentals import Board
 from board_elements.Fundamentals import BaseCircuitElement
 from exceptions.exceptions import *
 class TestFund(TestCase):
+    """tests for fundamentals"""
     def test_BCE(self):
-
+        """test BCE"""
         self.board = Board()
 
         self.circuitA = BaseCircuitElement(self.board, 2, 1)
@@ -34,6 +35,7 @@ class TestFund(TestCase):
         self.assertEqual(self.board._circuits_list, [])
 
     def test_pins(self):
+        """test pins"""
         self.board = Board()
         self.circuitA = BaseCircuitElement(self.board, 2, 1)
         self.circuitB = BaseCircuitElement(self.board, 2, 1)
@@ -51,7 +53,7 @@ class TestFund(TestCase):
 
         self.pinA.set_parent(self.pinB)
         self.assertEqual(self.pinA.get_parent(), self.pinB)
-        
+
         self.pinB.add_child(self.pinA)
         self.assertEqual(self.pinB.get_children()[0], self.pinA)
 
@@ -63,7 +65,7 @@ class TestFund(TestCase):
         with self.assertRaises(ValueError) as  context:
             self.pinB.set_state(1322)
         self.assertTrue("Incorrect value for a pin state!" in str(context.exception))
-        
+
         self.pinB.update_state(True)
         self.pinA.update_state()
         self.assertTrue(self.pinB.get_state())
@@ -83,9 +85,5 @@ class TestFund(TestCase):
         self.assertNotEqual(self.pinA, self.pinB)
         self.assertEqual(hash(self.pinA), 12)
 
-
-
-
-        pass
 if __name__ == '__main__':
     main()

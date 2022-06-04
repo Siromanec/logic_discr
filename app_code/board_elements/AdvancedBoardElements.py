@@ -6,6 +6,7 @@
 from __future__ import annotations
 import os
 import sys
+import time
 
 root_folder = os.path.abspath(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -13,7 +14,6 @@ root_folder = os.path.abspath(
 sys.path.append(root_folder)
 
 from board_elements.Fundamentals import Board, BaseCircuitElement, InputPin, OutputPin
-import time
 
 from board_elements.SimpleBoardElements import (
     AND_Gate,

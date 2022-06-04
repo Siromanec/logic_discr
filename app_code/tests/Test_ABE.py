@@ -10,7 +10,6 @@ sys.path.append(root_folder)
 from board_elements.Fundamentals import Board
 from board_elements.AdvancedBoardElements import *
 from board_elements.SimpleBoardElements import ONE_Generator, ZERO_Generator
-
 from Test_SBE import Test_SBE
 
 
@@ -204,7 +203,7 @@ class Test_ABE(Test_SBE):
         )
 
     def test_Encoder_8_to_3(self):
-        """Testing 4-to-2 encoder"""
+        """Testing 8-to-3 encoder"""
         self.el = Encoder_8_to_3
         self.board.clear()
         self.element = self.board.create_element(self.el)
