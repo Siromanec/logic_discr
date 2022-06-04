@@ -701,9 +701,10 @@ class Encoder_8_to_3(AdvancedCircuitElement):
         6: I2
         7: I1
     Output pins:
-        0: O1
+        0: O3
         1: O2
-        2: Valid
+        2: O1
+        3: Valid
     """
 
     def __init__(self, board: Board, i_number=8, o_number=4):
