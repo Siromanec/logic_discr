@@ -19,6 +19,7 @@ class Pin:
         self._circuit = circuit
         self._state = False
         self._reaction_area = None
+        self._connected_line = None
 
     def __eq__(self, other: Pin) -> bool:
         """All pins are unique"""
@@ -46,6 +47,15 @@ class Pin:
     def get_reaction_area(self):
         """Get reaction area of the pin"""
         return self._reaction_area
+    
+    def set_connected_line(self, line):
+        self._connected_line = line
+    
+    def get_connected_line(self, line):
+        return self._connected_line
+    
+    def remove_connected_line(self):
+        self._connected_line = None
 
     def check_dot(self, x_coord, y_coord):
         """Check if dot is in the reaction area"""
@@ -274,7 +284,10 @@ class Board:
     def __init__(self):
         #self.clear()
         self._circuits_list: list[BaseCircuitElement] = []
-
+        self._images_list = []
+    
+    def add_to_img_list(self, img):
+        self._images_list.append(img)
 
     def clear(self):
         # for el in self._circuits_list:

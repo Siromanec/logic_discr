@@ -11,71 +11,110 @@ from board_elements.Fundamentals import *
 
 
 class Line:
-    last_coords = []
+    last_pins_to_connect = []
 
-    def __init__(self, color="black", canvas=None, coords=[]) -> None:
+    def __init__(self, color="black", canvas: Canvas = None, connected_pins=(None, None)) -> None:
         self.color = color
+        self.width = 3
         self.canvas = canvas
-        self.coords = coords
-        self.connected_pins = [None, None]
+        self.connected_pins = connected_pins
+
+    def set_connected_pins(self, pins: tuple[Pin]):
+        self.connected_pins = pins
+
+    def get_connected_pins(self):
+        return self.connected_pins
 
     @classmethod
-    def clear(cls):
+    def clear_last_pins(cls):
         """
-        Clear list with last coordinates.
+        Clear list with last pair of pins to connect.
         """
-        cls.last_coords.clear()
+        cls.last_pins_to_connect.clear()
 
-    def valide_click(self, x_coord, y_coord):
+    @ classmethod
+    def valide_click(cls, x_coord, y_coord):
         """
         Check if user clicked on the free pin.
+        If yes: return True and add that pin to list, no: return False
         """
         for pin in board.get_all_pins():
             if pin.check_dot(x_coord, y_coord) and not pin.is_connected():
-                if isinstance(pin, OutputPin):
-                    self.connected_pins[0] = pin
-                else:
-                    self.connected_pins[1] = pin
+                cls.last_pins_to_connect.append(pin)
                 return True
         return False
+
+    def draw_line(self):
+        """Connect two pins with a line"""
+        pin1 = self.get_connected_pins()[0].get_reaction_area()
+        center1 = ((pin1[0]+pin1[2])/2, (pin1[1]+pin1[3])/2)
+        pin2 = self.get_connected_pins()[1].get_reaction_area()
+        center2 = ((pin2[0]+pin2[2])/2, (pin2[1]+pin2[3])/2)
+        print("draw a line")
+        self.canvas.create_line(
+            center1[0], center1[1], center2[0], center2[1], width=self.width, fill=self.color)
+
+
+def connect(event):
+    print("clicked at", event.x, event.y)
+
+    if not Line.valide_click(event.x, event.y):
+        print("invalid click")
+        Line.clear_last_pins()
+
+    elif len(Line.last_pins_to_connect) == 2:
+        last_pins = Line.last_pins_to_connect
+        if isinstance(last_pins[0], OutputPin) and isinstance(last_pins[1], InputPin):
+            board.connect_pins(last_pins[0], last_pins[1])
+            line = Line(canvas=canvas, connected_pins=last_pins)
+            line.draw_line()
+        elif isinstance(last_pins[0], InputPin) and isinstance(last_pins[1], OutputPin):
+            board.connect_pins(last_pins[1], last_pins[0])
+            line = Line(canvas=canvas, connected_pins=last_pins)
+            line.draw_line()
+        Line.clear_last_pins()
+
+
+def curr_com_connect():
+    Line.clear_last_pins()
+    canvas.bind("<Button-1>", connect)
 
 
 def put_bulb(event):
     """Puts image bulb on the canvas"""
     print("clicked at", event.x, event.y)
-    # coords.append(event.x)
-    # coords.append(event.y)
-    new_lamp = Lamp(board)
+    new_lamp = board.create_element(Lamp)
     new_lamp.update_reaction_areas(event.x, event.y)
-    Lamp.all_lamp_images.append(new_lamp.img)
-    canvas.create_image(event.x, event.y, image=Lamp.all_lamp_images[-1])
-    # coords.clear()
+    # print(new_lamp._input_pins[0].get_reaction_area())
+    img = ImageTk.PhotoImage(Image.open(new_lamp.img_path).resize((50, 100)))
+    board.add_to_img_list(img)
+    canvas.create_image(event.x, event.y, image=img)
 
 
 def curr_com_put_bulb():
     """Defines command"""
-    # coords.clear()
     canvas.bind("<Button-1>", put_bulb)
-
-
-def connect(event):
-    print("current function: connect")
-    print("clicked at", event.x, event.y)
-    Line.last_coords.append(event.x)
-    Line.last_coords.append(event.y)
-
-
-def curr_com_connect():
-    Line.last_coords.clear()
-    canvas.bind("<Button-1>", connect)
 
 
 def put_buffer():
     pass
 
 
-def put_not():
-    pass
+def put_not(event):
+    """Puts image of gate NOT on the canvas"""
+    print("clicked at", event.x, event.y)
+    new_not = board.create_element(NOT_Gate)
+    new_not.update_reaction_areas(event.x, event.y)
+    # print(new_not._input_pins[0].get_reaction_area())
+    # print(new_not._output_pins[0].get_reaction_area())
+    img = ImageTk.PhotoImage(Image.open(new_not.img_path).resize((100, 50)))
+    board.add_to_img_list(img)
+    canvas.create_image(event.x, event.y, image=img)
+
+
+def curr_com_put_not():
+    """Defines command"""
+    canvas.bind("<Button-1>", put_not)
 
 
 def put_and():
@@ -162,7 +201,8 @@ def main():
         compound=local_compound,
         height=local_height,
         width=local_width,
-        fg_color=local_fg_color)
+        fg_color=local_fg_color,
+        command=curr_com_put_not)
 
     img = ImageTk.PhotoImage(Image.open("app_code/visuals/textures/not.png").resize((80, 40)))
     not_button.set_image(img)
@@ -297,7 +337,8 @@ def main():
         command=curr_com_put_bulb
     )
 
-    img = ImageTk.PhotoImage(Image.open("app_code/visuals/textures/light_bulb.png").resize((40, 80)))
+    img = ImageTk.PhotoImage(Image.open(
+        "app_code/visuals/textures/light_bulb.png").resize((40, 80)))
     light_bulb_button.set_image(img)
     light_bulb_button.grid(row=1, column=0, padx=5, pady=5)
 
@@ -312,7 +353,7 @@ def main():
     connect_button.grid(row=1, column=1, padx=5, pady=5)
 
     # Setting up the canvas
-    global canvas # please don't use globals
+    global canvas  # please don't use globals
     canvas = Canvas(master=app, height=700,
                     width=1000, bg="light grey")
     canvas.grid(row=0, column=2, rowspan=3)
@@ -327,3 +368,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
