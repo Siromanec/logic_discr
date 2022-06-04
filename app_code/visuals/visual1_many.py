@@ -67,6 +67,12 @@ def connect(event):
         last_pins = Line.last_pins_to_connect
         if isinstance(last_pins[0], OutputPin) and isinstance(last_pins[1], InputPin):
             board.connect_pins(last_pins[0], last_pins[1])
+            for element in board.get_circuits_list():
+                if isinstance(element, Lamp):
+                    if element.get_inputs()[0].get_state():
+                        img = ImageTk.PhotoImage(Image.open(element.img_path_on).resize((50, 100)))
+                        board.add_to_img_list(img)
+                        canvas.create_image(element.get_img_coords()[0], element.get_img_coords()[1], image=img)
             line = Line(canvas=canvas, connected_pins=last_pins)
             line.draw_line()
         elif isinstance(last_pins[0], InputPin) and isinstance(last_pins[1], OutputPin):
@@ -81,8 +87,9 @@ def put_bulb(event):
     print("clicked at", event.x, event.y)
     new_lamp = board.create_element(Lamp)
     new_lamp.update_reaction_areas(event.x, event.y)
+    new_lamp.set_img_coords(event.x, event.y)
     # print(new_lamp._input_pins[0].get_reaction_area())
-    img = ImageTk.PhotoImage(Image.open(new_lamp.img_path).resize((50, 100)))
+    img = ImageTk.PhotoImage(Image.open(new_lamp.img_path_off).resize((50, 100)))
     board.add_to_img_list(img)
     canvas.create_image(event.x, event.y, image=img)
 

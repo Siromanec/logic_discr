@@ -365,9 +365,17 @@ class Lamp(BaseCircuitElement):
     def __init__(self, board) -> None:
         super().__init__(board, 1, 0)
 
-        self.img_path = "app_code/visuals/textures/light_bulb.png"
+        self.img_path_off = "app_code/visuals/textures/light_bulb.png"
+        self.img_path_on = "app_code/visuals/textures/light_bulb_shine.png"
 
         self.set_reaction_areas_for_pins()
+        self._img_coords = None
+    
+    def set_img_coords(self, x_coord, y_coord):
+        self._img_coords = (x_coord, y_coord)
+    
+    def get_img_coords(self):
+        return self._img_coords
 
     def operation(self):
         """
