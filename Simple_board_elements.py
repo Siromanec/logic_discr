@@ -323,7 +323,7 @@ class Switch(BaseCircuitElement):
 
     def switch(self):
         """Activates by the click on the Switch element area"""
-        self.state = False if self.state else True
+        self.state = not self.state
         # self.img = self.images[self.state]
         self.get_board().update_board()
 
@@ -348,7 +348,7 @@ class ClockGenerator(BaseCircuitElement):
             for o_pin in self.get_outputs():
                 o_pin.update_state(self.state)
             self.get_board().update_board()
-            self.state = False if self.state else True
+            self.state = not self.state
 
     def destroy(self):
         """Activates by the click on the Switch element area"""
