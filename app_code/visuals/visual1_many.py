@@ -77,7 +77,7 @@ def connect(event):
             board.connect_pins(last_pins[0], last_pins[1])
             for element in board.get_circuits_list():
                 img = ImageTk.PhotoImage(
-                    Image.open(element.img)).resize((50, 100))
+                    Image.open(element.img_path).resize((element.get_img_width(), element.get_img_height())))
                 canvas.itemconfig(element.img_object, image=img)
                 board.add_to_img_list(img)
             line = Line(canvas=canvas, connected_pins=last_pins)
@@ -86,7 +86,7 @@ def connect(event):
             board.connect_pins(last_pins[1], last_pins[0])
             for element in board.get_circuits_list():
                 img = ImageTk.PhotoImage(
-                    Image.open(element.img)).resize((50, 100))
+                    Image.open(element.img_path).resize((element.get_img_width(), element.get_img_height())))
                 canvas.itemconfig(element.img_object, image=img)
                 board.add_to_img_list(img)
             line = Line(canvas=canvas, connected_pins=last_pins)
@@ -99,7 +99,7 @@ def delete(event):
     for element in board.get_circuits_list():
         # remove if lamp!!!!!!!!!!!!!!
         if isinstance(element, Lamp) and element.check_dot_in_img(event.x, event.y):
-            canvas.delete(element.tag)
+            canvas.delete(element.img_object)
             for input_pin in element.get_inputs():
                 # delete line from canvas
                 line_to_delete = input_pin.get_connected_line_tag()
@@ -130,7 +130,7 @@ def put(element_type, event):
     # print(new_not._output_pins[0].get_reaction_area())
     img = ImageTk.PhotoImage(Image.open(new_not.img_path).resize((100, 50)))
     board.add_to_img_list(img)
-    canvas.create_image(event.x, event.y, image=img)
+    new_not.img_object = canvas.create_image(event.x, event.y, image=img)
 
 
 def put_bulb(event):
@@ -141,9 +141,9 @@ def put_bulb(event):
     new_lamp.set_img_coords(event.x, event.y)
     # print(new_lamp._input_pins[0].get_reaction_area())
     img = ImageTk.PhotoImage(Image.open(
-        new_lamp.img_path_off).resize((50, 100)))
+        new_lamp.img_path).resize((50, 100)))
     board.add_to_img_list(img)
-    canvas.create_image(event.x, event.y, image=img, tag=new_lamp.tag)
+    new_lamp.img_object = canvas.create_image(event.x, event.y, image=img)
     # m = canvas.create_image(event.x, event.y, image=img)
 
 
@@ -160,7 +160,7 @@ def put_not(event):
     # print(new_not._output_pins[0].get_reaction_area())
     img = ImageTk.PhotoImage(Image.open(new_not.img_path).resize((100, 50)))
     board.add_to_img_list(img)
-    canvas.create_image(event.x, event.y, image=img)
+    new_not.img_object = canvas.create_image(event.x, event.y, image=img)
 
 
 def put_and(event):
@@ -171,7 +171,7 @@ def put_and(event):
     print(new_and._input_pins[0].get_reaction_area())
     img = ImageTk.PhotoImage(Image.open(new_and.img_path).resize((100, 50)))
     board.add_to_img_list(img)
-    canvas.create_image(event.x, event.y, image=img)
+    new_and.img_object = canvas.create_image(event.x, event.y, image=img)
 
 
 def put_nand(event):
@@ -181,7 +181,7 @@ def put_nand(event):
     new_nand.update_reaction_areas(event.x, event.y)
     img = ImageTk.PhotoImage(Image.open(new_nand.img_path).resize((100, 50)))
     board.add_to_img_list(img)
-    canvas.create_image(event.x, event.y, image=img)
+    new_nand.img_object = canvas.create_image(event.x, event.y, image=img)
 
 
 def put_or(event):
@@ -201,7 +201,7 @@ def put_nor(event):
     new_nor.update_reaction_areas(event.x, event.y)
     img = ImageTk.PhotoImage(Image.open(new_nor.img_path).resize((100, 50)))
     board.add_to_img_list(img)
-    canvas.create_image(event.x, event.y, image=img)
+    new_nor.img_object = canvas.create_image(event.x, event.y, image=img)
 
 
 def put_xor(event):
@@ -211,7 +211,7 @@ def put_xor(event):
     new_xor.update_reaction_areas(event.x, event.y)
     img = ImageTk.PhotoImage(Image.open(new_xor.img_path).resize((100, 50)))
     board.add_to_img_list(img)
-    canvas.create_image(event.x, event.y, image=img)
+    new_xor.img_object = canvas.create_image(event.x, event.y, image=img)
 
 
 def put_xnor(event):
@@ -221,7 +221,7 @@ def put_xnor(event):
     new_xnor.update_reaction_areas(event.x, event.y)
     img = ImageTk.PhotoImage(Image.open(new_xnor.img_path).resize((100, 50)))
     board.add_to_img_list(img)
-    canvas.create_image(event.x, event.y, image=img)
+    new_xnor.img_object = canvas.create_image(event.x, event.y, image=img)
 
 
 def put_high_const(event):
@@ -232,7 +232,7 @@ def put_high_const(event):
     img = ImageTk.PhotoImage(Image.open(
         new_high_const.img_path).resize((100, 50)))
     board.add_to_img_list(img)
-    canvas.create_image(event.x, event.y, image=img)
+    new_high_const.img_object = canvas.create_image(event.x, event.y, image=img)
 
 
 def put_low_const(event):
@@ -243,13 +243,13 @@ def put_low_const(event):
     img = ImageTk.PhotoImage(Image.open(
         new_low_const.img_path).resize((100, 50)))
     board.add_to_img_list(img)
-    canvas.create_image(event.x, event.y, image=img)
+    new_low_const.img_object = canvas.create_image(event.x, event.y, image=img)
 
 
-def dec(element):
-    def curr_com(element):
-        canvas.bind("<Button-1>", element)
-    return curr_com
+# def dec(element):
+#     def curr_com(element):
+#         canvas.bind("<Button-1>", element)
+#     return curr_com
 
 
 def curr_com_connect():
@@ -282,7 +282,7 @@ def curr_com_put_nand():
     canvas.bind("<Button-1>", put_nand)
 
 
-def curr_com_put_or(el_type):
+def curr_com_put_or():
     """Defines command"""
     canvas.bind("<Button-1>", put_or)
 
@@ -325,7 +325,7 @@ def main():
     ctk.set_default_color_theme("blue")
 
     WIDTH = 1400
-    HEIGHT = 900
+    HEIGHT = 800
 
     app = ctk.CTk()
 
@@ -369,7 +369,8 @@ def main():
         height=hght,
         width=wdth,
         fg_color=fg_color,
-        command=dec())
+        # command=dec(NOT_Gate))
+        command=curr_com_put_not)
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/not.png").resize((80, 40)))

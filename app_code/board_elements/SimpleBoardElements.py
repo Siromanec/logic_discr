@@ -365,8 +365,10 @@ class Lamp(BaseCircuitElement):
     def __init__(self, board) -> None:
         super().__init__(board, 1, 0)
 
-        self.img_path_off = "app_code/visuals/textures/light_bulb.png"
-        self.img_path_on = "app_code/visuals/textures/light_bulb_shine.png"
+        img_path_off = "app_code/visuals/textures/light_bulb.png"
+        img_path_on = "app_code/visuals/textures/light_bulb_shine.png"
+        self.images = {False: img_path_off, True: img_path_on}
+        self.img_path = self.images[self._input_pins[0].get_state()] 
         self.tag = "lamp"+str(self.id)
 
         self.set_reaction_areas_for_pins()
@@ -377,8 +379,9 @@ class Lamp(BaseCircuitElement):
         """
         shines if the signal is 1 (True)
         """
-        bools = tuple(i_pin.get_state() for i_pin in self.get_inputs())
+        self.img_path = self.images[self._input_pins[0].get_state()] 
 
+        bools = tuple(i_pin.get_state() for i_pin in self.get_inputs())
         val_prev = bools[0]
 
         if val_prev:
