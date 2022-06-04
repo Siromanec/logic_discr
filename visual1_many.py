@@ -147,7 +147,7 @@ def main():
         width=local_width,
         fg_color=local_fg_color)
 
-    img = ImageTk.PhotoImage(Image.open("buffer.png").resize((80, 40)))
+    img = ImageTk.PhotoImage(Image.open("visuals/buffer.png").resize((80, 40)))
     buffer_button.set_image(img)
     buffer_button.grid(row=1, column=0, padx=5, pady=5)
 
@@ -159,7 +159,7 @@ def main():
         width=local_width,
         fg_color=local_fg_color)
 
-    img = ImageTk.PhotoImage(Image.open("not.png").resize((80, 40)))
+    img = ImageTk.PhotoImage(Image.open("visuals/not.png").resize((80, 40)))
     not_button.set_image(img)
     not_button.grid(row=1, column=1, padx=5, pady=5)
 
@@ -171,7 +171,7 @@ def main():
         width=local_width,
         fg_color=local_fg_color)
 
-    img = ImageTk.PhotoImage(Image.open("and.png").resize((80, 40)))
+    img = ImageTk.PhotoImage(Image.open("visuals/and.png").resize((80, 40)))
     and_button.set_image(img)
     and_button.grid(row=2, column=0, padx=5, pady=5)
 
@@ -183,7 +183,7 @@ def main():
         width=local_width,
         fg_color=local_fg_color)
 
-    img = ImageTk.PhotoImage(Image.open("nand.png").resize((80, 40)))
+    img = ImageTk.PhotoImage(Image.open("visuals/nand.png").resize((80, 40)))
     nand_button.set_image(img)
     nand_button.grid(row=2, column=1, padx=5, pady=5)
 
@@ -195,7 +195,7 @@ def main():
         width=local_width,
         fg_color=local_fg_color)
 
-    img = ImageTk.PhotoImage(Image.open("or.png").resize((80, 40)))
+    img = ImageTk.PhotoImage(Image.open("visuals/or.png").resize((80, 40)))
     or_button.set_image(img)
     or_button.grid(row=3, column=0, padx=5, pady=5)
 
@@ -207,7 +207,7 @@ def main():
         width=local_width,
         fg_color=local_fg_color)
 
-    img = ImageTk.PhotoImage(Image.open("nor.png").resize((80, 40)))
+    img = ImageTk.PhotoImage(Image.open("visuals/nor.png").resize((80, 40)))
     nor_button.set_image(img)
     nor_button.grid(row=3, column=1, padx=5, pady=5)
 
@@ -219,7 +219,7 @@ def main():
         width=local_width,
         fg_color=local_fg_color)
 
-    img = ImageTk.PhotoImage(Image.open("xor.png").resize((80, 40)))
+    img = ImageTk.PhotoImage(Image.open("visuals/xor.png").resize((80, 40)))
     xor_button.set_image(img)
     xor_button.grid(row=4, column=0, padx=5, pady=5)
 
@@ -231,7 +231,7 @@ def main():
         width=local_width,
         fg_color=local_fg_color)
 
-    img = ImageTk.PhotoImage(Image.open("xnor.png").resize((80, 40)))
+    img = ImageTk.PhotoImage(Image.open("visuals/xnor.png").resize((80, 40)))
     xnor_button.set_image(img)
     xnor_button.grid(row=4, column=1, padx=5, pady=5)
 
@@ -254,7 +254,7 @@ def main():
         fg_color=local_fg_color)
 
     img = ImageTk.PhotoImage(Image.open(
-        "high_constant.png").resize((80, 40)))
+        "visuals/high_constant.png").resize((80, 40)))
     high_constant_button.set_image(img)
     high_constant_button.grid(row=1, column=0, padx=5, pady=5)
 
@@ -267,7 +267,7 @@ def main():
         fg_color=local_fg_color)
 
     img = ImageTk.PhotoImage(Image.open(
-        "low_constant.png").resize((80, 40)))
+        "visuals/low_constant.png").resize((80, 40)))
     low_constant_button.set_image(img)
     low_constant_button.grid(row=1, column=1, padx=5, pady=5)
 
@@ -292,7 +292,7 @@ def main():
         command=curr_com_put_bulb
     )
 
-    img = ImageTk.PhotoImage(Image.open("light_bulb.png").resize((40, 80)))
+    img = ImageTk.PhotoImage(Image.open("visuals/light_bulb.png").resize((40, 80)))
     light_bulb_button.set_image(img)
     light_bulb_button.grid(row=1, column=0, padx=5, pady=5)
 
@@ -307,7 +307,7 @@ def main():
     connect_button.grid(row=1, column=1, padx=5, pady=5)
 
     # Setting up the canvas
-    global canvas
+    global canvas # please don't use globals
     canvas = Canvas(master=app, height=700,
                     width=1000, bg="light grey")
     canvas.grid(row=0, column=2, rowspan=3)
