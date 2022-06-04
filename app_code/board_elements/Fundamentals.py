@@ -1,3 +1,8 @@
+"""
+Fundamentals.py
+[Pin, InputPin, OutputPin,
+ BaseCircuitElement, Board]
+"""
 from __future__ import annotations
 import os
 import sys
@@ -9,6 +14,10 @@ from exceptions.exceptions import *
 
 
 class Pin:
+    """
+    class Pin
+    represents connections of elements
+    """
     count = 0
 
     def __init__(self, circuit: BaseCircuitElement) -> None:
@@ -29,15 +38,23 @@ class Pin:
         return hash(self.id)
 
     def get_state(self) -> bool:
-
+        """
+        returns the state of the pin
+        """
         return self._state
 
     def set_state(self, new_state: bool):
+        """
+        sets the state of the pin
+        """
         if not isinstance(new_state, bool):
             raise ValueError("Incorrect value for a pin state!")
         self._state = new_state
 
     def get_circuit(self) -> BaseCircuitElement:
+        """
+        returns the element that this pin is on
+        """
         return self._circuit
 
     def set_reaction_area(self, x1, y1, x2, y2):
@@ -47,13 +64,13 @@ class Pin:
     def get_reaction_area(self):
         """Get reaction area of the pin"""
         return self._reaction_area
-    
+
     def set_connected_line(self, line):
         self._connected_line = line
-    
-    def get_connected_line(self, line):
+
+    def get_connected_line(self):
         return self._connected_line
-    
+
     def remove_connected_line(self):
         self._connected_line = None
 
@@ -63,10 +80,14 @@ class Pin:
         return area[0] <= x_coord <= area[2] and area[1] <= y_coord <= area[3]
     
     def is_connected(self):
-        pass
+        """used to check connections"""
 
 
 class InputPin(Pin):
+    """
+    class InputPin
+    used to represent the input pins of an element
+    """
     def __init__(self, circuit: BaseCircuitElement) -> None:
         super().__init__(circuit)
         self._parent = None
@@ -98,13 +119,16 @@ class InputPin(Pin):
                                                                      str(self.get_state()))
 
     def update_state(self):
-        if self._parent is not None and self._parent.get_state() is True:
-            self.set_state(True)
-        else:
-            self.set_state(False)
+        """
+        copies the state of parent pin
+        """
+        self.set_state(self._parent.is_connected() and self.get_parent().get_state())
 
     def set_parent(self, new_parent: OutputPin):
-        if self._parent is not None:
+        """
+        sets parent
+        """
+        if  self.is_connected():
             raise ParentAlreadyExistsError(
                 "Disconnect this pin from his current parent first!")
         if not isinstance(new_parent, OutputPin):
@@ -112,18 +136,29 @@ class InputPin(Pin):
         self._parent = new_parent
 
     def remove_parent(self):
+        """
+        removes parent
+        """
         self._parent = None
 
-    def get_parent(self):
+    def get_parent(self) -> OutputPin:
+        """
+        returns parent of the pin
+        """
         return self._parent
     
-    def is_connected(self):
-        if self._parent:
-            return True
-        return False
+    def is_connected(self) -> bool:
+        """
+        checks if self has connections
+        """
+        return bool(self.get_parent())
 
 
 class OutputPin(Pin):
+    """
+    class OutputPin
+    used to represent the output pins of an element
+    """
     def __init__(self, circuit: BaseCircuitElement) -> None:
         super().__init__(circuit)
         self._children = []
@@ -141,7 +176,7 @@ class OutputPin(Pin):
             'children:',
             repr(self.get_children())))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "OutputPin(id={}, childrenId={}, gate={}, state={})".format(str(self.id),
                                                                            str([
                                                                                child.id for child in self.get_children()]),
@@ -150,14 +185,23 @@ class OutputPin(Pin):
                                                                            str(self.get_state()))
 
     def update_state(self, new_state: bool):
+        """
+        updates the state of the pin
+        """
         self.set_state(new_state)
 
     def add_child(self, child: InputPin):
+        """
+        adds a child
+        """
         if not isinstance(child, InputPin):
             raise ValueError("A child can only be an InputPin")
         self._children.append(child)
 
     def remove_child(self, child: InputPin):
+        """
+        removes the given child
+        """
         if not isinstance(child, InputPin):
             raise ValueError("A child can only be an InputPin")
         if child not in self.get_children():
@@ -165,12 +209,17 @@ class OutputPin(Pin):
         self._children.remove(child)
 
     def get_children(self) -> list[InputPin]:
+        """
+        return s list of input pins
+        """
         return list(self._children)
     
-    def is_connected(self):
-        if self._children:
-            return True
-        return False
+    def is_connected(self) -> bool:
+        """
+        checks if has any children
+        """
+
+        return bool(self.get_children())
 
 
 class BaseCircuitElement:
@@ -180,7 +229,9 @@ class BaseCircuitElement:
     """
     count = 0
 
-    def __init__(self, board: Board, input_pins_amount: int, output_pins_amount: int) -> None:
+    def __init__(self, board: Board, 
+                 input_pins_amount: int,
+                 output_pins_amount: int) -> None:
         self._input_pins = tuple(InputPin(self)
                                  for _ in range(input_pins_amount))
         self._output_pins = tuple(OutputPin(self)
@@ -204,15 +255,27 @@ class BaseCircuitElement:
         return hash(id(self))
 
     def get_inputs(self) -> tuple[InputPin]:
+        """
+        retuns a list of all input pins
+        """
         return list(self._input_pins)
 
     def get_outputs(self) -> tuple[OutputPin]:
+        """
+        retuns a list of all output pins
+        """
         return list(self._output_pins)
 
-    def get_board(self):
+    def get_board(self) -> Board:
+        """
+        returns the board that the element is on
+        """
         return self._board
 
-    def get_dependent_circuits(self):
+    def get_dependent_circuits(self) -> list[BaseCircuitElement]:
+        """
+        returns a list of all circuits that are connected to output pins
+        """
         output_pins = self.get_outputs()
         dependent_circuits = set()
         for pin in output_pins:
@@ -220,7 +283,10 @@ class BaseCircuitElement:
                 dependent_circuits.add(child.get_circuit())
         return list(dependent_circuits)
 
-    def get_parent_circuits(self) -> set[BaseCircuitElement]:
+    def get_parent_circuits(self) -> list[BaseCircuitElement]:
+        """
+        returns a list of all circuits that are connected to input pins
+        """
         input_pins = self.get_inputs()
         parent_circuits = set()
         for pin in input_pins:
@@ -229,6 +295,9 @@ class BaseCircuitElement:
         return list(parent_circuits)
 
     def is_fully_connected(self):
+        """
+        checks if all elements are connected
+        """
         for pin in self.get_inputs():
             if pin.get_parent() is None:
                 return False
@@ -236,11 +305,9 @@ class BaseCircuitElement:
 
     def operation(self):
         """Depends on the element"""
-        pass
 
     def set_reaction_areas_for_pins(self):
         """Depends on the element"""
-        pass
 
     def update_reaction_areas(self, x_coord, y_coord):
         """Update reaction areas of pins depending on the position of the image"""
@@ -257,28 +324,21 @@ class BaseCircuitElement:
                     old_area[0]+x_coord, old_area[1]+y_coord, old_area[2]+x_coord, old_area[3]+y_coord)
 
     def update(self):
+        """updates the BCE"""
         if not self.is_fully_connected():
             for pin in self.get_outputs():
                 pin.update_state(False)
             print("Not fully connected: " + str(self))
             return
-            # raise NotConnectedCircuitError()
         for pin in self.get_inputs():
             pin.update_state()
         self.operation()
 
     def cycle_processing(self):
         """Maybe it should become red on the board or smth like that"""
-        pass
 
     def destroy(self):
-        # max we can do is set board to None. Python will outomatically destroy the object, once all refferences dissapear. Serhii.
-        # self._input_pins = tuple()
-                   
-        # self._output_pins = tuple()
-
-        # self._board = None
-        pass  # some additional actions to destroy the circuit?
+        """additional actions to destroy the circuit, if running out of refferences isn't enough"""
 
 
 class Board:
