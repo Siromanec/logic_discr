@@ -1,7 +1,7 @@
 # logic_discr
 very cool discreete project<br />
 ## requirements:
-  tkinter, customtkinter<br />
+  tkinter, customtkinter, pillow<br />
 ## usage:
 run main.py
 ```
