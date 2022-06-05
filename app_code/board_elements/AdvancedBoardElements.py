@@ -1590,8 +1590,8 @@ class ALU_4_bit(AdvancedCircuitElement):
         1: O2
         2: O1
         3: O0
-        1: Carry Out
-        2: Borrow Out
+        4: Carry Out
+        5: Borrow Out
     """
 
     def __init__(self, board: Board, i_number=12, o_number=6):
