@@ -517,7 +517,7 @@ class Multiplexor(AdvancedCircuitElement):
     def set_reaction_areas_for_pins(self):
         self.input_dict["s1"].set_reaction_area(-13, -48, -4, -40)
         self.input_dict["s0"].set_reaction_area(6, -48, 15, -40)
-        self.input_dict["i0"].set_reaction_area(-50, -21, -41, -10)
+        self.input_dict["i0"].set_reaction_area(-50, -23, -41, -13)
         self.input_dict["i1"].set_reaction_area(-50, -4, -41, 6)
         self.input_dict["i2"].set_reaction_area(-50, 13, -41, 22)
         self.input_dict["i3"].set_reaction_area(-50, 31, -41, 41)
