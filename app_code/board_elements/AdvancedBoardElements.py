@@ -93,8 +93,8 @@ class AdvancedCircuitElement(BaseCircuitElement):
                 circuits.remove(circuit)
             if circuit:
                 for circuit in circuits:
-                    circuit.connection_problems_processing()
-                self.connection_problems_processing()
+                    circuit.cycle_proccessing()
+                self.cycle_processing()
 
         for i_pin in self.get_inputs():
             self.inner_inputs_dict[i_pin].update_state(i_pin.get_state())

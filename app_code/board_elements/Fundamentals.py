@@ -6,13 +6,12 @@ Fundamentals.py
 from __future__ import annotations
 import os
 import sys
-import time
 
 root_folder = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(root_folder)
 
 from exceptions.exceptions import *
-from PIL import Image, ImageTk
+
 
 
 class Pin:
@@ -30,7 +29,7 @@ class Pin:
         self._circuit = circuit
         self._state = False
         self._reaction_area = None
-        self._connected_line_tags = []
+        self._connected_line_tag = None
 
     def __eq__(self, other: Pin) -> bool:
         """All pins are unique"""
@@ -61,23 +60,23 @@ class Pin:
 
     def set_reaction_area(self, x1, y1, x2, y2):
         """Set reaction area for the pin"""
+        # check
         self._reaction_area = (x1, y1, x2, y2)
 
     def get_reaction_area(self):
         """Get reaction area of the pin"""
         return self._reaction_area
 
-    def append_connected_line_tag(self, line_tag):
-        self._connected_line_tags.append(line_tag)
+    def set_connected_line_tag(self, line_tag):
+        # check
+        self._connected_line_tag = line_tag
 
-    def get_connected_line_tags(self):
-        return list(self._connected_line_tags)
+    def get_connected_line_tag(self):
+        return self._connected_line_tag
 
-    def remove_connected_line_tag(self, line_tag):
-        try:
-            self._connected_line_tags.remove(line_tag)
-        except Exception as e:
-            print(e)
+    def remove_connected_line_tag(self):
+        self._connected_line_tag = None
+
 
     def check_dot(self, x_coord, y_coord):
         """Check if dot is in the reaction area"""
@@ -86,7 +85,6 @@ class Pin:
 
     def is_connected(self):
         """used to check connections"""
-        raise NotImplementedError
 
 
 class InputPin(Pin):
@@ -128,13 +126,13 @@ class InputPin(Pin):
         """
         copies the state of parent pin
         """
-        self.set_state(bool(self._parent) and self.get_parent().get_state())
+        self.set_state(bool(self._parent) and self._parent.is_connected() and self.get_parent().get_state())
 
     def set_parent(self, new_parent: OutputPin):
         """
         sets parent
         """
-        if self.is_connected():
+        if  self.is_connected():
             raise ParentAlreadyExistsError(
                 "Disconnect this pin from his current parent first!")
         if not isinstance(new_parent, OutputPin):
@@ -168,7 +166,6 @@ class OutputPin(Pin):
     def __init__(self, circuit: BaseCircuitElement) -> None:
         super().__init__(circuit)
         self._children = []
-        self._is_active = False
 
     def __str__(self) -> str:
         return ' '.join((
@@ -228,14 +225,6 @@ class OutputPin(Pin):
 
         return bool(self.get_children())
 
-    def is_active(self):
-        return self._is_active
-
-    def set_activeness(self, state):
-        if not isinstance(state, bool):
-            raise TypeError("Wrong state type!")
-        self._is_active = state
-
 
 class BaseCircuitElement:
     """
@@ -259,7 +248,6 @@ class BaseCircuitElement:
         self._img_coords = None
         self._img_width = 100
         self._img_height = 50
-        self.changes_img = False
 
     def __eq__(self, other: BaseCircuitElement) -> bool:
         """All circuit elements are unique"""
@@ -277,13 +265,13 @@ class BaseCircuitElement:
 
     def get_inputs(self) -> tuple[InputPin]:
         """
-        returns a list of all input pins
+        retuns a list of all input pins
         """
         return list(self._input_pins)
 
     def get_outputs(self) -> tuple[OutputPin]:
         """
-        returns a list of all output pins
+        retuns a list of all output pins
         """
         return list(self._output_pins)
 
@@ -292,6 +280,7 @@ class BaseCircuitElement:
         returns the board that the element is on
         """
         return self._board
+
 
     def set_img_coords(self, x_coord, y_coord):
         self._img_coords = (x_coord, y_coord)
@@ -335,20 +324,18 @@ class BaseCircuitElement:
 
     def is_fully_connected(self):
         """
-        checks if all pins are connected
+        checks if all elements are connected
         """
         for pin in self.get_inputs():
-            if pin.get_parent() is None or pin.get_parent().is_active() is False:
+            if pin.get_parent() is None:
                 return False
         return True
 
     def operation(self):
         """Depends on the element"""
-        raise NotImplementedError
 
     def set_reaction_areas_for_pins(self):
         """Depends on the element"""
-        raise NotImplementedError
 
     def update_reaction_areas(self, x_coord, y_coord):
         """Update reaction areas of pins depending on the position of the image"""
@@ -380,62 +367,49 @@ class BaseCircuitElement:
         return ((center_x - x_shift <= x_coord <= center_x + x_shift) and
                 (center_y - y_shift <= y_coord <= center_y + y_shift))
 
+
     def update(self):
         """updates the BCE"""
         if not self.is_fully_connected():
             for pin in self.get_inputs():
-                pin.set_state(False)
-            for pin in self.get_outputs():
-                pin.set_activeness(False)
-            print("Not fully connected: " + str(self))
-            self.operation()
-            for pin in self.get_outputs():
-                pin.update_state(False)
-            self.connection_problems_processing()
-        else:
-            for pin in self.get_inputs():
                 pin.update_state()
             for pin in self.get_outputs():
-                pin.set_activeness(True)
-                for tag in pin.get_connected_line_tags():
-                    self.get_board().get_canvas().itemconfig(tag, fill="black")
-            self.operation()
+                pin.update_state(False)
+            print("Not fully connected: " + str(self))
+            return
+        for pin in self.get_inputs():
+            pin.update_state()
+        self.operation()
+        img = ImageTk.PhotoImage(Image.open(self.img_path).resize((self.get_img_width(), self.get_img_height())))
+        canvas.itemconfig(element.img_object, image=img)
+        board.add_to_img_list(img)
 
-    def connection_problems_processing(self):
+    def cycle_processing(self):
         """Maybe it should become red on the board or smth like that"""
-        for o_pin in self.get_outputs():
-            for tag in o_pin.get_connected_line_tags():
-                self.get_board().get_canvas().itemconfig(tag, fill="red")
 
     def destroy(self):
         """additional actions to destroy the circuit, if running out of refferences isn't enough"""
-        pass
 
 
 class Board:
 
-    def __init__(self, canvas):
+    def __init__(self):
         #self.clear()
         self._circuits_list: list[BaseCircuitElement] = []
         self._images_list = []
-        self.canvas = canvas
-        self.img_cache = {}
-
-    def get_canvas(self):
-        return self.canvas
     
     def add_to_img_list(self, img):
         self._images_list.append(img)
 
     def clear(self):
-        for el in self._circuits_list:
-            self.remove_element(el)
-        # self._circuits_list: list[BaseCircuitElement] = []
+        # for el in self._circuits_list:
+        #     self.remove_element(el)
+        self._circuits_list: list[BaseCircuitElement] = []
 
     def connect_pins(self, parent_pin: OutputPin, child_pin: InputPin, update=True):
         """Connects a parent pin with a child pin"""
-        child_pin.set_parent(parent_pin)
         parent_pin.add_child(child_pin)
+        child_pin.set_parent(parent_pin)
         if update:
             self.update_board()
 
@@ -450,8 +424,7 @@ class Board:
         """Removes given circuit from a board and - deletes it"""
         for child in circuit.get_inputs():
             parent = child.get_parent()
-            if parent:
-                self.disconnect_pins(parent, child, update=False)
+            self.disconnect_pins(parent, child, update=False)
         for parent in circuit.get_outputs():
             children = parent.get_children()
             for child in children:
@@ -459,6 +432,8 @@ class Board:
         self._circuits_list.remove(circuit)
         circuit.destroy()
         self.update_board()
+        for el in self._circuits_list:
+            print(el)
 
     def create_element(self, circuit_type, inputs=None, outputs=None) -> BaseCircuitElement:
         """Creates a circuit of a given type on the board"""
@@ -513,25 +488,4 @@ class Board:
                     independent_circuits.append(dependent_circuit)
             circuits.remove(circuit)
         for circuit in circuits:
-            circuit.connection_problems_processing()
-        # I don't think that is a good practice to call functions from visuals module, but
-        # it's probably the best solution without using loops, which would be very ineffective
-        self.update_images()
-
-    def update_images(self):
-        """Updates all the images on the canvas"""
-        for element in self.get_circuits_list():
-            if element.changes_img:
-                if tuple([element.img_path, element.get_img_width(),
-                          element.get_img_height()]) in self.img_cache:
-                    img = self.img_cache[tuple([element.img_path, element.get_img_width(),
-                          element.get_img_height()])]
-                    self.canvas.itemconfig(element.img_object, image=img)
-                    self.add_to_img_list(img)
-                else:
-                    img = ImageTk.PhotoImage(
-                    Image.open(element.img_path).resize((element.get_img_width(), element.get_img_height())))
-                    self.img_cache[tuple([element.img_path, element.get_img_width(),
-                          element.get_img_height()])] = img
-                    self.canvas.itemconfig(element.img_object, image=img)
-                    self.add_to_img_list(img)
+            circuit.cycle_processing()
