@@ -225,19 +225,19 @@ class Test_ABE(Test_SBE):
             [True, False],
         )
 
-    # def test_Substractor(self):
-    #     """Testing substractor"""
-    #     self.el = Substractor
-    #     self.board.clear()
-    #     self.element = self.board.create_element(self.el)
-    #     self.set_board_010()
-    #     self.assertEqual(
-    #         [
-    #             self.element.get_outputs()[i].get_state()
-    #             for i in range(len(self.element.get_outputs()))
-    #         ],
-    #         [True, True],
-    #     )
+    def test_Substractor(self):
+        """Testing substractor"""
+        self.el = Substractor
+        self.board.clear()
+        self.element = self.board.create_element(self.el)
+        self.set_board_010()
+        self.assertEqual(
+            [
+                self.element.get_outputs()[i].get_state()
+                for i in range(len(self.element.get_outputs()))
+            ],
+            [True, True],
+        )
 
     def test_Decoder(self):
         """Testing decoder"""

@@ -1532,11 +1532,6 @@ class ALU_1_bit(AdvancedCircuitElement):
             self.not_gate.get_inputs()[0],
             update=False,
         )
-        # board.connect_pins(
-        #     self.external_inner_convertor("Input B"),
-        #     self.or_gate.get_inputs()[1],
-        #     update=False,
-        # )
         board.connect_pins(
             self.external_inner_convertor("Select S1"),
             self.mux.get_inputs()[0],
@@ -1589,14 +1584,14 @@ class ALU_4_bit(AdvancedCircuitElement):
         8: Carry In
         9: Borrow In
         10: Select S1
-        11: Select S2
+        11: Select S0
     Output pins:
         0: O3
         1: O2
         2: O1
         3: O0
-        1: Select S1
-        2: Select S0
+        1: Carry Out
+        2: Borrow Out
     """
 
     def __init__(self, board: Board, i_number=12, o_number=6):
