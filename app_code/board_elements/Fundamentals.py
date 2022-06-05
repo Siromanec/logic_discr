@@ -380,9 +380,9 @@ class BaseCircuitElement:
         for pin in self.get_inputs():
             pin.update_state()
         self.operation()
-        img = ImageTk.PhotoImage(Image.open(self.img_path).resize((self.get_img_width(), self.get_img_height())))
-        canvas.itemconfig(element.img_object, image=img)
-        board.add_to_img_list(img)
+        # img = ImageTk.PhotoImage(Image.open(self.img_path).resize((self.get_img_width(), self.get_img_height())))
+        # canvas.itemconfig(element.img_object, image=img)
+        # board.add_to_img_list(img)
 
     def cycle_processing(self):
         """Maybe it should become red on the board or smth like that"""
@@ -415,7 +415,8 @@ class Board:
 
     def disconnect_pins(self, parent_pin: OutputPin, child_pin: InputPin, update=True):
         """Disconnects a parent pin and a child pin"""
-        parent_pin.remove_child(child_pin)
+        if parent_pin:
+            parent_pin.remove_child(child_pin)
         child_pin.remove_parent()
         if update:
             self.update_board()

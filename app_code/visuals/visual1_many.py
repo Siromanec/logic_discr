@@ -62,6 +62,18 @@ class Line:
             pin.set_connected_line_tag(self.tag)
 
 
+def update_all_images():
+    for element in board.get_circuits_list():
+        # most likely will be deleted
+        if isinstance(element, Lamp):
+            element.operation()
+
+        img = ImageTk.PhotoImage(
+            Image.open(element.img_path).resize((element.get_img_width(), element.get_img_height())))
+        canvas.itemconfig(element.img_object, image=img)
+        board.add_to_img_list(img)
+
+
 def connect(event):
     print("clicked at", event.x, event.y)
 
@@ -71,22 +83,18 @@ def connect(event):
 
     elif len(Line.last_pins_to_connect) == 2:
         last_pins = Line.last_pins_to_connect
+        valide = True
+
         if isinstance(last_pins[0], OutputPin) and isinstance(last_pins[1], InputPin):
-            board.connect_pins(last_pins[0], last_pins[1])
-            for element in board.get_circuits_list():
-                img = ImageTk.PhotoImage(
-                    Image.open(element.img_path).resize((element.get_img_width(), element.get_img_height())))
-                canvas.itemconfig(element.img_object, image=img)
-                board.add_to_img_list(img)
-            line = Line(canvas=canvas, connected_pins=last_pins)
-            line.draw_line()
+            output_pin, input_pin = last_pins[0], last_pins[1]
         elif isinstance(last_pins[0], InputPin) and isinstance(last_pins[1], OutputPin):
-            board.connect_pins(last_pins[1], last_pins[0])
-            for element in board.get_circuits_list():
-                img = ImageTk.PhotoImage(
-                    Image.open(element.img_path).resize((element.get_img_width(), element.get_img_height())))
-                canvas.itemconfig(element.img_object, image=img)
-                board.add_to_img_list(img)
+            output_pin, input_pin = last_pins[1], last_pins[0]
+        else:
+            valide = False
+
+        if valide:
+            board.connect_pins(output_pin, input_pin)
+            update_all_images()
             line = Line(canvas=canvas, connected_pins=last_pins)
             line.draw_line()
         Line.clear_last_pins()
@@ -95,9 +103,9 @@ def connect(event):
 def delete(event):
     """Delete element from canvas"""
     for element in board.get_circuits_list():
-        # remove if lamp!!!!!!!!!!!!!!
         if element.check_dot_in_img(event.x, event.y):
             canvas.delete(element.img_object)
+
             for input_pin in element.get_inputs():
                 # delete line from canvas
                 line_to_delete = input_pin.get_connected_line_tag()
@@ -106,6 +114,7 @@ def delete(event):
                 parent = input_pin.get_parent()
                 if parent:
                     parent.remove_connected_line_tag()
+
             for output_pin in element.get_outputs():
                 # delete line from canvas
                 line_to_delete = output_pin.get_connected_line_tag()
@@ -117,11 +126,13 @@ def delete(event):
                         child.remove_connected_line_tag()
 
             board.remove_element(element)
+    update_all_images()
 
 
 def curr_com_put(element_type):
     """Defines command that puts element images and creates objects"""
     canvas.bind("<Button-1>", lambda event: put(element_type, event))
+
 
 def put(element_type, event):
     """Puts image of element on the canvas and crates an appropriate object"""
@@ -129,7 +140,8 @@ def put(element_type, event):
     new_element = board.create_element(element_type)
     new_element.update_reaction_areas(event.x, event.y)
     new_element.set_img_coords(event.x, event.y)
-    img = ImageTk.PhotoImage(Image.open(new_element.img_path).resize((new_element.get_img_width(), new_element.get_img_height())))
+    img = ImageTk.PhotoImage(Image.open(new_element.img_path).resize(
+        (new_element.get_img_width(), new_element.get_img_height())))
     board.add_to_img_list(img)
 
     new_element.img_object = canvas.create_image(event.x, event.y, image=img)
