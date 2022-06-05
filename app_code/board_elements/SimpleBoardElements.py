@@ -369,7 +369,8 @@ class Lamp(BaseCircuitElement):
         img_path_off = "app_code/visuals/textures/light_bulb.png"
         img_path_on = "app_code/visuals/textures/light_bulb_shine.png"
         self.images = {False: img_path_off, True: img_path_on}
-        self.img_path = self.images[self._input_pins[0].get_state()] 
+        self.img_path = self.images[self._input_pins[0].get_state()]
+        self.changes_img = True
 
         self.set_reaction_areas_for_pins()
         self.set_img_height(100)
@@ -405,6 +406,7 @@ class Switch(BaseCircuitElement):
         self.images = {True: img1, False: img2}
         # self.img = self.images[self.state]
         self.set_reaction_areas_for_pins()
+        self.changes_img = True
 
     def operation(self):
         """Generates either ZERO or ONE, depending on the state"""
