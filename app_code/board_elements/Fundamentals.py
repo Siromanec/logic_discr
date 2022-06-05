@@ -517,6 +517,8 @@ class Board:
             circuits.remove(circuit)
         for circuit in circuits:
             circuit.connection_problems_processing()
+        for pin in self.get_all_pins():
+            print(pin)
         # I don't think that is a good practice to call functions from visuals module, but
         # it's probably the best solution without using loops, which would be very ineffective
         self.update_images()
