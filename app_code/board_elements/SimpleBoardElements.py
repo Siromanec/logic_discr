@@ -353,10 +353,6 @@ class ONE_Generator(BaseCircuitElement):
         """
         for o_pin in self.get_outputs():
             o_pin.update_state(True)
-        img_path_off = "app_code/visuals/textures/light_bulb.png"
-        img_path_on = "app_code/visuals/textures/light_bulb_shine.png"
-        self.images = {False: img_path_off, True: img_path_on}
-        self.img_path = self.images[self.get_inputs()[0].get_state()]
 
         self.set_reaction_areas_for_pins()
         self.set_img_height(100)
