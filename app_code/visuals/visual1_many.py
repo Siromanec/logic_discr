@@ -172,7 +172,7 @@ def main():
     # Themes: blue (default), dark-blue, green
     ctk.set_default_color_theme("blue")
 
-    WIDTH = 1800
+    WIDTH = 1750
     HEIGHT = 850
 
     app = ctk.CTk()
@@ -391,12 +391,12 @@ def main():
     # Setup for frame with advanced elements
     frame_advanced_elements = ctk.CTkFrame(master=app)
     frame_advanced_elements.grid(
-        row=0, column=3, rowspan=2, sticky="nswe", padx=20, pady=20)
+        row=0, column=3, rowspan=2, padx=20, pady=20)
 
     # Label for the frame
     label_advanced_elements = ctk.CTkLabel(
         master=frame_advanced_elements, text="Advanced elements", text_font=("Roboto Medium", 13))
-    label_advanced_elements.grid(row=0, column=0)
+    label_advanced_elements.grid(row=0, column=0, columnspan=2, sticky="W")
 
     # Half Adder button
     half_adder_button = ctk.CTkButton(
@@ -520,14 +520,28 @@ def main():
         command=lambda: curr_com_put(Encoder_4_to_2))
 
     img = ImageTk.PhotoImage(Image.open(
-        "app_code/visuals/textures/encoder_4_to_2.png").resize((80, 40)))
+        "app_code/visuals/textures/encoder_4_to_2.png").resize((80, 50)))
     encoder_4_to_2_button.set_image(img)
     encoder_4_to_2_button.grid(row=5, column=0, padx=5, pady=5)
+
+    # 4 bit ALU button
+    ALU_4bit_button = ctk.CTkButton(
+        master=frame_advanced_elements, text="4 bit ALU",
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
+        command=lambda: curr_com_put(ALU_4_bit))
+
+    img = ImageTk.PhotoImage(Image.open(
+        "app_code/visuals/textures/ALU_4_bit.png").resize((80, 50)))
+    ALU_4bit_button.set_image(img)
+    ALU_4bit_button.grid(row=5, column=1, padx=5, pady=5)
 
     # Setup for frame with action buttons
     action_buttons_frame = ctk.CTkFrame(master=app)
     action_buttons_frame.grid(
-        row=2, column=3, sticky="nswe", padx=20, pady=20)
+        row=2, column=3, padx=20, pady=20)
 
     # Connect button
     connect_button = ctk.CTkButton(
@@ -549,7 +563,7 @@ def main():
 
     # Setting up the canvas
     global canvas  # please don't use globals
-    canvas = Canvas(master=app, height=700,
+    canvas = Canvas(master=app, height=830,
                     width=1000, bg="light grey", )
     canvas.grid(row=0, column=1, rowspan=3)
 

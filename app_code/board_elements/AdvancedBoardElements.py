@@ -242,7 +242,7 @@ class Adder(AdvancedCircuitElement):
         self.input_dict["A"].set_reaction_area(-57, -20, -47, -10)
         self.input_dict["B"].set_reaction_area(-57, -4, -47, 6)
         self.input_dict["Carry in"].set_reaction_area(-57, 11, -47, 21)
-        self.output_dict["Sum"].set_reaction_area(44, -5, 55, -15)
+        self.output_dict["Sum"].set_reaction_area(44, -15, 55, -5)
         self.output_dict["Carry out"].set_reaction_area(44, 5, 55, 15)
 
 
@@ -682,7 +682,7 @@ class Substractor(AdvancedCircuitElement):
         self.input_dict["A"].set_reaction_area(-57, -20, -47, -10)
         self.input_dict["B"].set_reaction_area(-57, -4, -47, 6)
         self.input_dict["Borrow In"].set_reaction_area(-57, 11, -47, 21)
-        self.output_dict["Diff"].set_reaction_area(44, -5, 55, -15)
+        self.output_dict["Diff"].set_reaction_area(44, -15, 55, -5)
         self.output_dict["Borrow Out"].set_reaction_area(44, 5, 55, 15)
 
 
@@ -1101,7 +1101,7 @@ class Encoder_8_to_3(AdvancedCircuitElement):
         self.input_dict["I2"].set_reaction_area(-55, 42, -45, 52)
         self.input_dict["I1"].set_reaction_area(-55, 63, -45, 73)
         self.output_dict["O3"].set_reaction_area(45, -32, 55, -22)
-        self.output_dict["O2"].set_reaction_area(45, 12, 55, -2)
+        self.output_dict["O2"].set_reaction_area(45, -12, 55, -2)
         self.output_dict["O1"].set_reaction_area(45, 8, 55, 18)
         self.output_dict["Valid"].set_reaction_area(45, 28, 55, 38)
 
@@ -1268,14 +1268,14 @@ class ShiftLeft(AdvancedCircuitElement):
         self.get_board().update_board()
 
     def set_reaction_areas_for_pins(self):
-        self.input_dict["I1"].set_reaction_area(-29, 38, -20, 47)
-        self.input_dict["I2"].set_reaction_area(-11, 38, -3, 47)
-        self.input_dict["I3"].set_reaction_area(6, 38, 15, 47)
-        self.input_dict["I4"].set_reaction_area(24, 38, 33, 47)
-        self.output_dict["O1"].set_reaction_area(-30, -48, -21, 40)
-        self.output_dict["O2"].set_reaction_area(-12, -48, -3, 40)
-        self.output_dict["O3"].set_reaction_area(5, -48, 15, 40)
-        self.output_dict["O4"].set_reaction_area(23, -48, 33, 40)
+        self.input_dict["I1"].set_reaction_area(-29, -47, -20, -38)
+        self.input_dict["I2"].set_reaction_area(-11, -47, -3, -38)
+        self.input_dict["I3"].set_reaction_area(6, -47, 15, -38)
+        self.input_dict["I4"].set_reaction_area(24, -47, 33, -38)
+        self.output_dict["O1"].set_reaction_area(-30, 40, -21, 48)
+        self.output_dict["O2"].set_reaction_area(-12, 40, -3, 48)
+        self.output_dict["O3"].set_reaction_area(5, 40, 15, 48)
+        self.output_dict["O4"].set_reaction_area(23, 40, 33, 48)
 
 
 class ShiftRight(AdvancedCircuitElement):
@@ -1440,14 +1440,14 @@ class ShiftRight(AdvancedCircuitElement):
         self.get_board().update_board()
 
     def set_reaction_areas_for_pins(self):
-        self.input_dict["I1"].set_reaction_area(-29, 38, -20, 47)
-        self.input_dict["I2"].set_reaction_area(-11, 38, -3, 47)
-        self.input_dict["I3"].set_reaction_area(6, 38, 15, 47)
-        self.input_dict["I4"].set_reaction_area(24, 38, 33, 47)
-        self.output_dict["O1"].set_reaction_area(-30, -48, -21, 40)
-        self.output_dict["O2"].set_reaction_area(-12, -48, -3, 40)
-        self.output_dict["O3"].set_reaction_area(5, -48, 15, 40)
-        self.output_dict["O4"].set_reaction_area(23, -48, 33, 40)
+        self.input_dict["I1"].set_reaction_area(-29, -47, -20, -38)
+        self.input_dict["I2"].set_reaction_area(-11, -47, -3, -38)
+        self.input_dict["I3"].set_reaction_area(6, -47, 15, -38)
+        self.input_dict["I4"].set_reaction_area(24, -47, 33, -38)
+        self.output_dict["O1"].set_reaction_area(-30, 40, -21, 48)
+        self.output_dict["O2"].set_reaction_area(-12, 40, -3, 48)
+        self.output_dict["O3"].set_reaction_area(5, 40, 15, 48)
+        self.output_dict["O4"].set_reaction_area(23, 40, 33, 48)
 
 
 class ALU_1_bit(AdvancedCircuitElement):
@@ -1620,6 +1620,12 @@ class ALU_4_bit(AdvancedCircuitElement):
             "Overflow Adder": outputs[4],
             "Overflow Substractor": outputs[5],
         }
+
+        self.img_path = "app_code/visuals/textures/ALU_4_bit.png"
+        self.set_img_height(150)
+        self.set_img_width(262)
+        self.set_reaction_areas_for_pins()
+
         self.alu_1 = self.create_element(ALU_1_bit)
         self.alu_2 = self.create_element(ALU_1_bit)
         self.alu_3 = self.create_element(ALU_1_bit)
@@ -1762,7 +1768,45 @@ class ALU_4_bit(AdvancedCircuitElement):
             self.inner_external_convertor("Overflow Substractor"),
             update=False,
         )
+    
+    def set_reaction_areas_for_pins(self):
+        self.input_dict["A3"].set_reaction_area(-76, 112, -66, 122)
+        self.input_dict["A2"].set_reaction_area(-57, 112, -47, 122)
+        self.input_dict["A1"].set_reaction_area(-41, 112, -31, 122)
+        self.input_dict["A0"].set_reaction_area(-22, 112, -12, 122)
+        self.input_dict["B3"].set_reaction_area(18, 112, 28, 122)
+        self.input_dict["B2"].set_reaction_area(37, 112, 47, 122)
+        self.input_dict["B1"].set_reaction_area(54, 112, 64, 122)
+        self.input_dict["B0"].set_reaction_area(74, 112, 84, 122)
+        self.input_dict["Carry In"].set_reaction_area(115, -35, 125, -25)
+        self.input_dict["Borrow In"].set_reaction_area(115, -16, 125, -6)
+        self.input_dict["Select S1"].set_reaction_area(115, 1, 125, 11)
+        self.input_dict["Select S0"].set_reaction_area(115, 21, 125, 31)
+        self.output_dict["O3"].set_reaction_area(-21, -70,  -31, -60)
+        self.output_dict["O2"].set_reaction_area(-12, -70,  -2, -60)
+        self.output_dict["O1"].set_reaction_area(5, -70,  15, -60)
+        self.output_dict["O0"].set_reaction_area(24, -70,  34, -60)
+        self.output_dict["Overflow Adder"].set_reaction_area(124, -16, 144, -6)
+        self.output_dict["Overflow Substractor"].set_reaction_area(124, 3, 144, 13)
 
+        self.input_dict["A3"].set_reaction_area(-76, -122, -66, -112)
+        self.input_dict["A2"].set_reaction_area(-57, -122, -47, -112)
+        self.input_dict["A1"].set_reaction_area(-41, -122, -31, -112)
+        self.input_dict["A0"].set_reaction_area(-22, -122, -12, -112)
+        self.input_dict["B3"].set_reaction_area(18, -122, 28, -112)
+        self.input_dict["B2"].set_reaction_area(37, -122, 47, -112)
+        self.input_dict["B1"].set_reaction_area(54, -122, 64, -112)
+        self.input_dict["B0"].set_reaction_area(74, -122, 84, -112)
+        self.input_dict["Carry In"].set_reaction_area(115, -35, 125, -25)
+        self.input_dict["Borrow In"].set_reaction_area(115, -16, 125, -6)
+        self.input_dict["Select S1"].set_reaction_area(115, 1, 125, 11)
+        self.input_dict["Select S0"].set_reaction_area(115, 21, 125, 31)
+        self.output_dict["O3"].set_reaction_area(-21, -70,  -31, -60)
+        self.output_dict["O2"].set_reaction_area(-12, -70,  -2, -60)
+        self.output_dict["O1"].set_reaction_area(5, -70,  15, -60)
+        self.output_dict["O0"].set_reaction_area(24, -70,  34, -60)
+        self.output_dict["Overflow Adder"].set_reaction_area(124, -16, 144, -6)
+        self.output_dict["Overflow Substractor"].set_reaction_area(124, 3, 144, 13)
 
 # def main():
 #     board = Board()

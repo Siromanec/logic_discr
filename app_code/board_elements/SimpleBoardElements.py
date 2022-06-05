@@ -432,6 +432,7 @@ class ClockGenerator(BaseCircuitElement):
         self.time_interval = 1 / frequency
         self.state = True
         self.exists = True
+        self.changes_img = True
 
         img_path_off = "app_code/visuals/textures/clock_off.png"
         img_path_on = "app_code/visuals/textures/clock_on.png"
