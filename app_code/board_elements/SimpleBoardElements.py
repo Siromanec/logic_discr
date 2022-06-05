@@ -354,9 +354,6 @@ class ONE_Generator(BaseCircuitElement):
         for o_pin in self.get_outputs():
             o_pin.update_state(True)
 
-        self.set_reaction_areas_for_pins()
-        self.set_img_height(100)
-
     def set_reaction_areas_for_pins(self):
         """Set reaction areas for all pins"""
         self.get_outputs()[0].set_reaction_area(20, -5, 27, 4)
