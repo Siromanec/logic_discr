@@ -1,5 +1,6 @@
 from __future__ import annotations
-from tkinter import Canvas
+from tkinter import *
+from turtle import right
 import customtkinter as ctk
 from PIL import Image, ImageTk
 import os
@@ -173,10 +174,31 @@ def main():
     frame_logical_gates.grid(
         row=0, column=0, sticky="nswe",  padx=20, pady=20)
 
-    # Label for the framw
+
+    #dances with a tambourine to make it scrollable
+    help_canvas1 = Canvas(frame_logical_gates, bg = "#2A2D2E")
+    help_canvas1.config(width=320, height=200)
+    help_canvas1.pack(side=LEFT, expand=0, fill=BOTH)
+
+
+    myscrollbar=Scrollbar(frame_logical_gates, orient="vertical", bg = "#2A2D2E", command = help_canvas1.yview, troughcolor = "#2A2D2E")
+    myscrollbar.pack(side = RIGHT, fill=Y)
+
+    help_canvas1.configure(yscrollcommand=myscrollbar.set)
+    help_canvas1.bind("<Configure>", lambda e: help_canvas1.configure(scrollregion=help_canvas1.bbox("all")))
+
+    second_frame = ctk.CTkFrame(master=help_canvas1)
+
+    help_canvas1.create_window((0,0), window = second_frame)
+
+
+
+
+    # Label for the frame
     label_logical_frame = ctk.CTkLabel(
-        master=frame_logical_gates, text="Logic Gates", text_font=("Roboto Medium", 13))
+        master=second_frame, text="Logic Gates", text_font=("Roboto Medium", 13))
     label_logical_frame.grid(row=0, column=0)
+    
 
     # Setup for buttons in a frames
     cmpd = "top"
@@ -186,7 +208,7 @@ def main():
 
     # NOT button
     not_button = ctk.CTkButton(
-        master=frame_logical_gates, text="NOT Gate",
+        master=second_frame, text="NOT Gate",
         compound=cmpd,
         height=hght,
         width=wdth,
@@ -201,7 +223,7 @@ def main():
 
     # AND button
     and_button = ctk.CTkButton(
-        master=frame_logical_gates, text="AND Gate",
+        master=second_frame, text="AND Gate",
         compound=cmpd,
         height=hght,
         width=wdth,
@@ -215,7 +237,7 @@ def main():
 
     # NAND button
     nand_button = ctk.CTkButton(
-        master=frame_logical_gates, text="NAND Gate",
+        master=second_frame, text="NAND Gate",
         compound=cmpd,
         height=hght,
         width=wdth,
@@ -229,7 +251,7 @@ def main():
 
     # OR button
     or_button = ctk.CTkButton(
-        master=frame_logical_gates, text="OR Gate",
+        master=second_frame, text="OR Gate",
         compound=cmpd,
         height=hght,
         width=wdth,
@@ -243,7 +265,7 @@ def main():
 
     # NOR button
     nor_button = ctk.CTkButton(
-        master=frame_logical_gates, text="NOR Gate",
+        master=second_frame, text="NOR Gate",
         compound=cmpd,
         height=hght,
         width=wdth,
@@ -257,7 +279,7 @@ def main():
 
     # XOR button
     xor_button = ctk.CTkButton(
-        master=frame_logical_gates, text="XOR Gate",
+        master=second_frame, text="XOR Gate",
         compound=cmpd,
         height=hght,
         width=wdth,
@@ -271,7 +293,7 @@ def main():
 
     # XNOR button
     xnor_button = ctk.CTkButton(
-        master=frame_logical_gates, text="XNOR Gate",
+        master=second_frame, text="XNOR Gate",
         compound=cmpd,
         height=hght,
         width=wdth,
