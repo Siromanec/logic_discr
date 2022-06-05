@@ -532,7 +532,7 @@ class Board:
                     img = self.img_cache[tuple([element.img_path, element.get_img_width(),
                                                 element.get_img_height()])]
                     self.canvas.itemconfig(element.img_object, image=img)
-                    self.add_to_img_list(img)
+                    # self.add_to_img_list(img)
                 else:
                     img = ImageTk.PhotoImage(
                         Image.open(element.img_path).resize((element.get_img_width(), element.get_img_height())))
