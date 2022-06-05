@@ -96,6 +96,54 @@ class Test_ABE(Test_SBE):
             self.src_A.get_outputs()[0], self.element.get_inputs()[5]
         )
 
+    def set_board_0101_0011_00_01(self):
+        self.set_board_01()
+        self.board.connect_pins(
+            self.src_A.get_outputs()[0], self.element.get_inputs()[2]
+        )
+        self.board.connect_pins(
+            self.src_B.get_outputs()[0], self.element.get_inputs()[3]
+        )
+        self.board.connect_pins(
+            self.src_A.get_outputs()[0], self.element.get_inputs()[4]
+        )
+        self.board.connect_pins(
+            self.src_A.get_outputs()[0], self.element.get_inputs()[5]
+        )
+        self.board.connect_pins(
+            self.src_B.get_outputs()[0], self.element.get_inputs()[6]
+        )
+        self.board.connect_pins(
+            self.src_B.get_outputs()[0], self.element.get_inputs()[7]
+        )
+        self.board.connect_pins(
+            self.src_A.get_outputs()[0], self.element.get_inputs()[8]
+        )
+        self.board.connect_pins(
+            self.src_A.get_outputs()[0], self.element.get_inputs()[9]
+        )
+        self.board.connect_pins(
+            self.src_A.get_outputs()[0], self.element.get_inputs()[10]
+        )
+        self.board.connect_pins(
+            self.src_B.get_outputs()[0], self.element.get_inputs()[11]
+        )
+
+    def set_board_10_00_00(self):
+        self.set_board_10()
+        self.board.connect_pins(
+            self.src_B.get_outputs()[0], self.element.get_inputs()[2]
+        )
+        self.board.connect_pins(
+            self.src_B.get_outputs()[0], self.element.get_inputs()[3]
+        )
+        self.board.connect_pins(
+            self.src_B.get_outputs()[0], self.element.get_inputs()[4]
+        )
+        self.board.connect_pins(
+            self.src_B.get_outputs()[0], self.element.get_inputs()[5]
+        )
+
     # def set_shifters(self):
 
     #     self.board.clear()
@@ -244,6 +292,34 @@ class Test_ABE(Test_SBE):
                 for i in range(len(self.element.get_outputs()))
             ],
             [True],
+        )
+
+    def test_ALU_1_bit(self):
+        """Testing 1-bit ALU"""
+        self.el = ALU_1_bit
+        self.board.clear()
+        self.element = self.board.create_element(self.el)
+        self.set_board_10_00_00()
+        self.assertEqual(
+            [
+                self.element.get_outputs()[i].get_state()
+                for i in range(len(self.element.get_outputs()))
+            ],
+            [True, False, False],
+        )
+
+    def test_ALU_4_bit(self):
+        """Testing 4-bit ALU"""
+        self.el = ALU_4_bit
+        self.board.clear()
+        self.element = self.board.create_element(self.el)
+        self.set_board_0101_0011_00_01()
+        self.assertEqual(
+            [
+                self.element.get_outputs()[i].get_state()
+                for i in range(len(self.element.get_outputs()))
+            ],
+            [False, False, True, False, False, False],
         )
 
 
