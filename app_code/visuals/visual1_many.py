@@ -135,8 +135,8 @@ def put(element_type, event):
     new_element = board.create_element(element_type)
     new_element.update_reaction_areas(event.x, event.y)
     new_element.set_img_coords(event.x, event.y)
-    img = ImageTk.PhotoImage(Image.open(new_element.img_path).resize(
-        (new_element.get_img_width(), new_element.get_img_height())))
+    img = ImageTk.PhotoImage(Image.open(new_element.img_path)\
+                             .resize((new_element.get_img_width(), new_element.get_img_height())))
     board.add_to_img_list(img)
 
     new_element.img_object = canvas.create_image(event.x, event.y, image=img)
