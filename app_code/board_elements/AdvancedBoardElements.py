@@ -130,6 +130,11 @@ class HalfAdder(AdvancedCircuitElement):
         self.input_dict = {"A": inputs[0], "B": inputs[1]}
         self.output_dict = {"Sum": outputs[0], "Carry": outputs[1]}
 
+        self.img_path = "app_code/visuals/textures/half_adder.png"
+        self.set_img_height(60)
+        self.set_img_width(120)
+        self.set_reaction_areas_for_pins()
+
         self.xor1 = self.create_element(XOR_Gate)
         self.and1 = self.create_element(AND_Gate)
 
@@ -158,6 +163,12 @@ class HalfAdder(AdvancedCircuitElement):
 
         self.get_board().update_board()
 
+    def set_reaction_areas_for_pins(self):
+        self.input_dict["A"].set_reaction_area(-54, -14, -44, -4)
+        self.input_dict["B"].set_reaction_area(-54, 6, -44, 16)
+        self.output_dict["Sum"].set_reaction_area(45, -14, 55, -4)
+        self.output_dict["Carry"].set_reaction_area(45, 6, 55, 16)
+
 
 class Adder(AdvancedCircuitElement):
     """
@@ -176,6 +187,11 @@ class Adder(AdvancedCircuitElement):
         outputs = self.get_outputs()
         self.input_dict = {"A": inputs[0], "B": inputs[1], "Carry in": inputs[2]}
         self.output_dict = {"Sum": outputs[0], "Carry out": outputs[1]}
+
+        self.img_path = "app_code/visuals/textures/adder.png"
+        self.set_img_height(60)
+        self.set_img_width(120)
+        self.set_reaction_areas_for_pins()
 
         self.half_adder_1 = self.create_element(HalfAdder)
         self.half_adder_2 = self.create_element(HalfAdder)
@@ -220,6 +236,12 @@ class Adder(AdvancedCircuitElement):
 
         self.get_board().update_board()
 
+    def set_reaction_areas_for_pins(self):
+        self.input_dict["A"].set_reaction_area(-57, -20, -47, -10)
+        self.input_dict["B"].set_reaction_area(-57, -4, -47, 6)
+        self.input_dict["Carry in"].set_reaction_area(-57, 11, -47, 21)
+        self.output_dict["Sum"].set_reaction_area(44, -5, 55, -15)
+        self.output_dict["Carry out"].set_reaction_area(44, 5, 55, 15)
 
 class Decoder(AdvancedCircuitElement):
     """
@@ -254,6 +276,12 @@ class Decoder(AdvancedCircuitElement):
             "O1": outputs[6],
             "O0": outputs[7],
         }
+
+        self.img_path = "app_code/visuals/textures/decoder.png"
+        self.set_img_height(160)
+        self.set_img_width(120)
+        self.set_reaction_areas_for_pins()
+
         self.not1 = self.create_element(NOT_Gate)
         self.not2 = self.create_element(NOT_Gate)
         self.not3 = self.create_element(NOT_Gate)
@@ -396,7 +424,19 @@ class Decoder(AdvancedCircuitElement):
 
         self.get_board().update_board()
         
-        
+    def set_reaction_areas_for_pins(self):
+        self.input_dict["A"].set_reaction_area(-55, -25, -45, -15)
+        self.input_dict["B"].set_reaction_area(-55, -5, -45, 5)
+        self.input_dict["C"].set_reaction_area(-55, 15, -45, 25)
+        self.output_dict["O0"].set_reaction_area(44, 64, 54, 74)
+        self.output_dict["O1"].set_reaction_area(44, 44, 54, 54)
+        self.output_dict["O2"].set_reaction_area(44, 26, 54, 36)
+        self.output_dict["O3"].set_reaction_area(44, 6, 54, 16)
+        self.output_dict["O4"].set_reaction_area(44, -14, 54, -4)
+        self.output_dict["O5"].set_reaction_area(44, -34, 54, -24)
+        self.output_dict["O6"].set_reaction_area(44, -52, 54, -42)
+        self.output_dict["O7"].set_reaction_area(44, -72, 54, -62)
+
 class Multiplexor(AdvancedCircuitElement):
     """ 
     A class for multiplexor.
@@ -417,6 +457,11 @@ class Multiplexor(AdvancedCircuitElement):
         self.input_dict = {"s1": inputs[0], "s0": inputs[1],
                            "i0": inputs[2], "i1": inputs[3], "i2": inputs[4], "i3": inputs[5]}
         self.output_dict = {"y": outputs[0]}
+
+        self.img_path = "app_code/visuals/textures/multiplexor.png"
+        self.set_img_height(110)
+        self.set_img_width(110)
+        self.set_reaction_areas_for_pins()
 
         self.not1 = self.create_element(NOT_Gate)
         self.not2 = self.create_element(NOT_Gate)
@@ -469,7 +514,14 @@ class Multiplexor(AdvancedCircuitElement):
 
         self.get_board().update_board()
 
-
+    def set_reaction_areas_for_pins(self):
+        self.input_dict["s1"].set_reaction_area(-13, -48, -4, -40)
+        self.input_dict["s0"].set_reaction_area(6, -48, 15, -40)
+        self.input_dict["i0"].set_reaction_area(-50, -21, -41, -10)
+        self.input_dict["i1"].set_reaction_area(-50, -4, -41, 6)
+        self.input_dict["i2"].set_reaction_area(-50, 13, -41, 22)
+        self.input_dict["i3"].set_reaction_area(-50, 31, -41, 41)
+        self.output_dict["y"].set_reaction_area(41, 4, 50, 13)
 
 class HalfSubstractor(AdvancedCircuitElement):
     """
@@ -487,6 +539,12 @@ class HalfSubstractor(AdvancedCircuitElement):
         outputs = self.get_outputs()
         self.input_dict = {"A": inputs[0], "B": inputs[1]}
         self.output_dict = {"Diff": outputs[0], "Borrow": outputs[1]}
+
+        self.img_path = "app_code/visuals/textures/half_substractor.png"
+        self.set_img_height(60)
+        self.set_img_width(120)
+        self.set_reaction_areas_for_pins()
+
         self.xor1 = self.create_element(XOR_Gate)
         self.and1 = self.create_element(AND_Gate)
         self.not1 = self.create_element(NOT_Gate)
@@ -518,6 +576,11 @@ class HalfSubstractor(AdvancedCircuitElement):
 
         self.get_board().update_board()
 
+    def set_reaction_areas_for_pins(self):
+        self.input_dict["A"].set_reaction_area(-54, -14, -44, -4)
+        self.input_dict["B"].set_reaction_area(-54, 6, -44, 16)
+        self.output_dict["Diff"].set_reaction_area(45, -14, 55, -4)
+        self.output_dict["Borrow"].set_reaction_area(45, 6, 55, 16)
 
 class Substractor(AdvancedCircuitElement):
     """
@@ -536,6 +599,12 @@ class Substractor(AdvancedCircuitElement):
         outputs = self.get_outputs()
         self.input_dict = {"A": inputs[0], "B": inputs[1], "Borrow In": inputs[2]}
         self.output_dict = {"Diff": outputs[0], "Borrow Out": outputs[1]}
+
+        self.img_path = "app_code/visuals/textures/substractor.png"
+        self.set_img_height(60)
+        self.set_img_width(120)
+        self.set_reaction_areas_for_pins()
+
         self.half_sub1 = self.create_element(HalfSubstractor)
         self.half_sub2 = self.create_element(HalfSubstractor)
         self.or1 = self.create_element(OR_Gate)
@@ -576,6 +645,13 @@ class Substractor(AdvancedCircuitElement):
             update=False,
         )
         self.get_board().update_board()
+
+    def set_reaction_areas_for_pins(self):
+        self.input_dict["A"].set_reaction_area(-57, -20, -47, -10)
+        self.input_dict["B"].set_reaction_area(-57, -4, -47, 6)
+        self.input_dict["Borrow In"].set_reaction_area(-57, 11, -47, 21)
+        self.output_dict["Diff"].set_reaction_area(44, -5, 55, -15)
+        self.output_dict["Borrow Out"].set_reaction_area(44, 5, 55, 15)
 
 
 class Encoder_4_to_2(AdvancedCircuitElement):
@@ -623,6 +699,12 @@ class Encoder_4_to_2(AdvancedCircuitElement):
             "I1": inputs[3],
         }
         self.output_dict = {"O2": outputs[0], "O1": outputs[1], "Valid": outputs[2]}
+
+        self.img_path = "app_code/visuals/textures/encoder_4_to_2.png"
+        self.set_img_height(70)
+        self.set_img_width(100)
+        self.set_reaction_areas_for_pins()
+
         self.or_for_valid_1 = self.create_element(OR_Gate)
         self.or_for_valid_2 = self.create_element(OR_Gate)
         self.or_for_valid_3 = self.create_element(OR_Gate)
@@ -708,6 +790,14 @@ class Encoder_4_to_2(AdvancedCircuitElement):
         )
         self.get_board().update_board()
 
+    def set_reaction_areas_for_pins(self):
+        self.input_dict["I4"].set_reaction_area(-47, -30,  -39, -21)
+        self.input_dict["I3"].set_reaction_area(-47, -13,  -39, -4)
+        self.input_dict["I2"].set_reaction_area(-47, 3,  -39, 12)
+        self.input_dict["I1"].set_reaction_area(-47, 22,  -39, 31)
+        self.output_dict["O2"].set_reaction_area(37, -21, 47, -12)
+        self.output_dict["O1"].set_reaction_area(37, -4, 47, 5)
+        self.output_dict["Valid"].set_reaction_area(37, 14, 47, 23)
 
 class Encoder_8_to_3(AdvancedCircuitElement):
     """
@@ -750,6 +840,12 @@ class Encoder_8_to_3(AdvancedCircuitElement):
             "O1": outputs[2],
             "Valid": outputs[3],
         }
+
+        self.img_path = "app_code/visuals/textures/encoder_8_to_3.png"
+        self.set_img_height(160)
+        self.set_img_width(120)
+        self.set_reaction_areas_for_pins()
+
         self.nand_gate_1 = self.create_element(NAND_Gate, 4, 1)
         self.nand_gate_2 = self.create_element(NAND_Gate, 4, 1)
         self.nand_gate_3 = self.create_element(NAND_Gate, 4, 1)
@@ -962,6 +1058,19 @@ class Encoder_8_to_3(AdvancedCircuitElement):
         )
         self.get_board().update_board()
 
+    def set_reaction_areas_for_pins(self):
+        self.input_dict["I8"].set_reaction_area(-55, -74, -45, -63)
+        self.input_dict["I7"].set_reaction_area(-55, -54, -45, -43)
+        self.input_dict["I6"].set_reaction_area(-55, -36, -45, -25)
+        self.input_dict["I5"].set_reaction_area(-55, -16, -45, -5)
+        self.input_dict["I4"].set_reaction_area(-55, 4, -45, 14)
+        self.input_dict["I3"].set_reaction_area(-55, 24, -45, 34)
+        self.input_dict["I2"].set_reaction_area(-55, 42, -45, 52)
+        self.input_dict["I1"].set_reaction_area(-55, 63, -45, 73)
+        self.output_dict["O3"].set_reaction_area(45, -32, 55, -22)
+        self.output_dict["O2"].set_reaction_area(45, 12, 55, -2)
+        self.output_dict["O1"].set_reaction_area(45, 8, 55, 18)
+        self.output_dict["Valid"].set_reaction_area(45, 28, 55, 38)
 
 class ShiftLeft(AdvancedCircuitElement):
     """
@@ -1001,6 +1110,12 @@ class ShiftLeft(AdvancedCircuitElement):
             "O3": outputs[2],
             "O4": outputs[3],
         }
+
+        self.img_path = "app_code/visuals/textures/left_shift.png"
+        self.set_img_height(105)
+        self.set_img_width(140)
+        self.set_reaction_areas_for_pins()
+
         self.controller = self.create_element(ZERO_Generator)
         self.not_gate = self.create_element(NOT_Gate)
         self.and_gate_1 = self.create_element(AND_Gate)
@@ -1118,6 +1233,15 @@ class ShiftLeft(AdvancedCircuitElement):
         )
         self.get_board().update_board()
 
+    def set_reaction_areas_for_pins(self):
+        self.input_dict["I1"].set_reaction_area(-29, 38, -20, 47)
+        self.input_dict["I2"].set_reaction_area(-11, 38, -3, 47)
+        self.input_dict["I3"].set_reaction_area(6, 38, 15, 47)
+        self.input_dict["I4"].set_reaction_area(24, 38, 33, 47)
+        self.output_dict["O1"].set_reaction_area(-30, -48, -21, 40)
+        self.output_dict["O2"].set_reaction_area(-12, -48, -3, 40)
+        self.output_dict["O3"].set_reaction_area(5, -48, 15, 40)
+        self.output_dict["O4"].set_reaction_area(23, -48, 33, 40)
 
 class ShiftRight(AdvancedCircuitElement):
     """
@@ -1157,6 +1281,12 @@ class ShiftRight(AdvancedCircuitElement):
             "O3": outputs[2],
             "O4": outputs[3],
         }
+
+        self.img_path = "app_code/visuals/textures/right_shift.png"
+        self.set_img_height(105)
+        self.set_img_width(140)
+        self.set_reaction_areas_for_pins()
+
         self.controller = self.create_element(ONE_Generator)
         self.not_gate = self.create_element(NOT_Gate)
         self.and_gate_1 = self.create_element(AND_Gate)
@@ -1274,6 +1404,15 @@ class ShiftRight(AdvancedCircuitElement):
         )
         self.get_board().update_board()
 
+    def set_reaction_areas_for_pins(self):
+        self.input_dict["I1"].set_reaction_area(-29, 38, -20, 47)
+        self.input_dict["I2"].set_reaction_area(-11, 38, -3, 47)
+        self.input_dict["I3"].set_reaction_area(6, 38, 15, 47)
+        self.input_dict["I4"].set_reaction_area(24, 38, 33, 47)
+        self.output_dict["O1"].set_reaction_area(-30, -48, -21, 40)
+        self.output_dict["O2"].set_reaction_area(-12, -48, -3, 40)
+        self.output_dict["O3"].set_reaction_area(5, -48, 15, 40)
+        self.output_dict["O4"].set_reaction_area(23, -48, 33, 40)
 
 class ALU_1_bit(AdvancedCircuitElement):
     """
