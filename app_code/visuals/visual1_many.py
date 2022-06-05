@@ -45,8 +45,8 @@ class Line:
         If yes: return True and add that pin to list, no: return False
         """
         for pin in board.get_all_pins():
-            if pin.check_dot(x_coord, y_coord) and not pin.is_connected():
-                if isinstance(pin, InputPin) and not pin.is_connected(): # check
+            if pin.check_dot(x_coord, y_coord):
+                if isinstance(pin, InputPin) and not pin.is_connected():
                     cls.last_pins_to_connect.append(pin)
                     return True
                 elif isinstance(pin, OutputPin):
