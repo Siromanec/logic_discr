@@ -224,6 +224,19 @@ class Adder(AdvancedCircuitElement):
 class Decoder(AdvancedCircuitElement):
     """
     A class for Decoder.
+    Input pins:
+        0: A
+        1: B
+        2: C
+    Output pins:
+        0: 07
+        1: 06
+        2: 05
+        3: 04
+        4: 03
+        5: 02
+        6: 01
+        7: 00
     """
 
     def __init__(self, board: Board, i_number=3, o_number=8):
@@ -387,6 +400,15 @@ class Decoder(AdvancedCircuitElement):
 class Multiplexor(AdvancedCircuitElement):
     """ 
     A class for multiplexor.
+    Input pins:
+        0: s1
+        1: s0
+        2: i0
+        3: i1
+        4: i2
+        5: i3
+    Output pins:
+        0: y
     """
     def __init__(self, board: Board, i_number=6, o_number=1):
         super().__init__(board, i_number, o_number)
