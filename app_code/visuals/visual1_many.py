@@ -9,6 +9,7 @@ root_folder = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__
 sys.path.append(root_folder)
 from board_elements.SimpleBoardElements import *
 from board_elements.Fundamentals import *
+from board_elements.AdvancedBoardElements import *
 
 
 class Line:
@@ -132,7 +133,7 @@ def delete(event):
 def curr_com_put(element_type):
     """Defines command that puts element images and creates objects"""
     canvas.bind("<Button-1>", lambda event: put(element_type, event))
-
+    canvas.bind("<Button-3>", switch_click)
 
 def put(element_type, event):
     """Puts image of element on the canvas and crates an appropriate object"""
@@ -146,6 +147,12 @@ def put(element_type, event):
 
     new_element.img_object = canvas.create_image(event.x, event.y, image=img)
 
+def switch_click(event):
+    print("clicked at", event.x, event.y)
+    for element in board.get_circuits_list():
+        if isinstance(element, Switch) and element.check_dot_in_img(event.x, event.y):
+            element.switch()
+            update_all_images()
 
 def curr_com_connect():
     """Binds left click to the connect function"""
@@ -170,7 +177,7 @@ def main():
     # Themes: blue (default), dark-blue, green
     ctk.set_default_color_theme("blue")
 
-    WIDTH = 1400
+    WIDTH = 1800
     HEIGHT = 850
 
     app = ctk.CTk()
@@ -332,6 +339,34 @@ def main():
     low_constant_button.set_image(img)
     low_constant_button.grid(row=1, column=1, padx=5, pady=5)
 
+    # Switch button
+    switch_button = ctk.CTkButton(
+        master=input_controls, text="Switch",
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
+        command=lambda: curr_com_put(Switch))
+
+    img = ImageTk.PhotoImage(Image.open(
+        "app_code/visuals/textures/switch_off.png").resize((80, 40)))
+    switch_button.set_image(img)
+    switch_button.grid(row=2, column=0, padx=5, pady=5)
+
+    # Clock button
+    clock_button = ctk.CTkButton(
+        master=input_controls, text="Clock",
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
+        command=lambda: curr_com_put(ClockGenerator))
+
+    img = ImageTk.PhotoImage(Image.open(
+        "app_code/visuals/textures/clock_off.png").resize((80, 40)))
+    clock_button.set_image(img)
+    clock_button.grid(row=2, column=1, padx=5, pady=5)
+
     # Setup for frame with output controls
     output_controls = ctk.CTkFrame(master=app)
     output_controls.grid(
@@ -358,29 +393,170 @@ def main():
     light_bulb_button.set_image(img)
     light_bulb_button.grid(row=1, column=0, padx=5, pady=5)
 
+    # Setup for frame with advanced elements
+    frame_advanced_elements = ctk.CTkFrame(master=app)
+    frame_advanced_elements.grid(
+        row=0, column=3, rowspan=2, sticky="nswe", padx=20, pady=20)
+
+    # Label for the frame
+    label_advanced_elements = ctk.CTkLabel(
+        master=frame_advanced_elements, text="Advanced elements", text_font=("Roboto Medium", 13))
+    label_advanced_elements.grid(row=0, column=0)
+
+    # Half Adder button
+    half_adder_button = ctk.CTkButton(
+        master=frame_advanced_elements, text="Half Adder",
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
+        command=lambda: curr_com_put(HalfAdder))
+
+    img = ImageTk.PhotoImage(Image.open(
+        "app_code/visuals/textures/half_adder.png").resize((80, 40)))
+    half_adder_button.set_image(img)
+    half_adder_button.grid(row=1, column=0, padx=5, pady=5)
+
+    # Adder button
+    adder_button = ctk.CTkButton(
+        master=frame_advanced_elements, text="Adder",
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
+        command=lambda: curr_com_put(Adder))
+
+    img = ImageTk.PhotoImage(Image.open(
+        "app_code/visuals/textures/adder.png").resize((80, 40)))
+    adder_button.set_image(img)
+    adder_button.grid(row=1, column=1, padx=5, pady=5)
+
+    # Decoder button
+    decoder_button = ctk.CTkButton(
+        master=frame_advanced_elements, text="Decoder",
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
+        command=lambda: curr_com_put(Decoder))
+
+    img = ImageTk.PhotoImage(Image.open(
+        "app_code/visuals/textures/decoder.png").resize((70, 80)))
+    decoder_button.set_image(img)
+    decoder_button.grid(row=2, column=0, padx=5, pady=5)
+
+    # Encoder 8 to 3 button
+    encoder_8_to_3_button = ctk.CTkButton(
+        master=frame_advanced_elements, text="Encoder 8 to 3",
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
+        command=lambda: curr_com_put(Encoder_8_to_3))
+
+    img = ImageTk.PhotoImage(Image.open(
+        "app_code/visuals/textures/encoder_8_to_3.png").resize((70, 80)))
+    encoder_8_to_3_button.set_image(img)
+    encoder_8_to_3_button.grid(row=2, column=1, padx=5, pady=5)
+
+    # Half Substractor button
+    half_substractor_button = ctk.CTkButton(
+        master=frame_advanced_elements, text="Half Substractor",
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
+        command=lambda: curr_com_put(HalfSubstractor))
+
+    img = ImageTk.PhotoImage(Image.open(
+        "app_code/visuals/textures/half_substractor.png").resize((80, 40)))
+    half_substractor_button.set_image(img)
+    half_substractor_button.grid(row=3, column=0, padx=5, pady=5)
+
+    # Substractor button
+    substractor_button = ctk.CTkButton(
+        master=frame_advanced_elements, text="Substractor",
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
+        command=lambda: curr_com_put(Substractor))
+
+    img = ImageTk.PhotoImage(Image.open(
+        "app_code/visuals/textures/substractor.png").resize((80, 40)))
+    substractor_button.set_image(img)
+    substractor_button.grid(row=3, column=1, padx=5, pady=5)
+
+    # Left Shift button
+    left_shift_button = ctk.CTkButton(
+        master=frame_advanced_elements, text="Left Shift",
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
+        command=lambda: curr_com_put(ShiftLeft))
+
+    img = ImageTk.PhotoImage(Image.open(
+        "app_code/visuals/textures/left_shift.png").resize((100, 60)))
+    left_shift_button.set_image(img)
+    left_shift_button.grid(row=4, column=0, padx=5, pady=5)
+
+    # Right Shift button
+    right_shift_button = ctk.CTkButton(
+        master=frame_advanced_elements, text="Right Shift",
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
+        command=lambda: curr_com_put(ShiftRight))
+
+    img = ImageTk.PhotoImage(Image.open(
+        "app_code/visuals/textures/right_shift.png").resize((100, 60)))
+    right_shift_button.set_image(img)
+    right_shift_button.grid(row=4, column=1, padx=5, pady=5)
+
+    # Encoder 4 to 2 button
+    encoder_4_to_2_button = ctk.CTkButton(
+        master=frame_advanced_elements, text="Encoder 4 to 2",
+        compound=cmpd,
+        height=hght,
+        width=wdth,
+        fg_color=fg_color,
+        command=lambda: curr_com_put(Encoder_4_to_2))
+
+    img = ImageTk.PhotoImage(Image.open(
+        "app_code/visuals/textures/encoder_4_to_2.png").resize((80, 40)))
+    encoder_4_to_2_button.set_image(img)
+    encoder_4_to_2_button.grid(row=5, column=0, padx=5, pady=5)
+
+    # Setup for frame with action buttons
+    action_buttons_frame = ctk.CTkFrame(master=app)
+    action_buttons_frame.grid(
+        row=2, column=3, sticky="nswe", padx=20, pady=20)
+
     # Connect button
     connect_button = ctk.CTkButton(
-        master=output_controls, text="Connect", text_font=("Roboto Medium", 14),
+        master=action_buttons_frame, text="Connect", text_font=("Roboto Medium", 14),
         compound=cmpd,
         height=hght,
         width=wdth,
         command=curr_com_connect)
-    connect_button.grid(row=1, column=1, padx=5, pady=5)
+    connect_button.grid(row=0, column=0, padx=5, pady=5)
 
     # Delete button
     delete_button = ctk.CTkButton(
-        master=output_controls, text="Delete", text_font=("Roboto Medium", 14),
+        master=action_buttons_frame, text="Delete", text_font=("Roboto Medium", 14),
         compound=cmpd,
         height=hght,
         width=wdth,
         command=curr_com_delete)
-    delete_button.grid(row=2, column=0, padx=5, pady=5)
+    delete_button.grid(row=0, column=1, padx=5, pady=5)
 
     # Setting up the canvas
     global canvas  # please don't use globals
     canvas = Canvas(master=app, height=700,
                     width=1000, bg="light grey", )
-    canvas.grid(row=0, column=2, rowspan=3)
+    canvas.grid(row=0, column=1, rowspan=3)
 
     # Setting up the board
     global board

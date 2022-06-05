@@ -62,6 +62,7 @@ class AND_Gate(BaseCircuitElement):
         self.get_inputs()[1].set_reaction_area(-41, 5, -32, 14)
         self.get_outputs()[0].set_reaction_area(40, -5, 48, 4)
 
+
 class NAND_Gate(BaseCircuitElement):
     """
     The NAND logic gate
@@ -72,7 +73,6 @@ class NAND_Gate(BaseCircuitElement):
 
         self.img_path = "app_code/visuals/textures/nand.png"
         self.set_reaction_areas_for_pins()
-
 
     def operation(self):
         """
@@ -104,6 +104,7 @@ class NAND_Gate(BaseCircuitElement):
         self.get_inputs()[1].set_reaction_area(-41, 5, -32, 14)
         self.get_outputs()[0].set_reaction_area(40, -5, 48, 4)
 
+
 class OR_Gate(BaseCircuitElement):
     """
     The OR logic gate
@@ -111,7 +112,6 @@ class OR_Gate(BaseCircuitElement):
 
     def __init__(self, board, i_number=2, o_number=1) -> None:
         super().__init__(board, i_number, o_number)
-
 
         self.img_path = "app_code/visuals/textures/or.png"
         self.set_reaction_areas_for_pins()
@@ -154,10 +154,8 @@ class NOR_Gate(BaseCircuitElement):
     def __init__(self, board, i_number=2, o_number=1) -> None:
         super().__init__(board, i_number, o_number)
 
-
         self.img_path = "app_code/visuals/textures/nor.png"
         self.set_reaction_areas_for_pins()
-
 
     def operation(self):
         """
@@ -283,10 +281,8 @@ class NOT_Gate(BaseCircuitElement):
     def __init__(self, board) -> None:
         super().__init__(board, 1, 1)
 
-
         self.img_path = "app_code/visuals/textures/not.png"
         self.set_reaction_areas_for_pins()
-
 
     def operation(self):
         """
@@ -323,7 +319,6 @@ class ZERO_Generator(BaseCircuitElement):
         self.img_path = "app_code/visuals/textures/low_constant.png"
         self.set_reaction_areas_for_pins()
 
-
     def operation(self):
         """
         Sends zero on all pins
@@ -347,7 +342,6 @@ class ONE_Generator(BaseCircuitElement):
         self.img_path = "app_code/visuals/textures/high_constant.png"
         self.set_reaction_areas_for_pins()
 
-
     def operation(self):
         """
         Sends one on all pins
@@ -369,7 +363,7 @@ class Lamp(BaseCircuitElement):
         img_path_off = "app_code/visuals/textures/light_bulb.png"
         img_path_on = "app_code/visuals/textures/light_bulb_shine.png"
         self.images = {False: img_path_off, True: img_path_on}
-        self.img_path = self.images[self._input_pins[0].get_state()] 
+        self.img_path = self.images[self.get_inputs()[0].get_state()]
 
         self.set_reaction_areas_for_pins()
         self.set_img_height(100)
@@ -379,7 +373,7 @@ class Lamp(BaseCircuitElement):
         """
         shines if the signal is 1 (True)
         """
-        self.img_path = self.images[self._input_pins[0].get_state()] 
+        self.img_path = self.images[self.get_inputs()[0].get_state()]
 
         bools = tuple(i_pin.get_state() for i_pin in self.get_inputs())
         val_prev = bools[0]
@@ -400,10 +394,12 @@ class Switch(BaseCircuitElement):
     def __init__(self, board, o_number=1) -> None:
         super().__init__(board, 0, o_number)
         self.state = False
-        img1 = "image 1"
-        img2 = "image 2"
-        self.images = {True: img1, False: img2}
-        # self.img = self.images[self.state]
+
+        img_path_off = "app_code/visuals/textures/switch_off.png"
+        img_path_on = "app_code/visuals/textures/switch_on.png"
+        self.images = {False: img_path_off, True: img_path_on}
+        self.img_path = self.images[self.state]
+
         self.set_reaction_areas_for_pins()
 
     def operation(self):
@@ -414,12 +410,12 @@ class Switch(BaseCircuitElement):
     def switch(self):
         """Activates by the click on the Switch element area"""
         self.state = not self.state
-        # self.img = self.images[self.state]
+        self.img_path = self.images[self.state]
         self.get_board().update_board()
 
     def set_reaction_areas_for_pins(self):
         """Set reaction areas for all pins"""
-        pass
+        self.get_outputs()[0].set_reaction_area(30, -5, 38, 4)
 
 
 class ClockGenerator(BaseCircuitElement):
@@ -430,7 +426,13 @@ class ClockGenerator(BaseCircuitElement):
         self.time_interval = 1 / frequency
         self.state = True
         self.exists = True
-        # # self.img =
+
+        img_path_off = "app_code/visuals/textures/clock_off.png"
+        img_path_on = "app_code/visuals/textures/clock_on.png"
+        self.images = {False: img_path_off, True: img_path_on}
+        self.img_path = self.images[self.state]
+        self.set_reaction_areas_for_pins()
+
         gen = threading.Thread(target=self.generation, args=())
         gen.start()
 
@@ -443,7 +445,12 @@ class ClockGenerator(BaseCircuitElement):
                 o_pin.update_state(self.state)
             self.get_board().update_board()
             self.state = not self.state
+            self.img_path = self.images[self.state]
 
     def destroy(self):
         """Activates by the click on the Switch element area"""
         self.exists = False
+
+    def set_reaction_areas_for_pins(self):
+        """Set reaction areas for all pins"""
+        self.get_outputs()[0].set_reaction_area(30, -5, 38, 4)
