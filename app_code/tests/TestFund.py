@@ -1,3 +1,4 @@
+from tkinter import Canvas
 from unittest import TestCase, main
 import os
 import sys
@@ -12,7 +13,7 @@ class TestFund(TestCase):
     """tests for fundamentals"""
     def test_BCE(self):
         """test BCE"""
-        self.board = Board()
+        self.board = Board(Canvas())
 
         self.circuitA = BaseCircuitElement(self.board, 2, 1)
         self.circuitB = BaseCircuitElement(self.board, 2, 1)
