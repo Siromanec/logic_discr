@@ -1100,10 +1100,10 @@ class Encoder_8_to_3(AdvancedCircuitElement):
         self.input_dict["I3"].set_reaction_area(-55, 24, -45, 34)
         self.input_dict["I2"].set_reaction_area(-55, 42, -45, 52)
         self.input_dict["I1"].set_reaction_area(-55, 63, -45, 73)
-        self.output_dict["O3"].set_reaction_area(45, -32, 55, -22)
-        self.output_dict["O2"].set_reaction_area(45, -12, 55, -2)
-        self.output_dict["O1"].set_reaction_area(45, 8, 55, 18)
-        self.output_dict["Valid"].set_reaction_area(45, 28, 55, 38)
+        self.output_dict["O3"].set_reaction_area(45, -18, 55, -8)
+        self.output_dict["O2"].set_reaction_area(45, -38, 55, -28)
+        self.output_dict["O1"].set_reaction_area(45, 22, 55, 32)
+        self.output_dict["Valid"].set_reaction_area(45, 2, 55, 12)
 
 
 class ShiftLeft(AdvancedCircuitElement):

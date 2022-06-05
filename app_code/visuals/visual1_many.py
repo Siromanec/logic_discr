@@ -13,6 +13,10 @@ from board_elements.AdvancedBoardElements import *
 
 
 class Line:
+    """
+    class Line
+    used to represent the conductors and connect pins
+    """
     last_pins_to_connect = []
     count = 0
 
@@ -26,9 +30,15 @@ class Line:
         self.tag = 'line'+str(self.id)
 
     def set_connected_pins(self, pins: tuple[Pin]):
+        """
+        Sets tuple of pins that are connected by this line
+        """
         self.connected_pins = pins
 
     def get_connected_pins(self):
+        """
+        Returns tuple of pins that are connected by this line
+        """
         return self.connected_pins
 
     @classmethod
@@ -42,7 +52,7 @@ class Line:
     def valide_click(cls, x_coord, y_coord):
         """
         Check if user clicked on the free pin.
-        If yes: return True and add that pin to list, no: return False
+        If yes: return True and add that pin to a list, no: return False
         """
         for pin in board.get_all_pins():
             if pin.check_dot(x_coord, y_coord):
@@ -68,6 +78,7 @@ class Line:
 
 
 def connect(event):
+    """Logic of connecting two pins"""
     print("clicked at", event.x, event.y)
 
     if not Line.valide_click(event.x, event.y):
@@ -98,7 +109,7 @@ def connect(event):
 
 def delete(event):
     """Delete element from canvas"""
-    for element in board.get_circuits_list():
+    for element in board.get_circuits_list()[::-1]:
         if element.check_dot_in_img(event.x, event.y):
             canvas.delete(element.img_object)
 
@@ -121,6 +132,7 @@ def delete(event):
                             child.remove_connected_line_tag(line_to_delete)
 
             board.remove_element(element)
+            break
 
 
 def curr_com_put(element_type):
@@ -135,7 +147,7 @@ def put(element_type, event):
     new_element = board.create_element(element_type)
     new_element.update_reaction_areas(event.x, event.y)
     new_element.set_img_coords(event.x, event.y)
-    img = ImageTk.PhotoImage(Image.open(new_element.img_path)\
+    img = ImageTk.PhotoImage(Image.open(new_element.img_path)
                              .resize((new_element.get_img_width(), new_element.get_img_height())))
     board.add_to_img_list(img)
 
@@ -143,6 +155,7 @@ def put(element_type, event):
 
 
 def switch_click(event):
+    """Changes state of the switch"""
     print("clicked at", event.x, event.y)
     for element in board.get_circuits_list():
         if isinstance(element, Switch) and element.check_dot_in_img(event.x, event.y):

@@ -68,12 +68,15 @@ class Pin:
         return self._reaction_area
 
     def append_connected_line_tag(self, line_tag):
+        """Add a connected line tag to a list"""
         self._connected_line_tags.append(line_tag)
 
     def get_connected_line_tags(self):
+        """Return list of connected lines' tags"""
         return list(self._connected_line_tags)
 
     def remove_connected_line_tag(self, line_tag):
+        """Removes a connected line tag from a list"""
         try:
             self._connected_line_tags.remove(line_tag)
         except Exception as e:
@@ -222,7 +225,7 @@ class OutputPin(Pin):
 
     def get_children(self) -> list[InputPin]:
         """
-        return s list of input pins
+        returns list of input pins
         """
         return list(self._children)
 
@@ -427,12 +430,15 @@ class Board:
         self.img_cache = {}
 
     def get_canvas(self):
+        """Return canvas"""
         return self.canvas
 
     def add_to_img_list(self, img):
+        """Append image to a list"""
         self._images_list.append(img)
 
     def clear(self):
+        """Clear the board"""
         for el in self._circuits_list:
             self.remove_element(el)
         # self._circuits_list: list[BaseCircuitElement] = []
@@ -488,9 +494,11 @@ class Board:
         return new_circuit
 
     def get_circuits_list(self) -> list[BaseCircuitElement]:
+        """Return list of all circuits that are on the board"""
         return list(self._circuits_list)
 
     def get_all_pins(self) -> list[Pin]:
+        """Return list of all pins of all circuits"""
         pins_list = []
         for element in self.get_circuits_list():
             for input_pin in element.get_inputs():
