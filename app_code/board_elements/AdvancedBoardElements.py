@@ -42,6 +42,7 @@ class AdvancedCircuitElement(BaseCircuitElement):
             self.inner_outputs_dict[o_pin] = i_pin
         for i_pin in self.get_inputs():
             o_pin = OutputPin(self)
+            o_pin.set_activeness(True)
             self.inner_inputs_dict[i_pin] = o_pin
 
     def create_element(
@@ -91,7 +92,7 @@ class AdvancedCircuitElement(BaseCircuitElement):
                         if circuits_dependence[dependent_circuit] == 0:
                             independent_circuits.append(dependent_circuit)
                 circuits.remove(circuit)
-            if circuit:
+            if circuits:
                 for circuit in circuits:
                     circuit.connection_problems_processing()
                 self.connection_problems_processing()
@@ -102,6 +103,7 @@ class AdvancedCircuitElement(BaseCircuitElement):
         topo_sorted_update()
 
         for o_pin in self.get_outputs():
+            # print(o_pin.is_active())
             pin = self.inner_outputs_dict[o_pin]
             pin.update_state()
             o_pin.set_state(pin.get_state())
