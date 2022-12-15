@@ -201,7 +201,7 @@ def main():
 
     # Label for the framw
     label_logical_frame = ctk.CTkLabel(
-        master=frame_logical_gates, text="Logic Gates", text_font=("Roboto Medium", 13))
+        master=frame_logical_gates, text="Logic Gates")#)
     label_logical_frame.grid(row=0, column=0)
 
     # Setup for buttons in a frames
@@ -222,7 +222,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/not.png").resize((80, 40)))
-    not_button.set_image(img)
+    not_button._update_image()
     not_button.grid(row=1, column=0, padx=5, pady=5)
 
     # AND button
@@ -236,7 +236,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/and.png").resize((80, 40)))
-    and_button.set_image(img)
+    and_button._update_image()
     and_button.grid(row=1, column=1, padx=5, pady=5)
 
     # NAND button
@@ -250,7 +250,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/nand.png").resize((80, 40)))
-    nand_button.set_image(img)
+    nand_button._update_image()
     nand_button.grid(row=2, column=0, padx=5, pady=5)
 
     # OR button
@@ -264,7 +264,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/or.png").resize((80, 40)))
-    or_button.set_image(img)
+    or_button._update_image()
     or_button.grid(row=2, column=1, padx=5, pady=5)
 
     # NOR button
@@ -278,7 +278,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/nor.png").resize((80, 40)))
-    nor_button.set_image(img)
+    nor_button._update_image()
     nor_button.grid(row=3, column=0, padx=5, pady=5)
 
     # XOR button
@@ -292,7 +292,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/xor.png").resize((80, 40)))
-    xor_button.set_image(img)
+    xor_button._update_image()
     xor_button.grid(row=3, column=1, padx=5, pady=5)
 
     # XNOR button
@@ -306,7 +306,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/xnor.png").resize((80, 40)))
-    xnor_button.set_image(img)
+    xnor_button._update_image()
     xnor_button.grid(row=4, column=0, padx=5, pady=5)
 
     # Setup for frame with input controls
@@ -316,7 +316,7 @@ def main():
 
     # Label for the framw
     label_input_controls = ctk.CTkLabel(
-        master=input_controls, text="Input Controls", text_font=("Roboto Medium", 13))
+        master=input_controls, text="Input Controls")
     label_input_controls.grid(row=0, column=0)
 
     # High Constant button
@@ -330,7 +330,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/high_constant.png").resize((80, 40)))
-    high_constant_button.set_image(img)
+    high_constant_button._update_image()
     high_constant_button.grid(row=1, column=0, padx=5, pady=5)
 
     # Low Constant button
@@ -344,7 +344,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/low_constant.png").resize((80, 40)))
-    low_constant_button.set_image(img)
+    low_constant_button._update_image()
     low_constant_button.grid(row=1, column=1, padx=5, pady=5)
 
     # Switch button
@@ -358,7 +358,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/switch_off.png").resize((80, 40)))
-    switch_button.set_image(img)
+    switch_button._update_image()
     switch_button.grid(row=2, column=0, padx=5, pady=5)
 
     # Clock button
@@ -372,7 +372,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/clock_off.png").resize((80, 40)))
-    clock_button.set_image(img)
+    clock_button._update_image()
     clock_button.grid(row=2, column=1, padx=5, pady=5)
 
     # Setup for frame with output controls
@@ -382,7 +382,7 @@ def main():
 
     # Label for the frame
     label_output_controls = ctk.CTkLabel(
-        master=output_controls, text="Output Controls", text_font=("Roboto Medium", 13))
+        master=output_controls, text="Output Controls")
     label_output_controls.grid(row=0, column=0)
 
     # Light Bulb button
@@ -398,7 +398,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/light_bulb.png").resize((40, 80)))
-    light_bulb_button.set_image(img)
+    light_bulb_button._update_image()
     light_bulb_button.grid(row=1, column=0, padx=5, pady=5)
 
     # Setup for frame with advanced elements
@@ -408,7 +408,7 @@ def main():
 
     # Label for the frame
     label_advanced_elements = ctk.CTkLabel(
-        master=frame_advanced_elements, text="Advanced elements", text_font=("Roboto Medium", 13))
+        master=frame_advanced_elements, text="Advanced elements")
     label_advanced_elements.grid(row=0, column=0, columnspan=2, sticky="W")
 
     # Half Adder button
@@ -422,7 +422,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/half_adder.png").resize((80, 40)))
-    half_adder_button.set_image(img)
+    half_adder_button._update_image()
     half_adder_button.grid(row=1, column=0, padx=5, pady=5)
 
     # Adder button
@@ -436,7 +436,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/adder.png").resize((80, 40)))
-    adder_button.set_image(img)
+    adder_button._update_image()
     adder_button.grid(row=1, column=1, padx=5, pady=5)
 
     # Decoder button
@@ -450,7 +450,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/decoder.png").resize((70, 80)))
-    decoder_button.set_image(img)
+    decoder_button._update_image()
     decoder_button.grid(row=2, column=0, padx=5, pady=5)
 
     # Encoder 8 to 3 button
@@ -464,7 +464,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/encoder_8_to_3.png").resize((70, 80)))
-    encoder_8_to_3_button.set_image(img)
+    encoder_8_to_3_button._update_image()
     encoder_8_to_3_button.grid(row=2, column=1, padx=5, pady=5)
 
     # Half Substractor button
@@ -478,7 +478,8 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/half_substractor.png").resize((80, 40)))
-    half_substractor_button.set_image(img)
+    half_substractor_button._update_image()
+
     half_substractor_button.grid(row=3, column=0, padx=5, pady=5)
 
     # Substractor button
@@ -492,7 +493,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/substractor.png").resize((80, 40)))
-    substractor_button.set_image(img)
+    substractor_button._update_image()
     substractor_button.grid(row=3, column=1, padx=5, pady=5)
 
     # Left Shift button
@@ -506,7 +507,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/left_shift.png").resize((100, 60)))
-    left_shift_button.set_image(img)
+    left_shift_button._update_image()
     left_shift_button.grid(row=4, column=0, padx=5, pady=5)
 
     # Right Shift button
@@ -520,7 +521,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/right_shift.png").resize((100, 60)))
-    right_shift_button.set_image(img)
+    right_shift_button._update_image()
     right_shift_button.grid(row=4, column=1, padx=5, pady=5)
 
     # Encoder 4 to 2 button
@@ -534,7 +535,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/encoder_4_to_2.png").resize((80, 50)))
-    encoder_4_to_2_button.set_image(img)
+    encoder_4_to_2_button._update_image()
     encoder_4_to_2_button.grid(row=5, column=0, padx=5, pady=5)
 
     # 4 bit ALU button
@@ -548,7 +549,7 @@ def main():
 
     img = ImageTk.PhotoImage(Image.open(
         "app_code/visuals/textures/ALU_4_bit.png").resize((80, 50)))
-    ALU_4bit_button.set_image(img)
+    ALU_4bit_button._update_image()
     ALU_4bit_button.grid(row=5, column=1, padx=5, pady=5)
 
     # Setup for frame with action buttons
@@ -558,7 +559,7 @@ def main():
 
     # Connect button
     connect_button = ctk.CTkButton(
-        master=action_buttons_frame, text="Connect", text_font=("Roboto Medium", 14),
+        master=action_buttons_frame, text="Connect",
         compound=cmpd,
         height=hght,
         width=wdth,
@@ -567,7 +568,7 @@ def main():
 
     # Delete button
     delete_button = ctk.CTkButton(
-        master=action_buttons_frame, text="Delete", text_font=("Roboto Medium", 14),
+        master=action_buttons_frame, text="Delete",
         compound=cmpd,
         height=hght,
         width=wdth,
